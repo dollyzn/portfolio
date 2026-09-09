@@ -6,7 +6,7 @@ services:
       args:
         NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://nsantos.dev}
     restart: unless-stopped
-    # só no loopback: o nginx/caddy do host (Chatwoot etc.) faz o proxy
+    # só no loopback — o nginx do host faz o HTTPS
     ports:
       - "127.0.0.1:${APP_PORT:-3000}:3000"
     environment:
@@ -24,28 +24,3 @@ services:
       timeout: 5s
       retries: 5
       start_period: 25s
-
-  # Só use se NADA mais estiver nas portas 80/443.
-  # docker compose --profile edge up -d --build
-  caddy:
-    profiles: ["edge"]
-    image: caddy:2-alpine
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp"
-    environment:
-      SITE_DOMAIN: ${SITE_DOMAIN:-nsantos.dev}
-      ACME_EMAIL: ${ACME_EMAIL:-contato@nsantos.dev}
-    volumes:
-      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
-      - caddy_data:/data
-      - caddy_config:/config
-    depends_on:
-      web:
-        condition: service_healthy
-
-volumes:
-  caddy_data:
-  caddy_config:

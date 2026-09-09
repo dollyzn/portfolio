@@ -44,83 +44,68 @@ apontem para o endereço correto.
 A imagem OpenGraph e o favicon são gerados em build por `src/app/opengraph-image.tsx`
 e `src/app/icon.tsx`.
 
-## Deploy em VPS (Hetzner / Ubuntu)
+## Deploy em VPS (Hetzner / Ubuntu + nginx)
 
-Por padrão o Compose sobe **só o Next.js em `127.0.0.1:3000`**. O HTTPS fica
-com o nginx/Caddy que já estiver no host — o caso típico quando Chatwoot (ou
-outro app) já ocupa as portas 80/443.
+O Compose sobe **só o Next.js em `127.0.0.1:3000`**. O HTTPS fica com o
+**nginx do host** (o mesmo que já serve o Chatwoot).
 
 ### Arquivos
 
-| Arquivo                         | Função                                                |
-| ------------------------------- | ----------------------------------------------------- |
-| `Dockerfile`                    | build multi-stage → imagem mínima                     |
-| `docker-compose.yml`            | serviço `web` (+ `caddy` opcional via profile `edge`) |
-| `deploy/nginx.nsantos.dev.conf` | site nginx apontando para `:3000`                     |
-| `deploy/caddy.nsantos.dev.conf` | bloco Caddy do host apontando para `:3000`            |
-| `deploy/Caddyfile`              | Caddy **dentro** do Compose (só com `--profile edge`) |
-| `.env.example`                  | domínio / porta / URL pública                         |
-| `scripts/deploy.sh`             | provisiona Docker e sobe o stack                      |
-| `scripts/update.sh`             | `git pull` + rebuild                                  |
+| Arquivo | Função |
+| --- | --- |
+| `Dockerfile` | build multi-stage → imagem mínima |
+| `docker-compose.yml` | serviço `web` em `127.0.0.1:3000` |
+| `deploy/nginx.nsantos.dev.conf` | site nginx → `:3000` |
+| `.env.example` | domínio / porta / URL pública |
+| `scripts/deploy.sh` | provisiona Docker e sobe o stack |
+| `scripts/update.sh` | `git pull` + rebuild |
 
 ### 1. DNS
 
 - `A` de `nsantos.dev` → IP do VPS
 - `A` de `www.nsantos.dev` → mesmo IP
 
-### 2. Subir a app (sem brigar pela :80)
+### 2. Subir a app
 
 ```bash
-cd /home/chatwoot/nsantos   # ou /opt/portfolio
-git pull
+cd /home/chatwoot/nsantos
 docker compose down
+docker rm -f portfolio-caddy-1 2>/dev/null
 docker compose up -d --build
 curl -I http://127.0.0.1:3000
 ```
 
-### 3. Ligar o domínio no proxy que já existe
-
-**Nginx** (mais comum com Chatwoot):
+### 3. Nginx (HTTP primeiro — sem SSL no arquivo)
 
 ```bash
 sudo cp deploy/nginx.nsantos.dev.conf /etc/nginx/sites-available/nsantos.dev
 sudo ln -sf /etc/nginx/sites-available/nsantos.dev /etc/nginx/sites-enabled/
 sudo nginx -t && sudo systemctl reload nginx
+```
+
+### 4. HTTPS com certbot
+
+```bash
 sudo certbot --nginx -d nsantos.dev -d www.nsantos.dev
 ```
 
-**Caddy no host**: importe `deploy/caddy.nsantos.dev.conf` no Caddyfile principal
-e recarregue o Caddy.
-
-### 4. VPS “limpo” (sem nada nas portas 80/443)
+### 5. Atualizar depois
 
 ```bash
-WITH_EDGE=1 sudo ./scripts/deploy.sh
-# ou:
-docker compose --profile edge up -d --build
+cd /home/chatwoot/nsantos
+git pull
+docker compose up -d --build
 ```
 
-Aí o Caddy do Compose assume HTTPS sozinho.
-
-### 5. Atualizar depois de um push
-
-```bash
-sudo ./scripts/update.sh
-# ou:
-git pull && docker compose up -d --build
-```
-
-### Variáveis de ambiente
+### Variáveis
 
 ```bash
 SITE_DOMAIN=nsantos.dev
-ACME_EMAIL=contato@nsantos.dev
 NEXT_PUBLIC_SITE_URL=https://nsantos.dev
 APP_PORT=3000
 ```
 
-`NEXT_PUBLIC_SITE_URL` entra no **build** da imagem. Se mudar o domínio, faça
-rebuild (`docker compose up -d --build`).
+`NEXT_PUBLIC_SITE_URL` entra no **build**. Se mudar o domínio, faça rebuild.
 
 ### Logs
 
@@ -128,11 +113,6 @@ rebuild (`docker compose up -d --build`).
 docker compose logs -f web
 docker compose ps
 ```
-
-### Erro `address already in use` na :80
-
-Significa que nginx/Caddy/outro container já usa a 80. **Não** use
-`--profile edge`. Suba só o `web` e faça o proxy no host (passos 2–3).
 
 ## Design system
 

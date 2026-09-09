@@ -1,6 +1,0 @@
-# Override legado — o compose principal já publica só em 127.0.0.1:3000.
-# Mantido para quem ainda chama: docker compose -f docker-compose.yml -f deploy/docker-compose.http.yml up -d
-services:
-  caddy:
-    profiles:
-      - disabled
