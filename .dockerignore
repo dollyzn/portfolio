@@ -1,0 +1,39 @@
+# Dependências e builds locais
+node_modules
+.next
+out
+dist
+build
+
+# Git e IDE
+.git
+.gitignore
+.cursor
+.vscode
+.idea
+*.swp
+*.swo
+
+# Docs e scripts de desenvolvimento (não entram na imagem)
+README.md
+AGENTS.md
+CLAUDE.md
+*.md
+scripts
+deploy
+
+# Env local (o compose injeta via .env no host)
+.env
+.env.*
+!.env.example
+
+# Testes e tooling
+playwright-report
+test-results
+coverage
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db

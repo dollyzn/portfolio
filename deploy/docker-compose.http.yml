@@ -1,0 +1,10 @@
+# Override para testes sem domínio / sem HTTPS.
+# Uso: docker compose -f docker-compose.yml -f deploy/docker-compose.http.yml up -d --build
+services:
+  web:
+    ports:
+      - "3000:3000"
+
+  caddy:
+    profiles:
+      - disabled

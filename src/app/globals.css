@@ -1,0 +1,259 @@
+@import "tailwindcss";
+
+/*
+  Paleta amostrada diretamente da imagem de referência:
+  preto-azulado, marinho profundo, azul elétrico e cyan de alta luz.
+*/
+@theme {
+  --color-void: #02040a;
+  --color-abyss: #04060f;
+  --color-panel: #070b16;
+  --color-navy-950: #030826;
+  --color-navy-900: #050c3a;
+  --color-navy-800: #061e6d;
+  --color-blue-600: #2563eb;
+  --color-blue-500: #3772cc;
+  --color-electric: #4cb1fc;
+  --color-cyan-bright: #72defe;
+  --color-paper: #eef3fb;
+  --color-mist: #b6c4da;
+  --color-slate-blue: #7f8fa8;
+  --color-dim: #5a6880;
+  --color-hairline: rgba(120, 160, 220, 0.12);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-hairline);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: var(--color-void);
+    color: var(--color-mist);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-electric) 32%, transparent);
+    color: #fff;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: var(--color-paper);
+    text-wrap: balance;
+    letter-spacing: -0.03em;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-electric);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* Scrollbar discreta, alinhada à identidade */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-void);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #131c30;
+    border: 3px solid var(--color-void);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #1d2b48;
+  }
+}
+
+@layer utilities {
+  /* Malha técnica de fundo - hairlines, nunca xadrez pesado */
+  .bg-tech-grid {
+    background-image:
+      linear-gradient(
+        to right,
+        rgba(120, 170, 240, 0.055) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        rgba(120, 170, 240, 0.055) 1px,
+        transparent 1px
+      );
+    background-size: 72px 72px;
+  }
+
+  .text-gradient-accent {
+    background: linear-gradient(
+      100deg,
+      #9ad9ff 0%,
+      var(--color-cyan-bright) 42%,
+      var(--color-electric) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .text-gradient-blue {
+    background: linear-gradient(
+      100deg,
+      var(--color-paper) 0%,
+      var(--color-paper) 38%,
+      var(--color-cyan-bright) 72%,
+      var(--color-electric) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Grão sutil: tira o aspecto "chapado" do fundo escuro */
+  .noise-overlay::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.045;
+    mix-blend-mode: soft-light;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+  }
+
+  .mask-fade-b {
+    -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+  }
+
+  .shine-sweep {
+    background: linear-gradient(
+      110deg,
+      transparent 25%,
+      rgba(114, 222, 254, 0.16) 48%,
+      transparent 62%
+    );
+  }
+}
+
+/* ── Intro ──────────────────────────────────────────────────────
+   O conteúdo começa escondido: a intro é decidida no cliente e não pode
+   haver flash do Hero antes dela. data-intro="done" libera com transição —
+   e essa transição roda no compositor, então continua fluida mesmo
+   enquanto o globo 3D bloqueia a thread principal para se montar.
+   Sem JavaScript, o <noscript> do layout libera tudo. */
+
+#conteudo,
+body > header,
+body > footer,
+body > nav {
+  transition:
+    opacity 800ms var(--ease-out-expo),
+    transform 1100ms var(--ease-out-expo),
+    filter 800ms var(--ease-out-expo);
+}
+
+html:not([data-intro="done"]) body {
+  overflow: hidden;
+}
+
+html:not([data-intro="done"]) #conteudo,
+html:not([data-intro="done"]) body > header,
+html:not([data-intro="done"]) body > footer,
+html:not([data-intro="done"]) body > nav {
+  opacity: 0;
+  transform: scale(1.03);
+  filter: blur(10px);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #conteudo,
+  body > header,
+  body > footer,
+  body > nav {
+    transition: opacity 200ms linear;
+  }
+
+  html:not([data-intro="done"]) #conteudo,
+  html:not([data-intro="done"]) body > header,
+  html:not([data-intro="done"]) body > footer,
+  html:not([data-intro="done"]) body > nav {
+    transform: none;
+    filter: none;
+  }
+}
+
+/* Marquee da seção de stack: duas cópias da lista, translação de -50% */
+@keyframes marquee-x {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-marquee {
+  animation: marquee-x 64s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
+}
+
+/* Marca-passo do cursor: variáveis atualizadas via JS no Hero */
+.glow-follow {
+  background: radial-gradient(
+    260px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(76, 177, 252, 0.14),
+    transparent 70%
+  );
+}
+
+/* O canvas do globo precisa recusar o pan nativo — senão o mobile
+   trata o arrasto como scroll e o OrbitControls nunca recebe o gesto. */
+[data-globe] canvas {
+  touch-action: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
