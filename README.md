@@ -11,8 +11,8 @@ primitivos no estilo shadcn/ui (cva + Radix Slot).
 ## Rodando localmente
 
 ```bash
-npm install
-npm run dev
+pnpm install
+pnpm dev
 ```
 
 ## Onde editar o conteúdo

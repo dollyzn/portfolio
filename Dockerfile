@@ -3,13 +3,16 @@ FROM node:22-alpine AS deps
 WORKDIR /app
 
 RUN apk add --no-cache libc6-compat
+RUN corepack enable && corepack prepare pnpm@9.15.9 --activate
 
-COPY package.json package-lock.json ./
-RUN npm ci
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
 
 # ── Build ───────────────────────────────────────────────────────
 FROM node:22-alpine AS builder
 WORKDIR /app
+
+RUN corepack enable && corepack prepare pnpm@9.15.9 --activate
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
@@ -20,7 +23,7 @@ ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
-RUN npm run build
+RUN pnpm build
 
 # ── Runtime ─────────────────────────────────────────────────────
 FROM node:22-alpine AS runner
