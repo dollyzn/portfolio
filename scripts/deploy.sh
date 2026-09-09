@@ -2,19 +2,22 @@
 #
 # Deploy do portfólio em Ubuntu (Hetzner / qualquer VPS).
 #
-# Uso no servidor:
-#   curl -fsSL https://raw.githubusercontent.com/SEU_USER/SEU_REPO/main/scripts/deploy.sh | bash
-#   # ou, com o repo já clonado:
-#   ./scripts/deploy.sh
+# Por padrão sobe só o Next em 127.0.0.1:3000 — ideal quando nginx/Caddy
+# do host (Chatwoot etc.) já ocupa 80/443.
+#
+# Uso:
+#   sudo ./scripts/deploy.sh
+#   WITH_EDGE=1 sudo ./scripts/deploy.sh   # inclui Caddy nas portas 80/443
 #
 # Variáveis opcionais:
 #   SITE_DOMAIN=nsantos.dev
 #   ACME_EMAIL=contato@nsantos.dev
 #   NEXT_PUBLIC_SITE_URL=https://nsantos.dev
+#   APP_PORT=3000
 #   REPO_URL=git@github.com:dollyzn/portfolio.git
 #   APP_DIR=/opt/portfolio
 #   BRANCH=main
-#   HTTP_ONLY=1          # sobe só a app na :3000, sem Caddy/HTTPS
+#   WITH_EDGE=1
 #
 set -euo pipefail
 
@@ -28,20 +31,20 @@ log()  { printf "${CYAN}→${NC} %s\n" "$*"; }
 ok()   { printf "${GREEN}✓${NC} %s\n" "$*"; }
 warn() { printf "${YELLOW}!${NC} %s\n" "$*"; }
 die()  { printf "${RED}✗${NC} %s\n" "$*" >&2; exit 1; }
-
-need_root() {
-  if [[ "${EUID}" -ne 0 ]]; then
-    die "rode como root (sudo ./scripts/deploy.sh)"
-  fi
-}
+ 
 
 SITE_DOMAIN="${SITE_DOMAIN:-nsantos.dev}"
 ACME_EMAIL="${ACME_EMAIL:-contato@nsantos.dev}"
 NEXT_PUBLIC_SITE_URL="${NEXT_PUBLIC_SITE_URL:-https://${SITE_DOMAIN}}"
+APP_PORT="${APP_PORT:-3000}"
 REPO_URL="${REPO_URL:-}"
 APP_DIR="${APP_DIR:-/opt/portfolio}"
 BRANCH="${BRANCH:-main}"
-HTTP_ONLY="${HTTP_ONLY:-0}"
+WITH_EDGE="${WITH_EDGE:-0}"
+# alias antigo
+if [[ "${HTTP_ONLY:-0}" == "1" ]]; then
+  WITH_EDGE=0
+fi
 
 install_docker() {
   if command -v docker >/dev/null 2>&1 && docker compose version >/dev/null 2>&1; then
@@ -80,13 +83,9 @@ configure_firewall() {
 
   log "configurando UFW (OpenSSH + HTTP/HTTPS)…"
   ufw allow OpenSSH >/dev/null
-  if [[ "${HTTP_ONLY}" == "1" ]]; then
-    ufw allow 3000/tcp >/dev/null
-  else
-    ufw allow 80/tcp >/dev/null
-    ufw allow 443/tcp >/dev/null
-    ufw allow 443/udp >/dev/null
-  fi
+  ufw allow 80/tcp >/dev/null
+  ufw allow 443/tcp >/dev/null
+  ufw allow 443/udp >/dev/null
   ufw --force enable >/dev/null
   ok "firewall ativo"
 }
@@ -104,7 +103,6 @@ sync_repo() {
     return
   fi
 
-  # script rodando de dentro do clone
   local script_dir
   script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
   local repo_root
@@ -121,7 +119,6 @@ sync_repo() {
         --exclude '.env' \
         "${repo_root}/" "${APP_DIR}/"
       if [[ -d "${repo_root}/.git" ]]; then
-        # mantém .git para próximos deploys via pull
         rsync -a "${repo_root}/.git/" "${APP_DIR}/.git/"
       fi
     fi
@@ -147,6 +144,7 @@ write_env() {
 SITE_DOMAIN=${SITE_DOMAIN}
 ACME_EMAIL=${ACME_EMAIL}
 NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL}
+APP_PORT=${APP_PORT}
 EOF
   chmod 600 "${env_file}"
   ok ".env criado"
@@ -155,11 +153,15 @@ EOF
 deploy_stack() {
   cd "${APP_DIR}"
 
-  if [[ "${HTTP_ONLY}" == "1" ]]; then
-    log "subindo só a app (HTTP_ONLY) na porta 3000…"
-    docker compose -f docker-compose.yml -f deploy/docker-compose.http.yml up -d --build --remove-orphans
+  # remove tentativa anterior do Caddy preso na :80
+  docker compose --profile edge stop caddy >/dev/null 2>&1 || true
+  docker compose --profile edge rm -f caddy >/dev/null 2>&1 || true
+
+  if [[ "${WITH_EDGE}" == "1" ]]; then
+    log "build + up (web + Caddy nas portas 80/443)…"
+    docker compose --profile edge up -d --build --remove-orphans
   else
-    log "build + up (web + Caddy)…"
+    log "build + up (web em 127.0.0.1:${APP_PORT})…"
     docker compose up -d --build --remove-orphans
   fi
 
@@ -171,24 +173,29 @@ print_next_steps() {
   echo
   ok "deploy concluído"
   echo
-  if [[ "${HTTP_ONLY}" == "1" ]]; then
-    printf "  App:  http://$(hostname -I | awk '{print $1}'):3000\n"
-  else
+  if [[ "${WITH_EDGE}" == "1" ]]; then
     printf "  Site: https://${SITE_DOMAIN}\n"
-    printf "\n  Confirme antes do HTTPS:\n"
-    printf "  1. DNS A (e AAAA se tiver) de ${SITE_DOMAIN} e www → IP deste VPS\n"
-    printf "  2. Portas 80/443 liberadas no firewall da Hetzner Cloud\n"
-    printf "  3. Aguarde a emissão do certificado Let's Encrypt (alguns segundos)\n"
+    printf "\n  Confirme: DNS A/AAAA + portas 80/443 livres no host.\n"
+  else
+    printf "  App local: http://127.0.0.1:${APP_PORT}\n"
+    printf "\n  A porta 80/443 já deve estar com nginx/Caddy do host.\n"
+    printf "  Aponte o domínio para este backend:\n"
+    printf "    nginx → deploy/nginx.nsantos.dev.conf\n"
+    printf "    Caddy → deploy/caddy.nsantos.dev.conf\n"
+    printf "\n  Exemplo rápido (nginx + certbot):\n"
+    printf "    sudo cp deploy/nginx.nsantos.dev.conf /etc/nginx/sites-available/nsantos.dev\n"
+    printf "    sudo ln -sf /etc/nginx/sites-available/nsantos.dev /etc/nginx/sites-enabled/\n"
+    printf "    sudo nginx -t && sudo systemctl reload nginx\n"
+    printf "    sudo certbot --nginx -d ${SITE_DOMAIN} -d www.${SITE_DOMAIN}\n"
   fi
   echo
-  printf "  Logs:    cd ${APP_DIR} && docker compose logs -f\n"
+  printf "  Logs:    cd ${APP_DIR} && docker compose logs -f web\n"
   printf "  Rebuild: cd ${APP_DIR} && docker compose up -d --build\n"
   printf "  Status:  cd ${APP_DIR} && docker compose ps\n"
   echo
 }
 
-main() {
-  need_root
+main() { 
   log "deploy · ${SITE_DOMAIN} → ${APP_DIR}"
   install_docker
   configure_firewall

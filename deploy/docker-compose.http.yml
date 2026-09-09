@@ -1,10 +1,6 @@
-# Override para testes sem domínio / sem HTTPS.
-# Uso: docker compose -f docker-compose.yml -f deploy/docker-compose.http.yml up -d --build
+# Override legado — o compose principal já publica só em 127.0.0.1:3000.
+# Mantido para quem ainda chama: docker compose -f docker-compose.yml -f deploy/docker-compose.http.yml up -d
 services:
-  web:
-    ports:
-      - "3000:3000"
-
   caddy:
     profiles:
       - disabled
