@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 # Atualiza o site a partir do git e reconstrói os containers.
-# Uso: sudo APP_DIR=/home/chatwoot/nsantos ./scripts/update.sh
+# Uso (na pasta do app): sudo ./scripts/update.sh
+# Override opcional: sudo APP_DIR=/caminho/custom ./scripts/update.sh
 set -euo pipefail
 
-APP_DIR="${APP_DIR:-/opt/portfolio}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+APP_DIR="${APP_DIR:-$(cd "${SCRIPT_DIR}/.." && pwd)}"
 BRANCH="${BRANCH:-main}"
 
 cd "${APP_DIR}"
@@ -29,5 +31,4 @@ fi
 
 docker compose up -d --build --remove-orphans
 docker compose ps
-docker image prune -f >/dev/null
 echo "✓ atualizado"

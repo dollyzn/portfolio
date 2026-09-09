@@ -4,6 +4,7 @@
 # Sobe o Next em 127.0.0.1:3000 — o nginx do servidor faz o HTTPS.
 #
 #   sudo ./scripts/deploy.sh
+#   sudo APP_DIR=/caminho/custom ./scripts/deploy.sh
 #
 set -euo pipefail
 
@@ -24,7 +25,8 @@ SITE_DOMAIN="${SITE_DOMAIN:-nsantos.dev}"
 NEXT_PUBLIC_SITE_URL="${NEXT_PUBLIC_SITE_URL:-https://${SITE_DOMAIN}}"
 APP_PORT="${APP_PORT:-3000}"
 REPO_URL="${REPO_URL:-}"
-APP_DIR="${APP_DIR:-/opt/portfolio}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+APP_DIR="${APP_DIR:-$(cd "${SCRIPT_DIR}/.." && pwd)}"
 BRANCH="${BRANCH:-main}"
 
 install_docker() {
@@ -99,10 +101,8 @@ sync_repo() {
     return
   fi
 
-  local script_dir
-  script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
   local repo_root
-  repo_root="$(cd "${script_dir}/.." && pwd)"
+  repo_root="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
   if [[ -f "${repo_root}/docker-compose.yml" ]]; then
     if [[ "${repo_root}" != "${APP_DIR}" ]]; then
