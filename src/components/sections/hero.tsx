@@ -70,11 +70,11 @@ export function Hero() {
           <h1 className="mt-7 text-[2.6rem] font-medium leading-[1.02] tracking-[-0.035em] sm:text-6xl lg:text-[4.1rem]">
             <Line delay={0.24}>
               <span className="text-[0.42em] font-normal tracking-[0.02em] text-slate-blue">
-                Olá, eu sou
+                Olá, me chamo
               </span>
             </Line>
             <Line delay={0.32}>
-              <span className="text-paper">Natã Santos.</span>
+              <span className="text-paper">Natã.</span>
             </Line>
             <Line delay={0.4}>
               <span className="flex flex-wrap items-baseline gap-x-[0.28em] text-slate-blue">

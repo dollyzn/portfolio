@@ -60,17 +60,16 @@ interface WorldProps {
   onReady?: () => void;
 }
 
-function nextFrame() {
+/** Cede a thread principal — rAF + timeout evita long-tasks contínuos. */
+function yieldToMain(ms = 32) {
   return new Promise<void>((resolve) => {
-    requestAnimationFrame(() => resolve());
+    requestAnimationFrame(() => {
+      window.setTimeout(resolve, ms);
+    });
   });
 }
 
-export function Globe({
-  globeConfig,
-  data,
-  onReady,
-}: WorldProps) {
+export function Globe({ globeConfig, data, onReady }: WorldProps) {
   const globeRef = useRef<ThreeGlobe | null>(null);
   const groupRef = useRef<Group | null>(null);
   const onReadyRef = useRef(onReady);
@@ -87,7 +86,7 @@ export function Globe({
       showAtmosphere: true,
       atmosphereAltitude: 0.1,
       polygonColor: "rgba(114,222,254,0.5)",
-      hexPolygonResolution: 3,
+      hexPolygonResolution: 1,
       globeColor: "#050C3A",
       emissive: "#02040A",
       emissiveIntensity: 0.1,
@@ -130,8 +129,8 @@ export function Globe({
     config.shininess,
   ]);
 
-  // Continentes, arcos e anéis entram em frames separados para o F5
-  // não pagar o custo todo de uma vez na thread principal.
+  // Continentes/arcos entram em fatias com yield — o hexPolygonsData é o
+  // long-task pesado; só roda depois do canvas já estar no ar.
   useEffect(() => {
     const globe = globeRef.current;
     if (!globe || !isInitialized || !data) return;
@@ -148,26 +147,10 @@ export function Globe({
       .ringsData([]);
 
     const run = async () => {
-      await nextFrame();
+      await yieldToMain(48);
       if (cancelled) return;
 
-      const geo = (await import("@/data/globe.json")).default as {
-        features: object[];
-      };
-      if (cancelled) return;
-
-      await nextFrame();
-      if (cancelled) return;
-
-      globe
-        .hexPolygonsData(geo.features)
-        .hexPolygonResolution(config.hexPolygonResolution)
-        .hexPolygonMargin(0.7)
-        .hexPolygonColor(() => config.polygonColor);
-
-      await nextFrame();
-      if (cancelled) return;
-
+      // atmosfera + arcos primeiro: visual leve, página já responde
       const points = data.flatMap((arc) => [
         {
           size: config.pointSize,
@@ -219,6 +202,27 @@ export function Globe({
         .ringPropagationSpeed(RING_PROPAGATION_SPEED)
         .ringRepeatPeriod((config.arcTime * config.arcLength) / config.rings);
 
+      await yieldToMain(80);
+      if (cancelled) return;
+
+      const geo = (await import("@/data/globe.json")).default as {
+        features: object[];
+      };
+      if (cancelled) return;
+
+      await yieldToMain(64);
+      if (cancelled) return;
+
+      // resolução 1: continentes legíveis sem long-task de ~500ms
+      globe
+        .hexPolygonsData(geo.features)
+        .hexPolygonResolution(config.hexPolygonResolution)
+        .hexPolygonMargin(0.75)
+        .hexPolygonColor(() => config.polygonColor);
+
+      // só avisa a intro depois do trabalho pesado — progresso sai do 0%
+      await yieldToMain(32);
+      if (cancelled) return;
       onReadyRef.current?.();
     };
 
@@ -285,22 +289,28 @@ export function World({
   const resolvedConfig = useMemo(
     () => ({
       ...globeConfig,
-      // resolução 3 gera um long-task de ~500ms no F5; 2 ainda desenha
-      // os continentes com clareza e deixa a thread principal respirar
-      hexPolygonResolution: globeConfig.hexPolygonResolution ?? 2,
+      // 1 = continentes legíveis sem o long-task de tessellation alto
+      hexPolygonResolution: globeConfig.hexPolygonResolution ?? 1,
     }),
     [globeConfig],
   );
+
+  const [lowPower] = useState(() => {
+    const mobile = window.matchMedia("(max-width: 768px)").matches;
+    const mem = (navigator as Navigator & { deviceMemory?: number })
+      .deviceMemory;
+    return mobile || (typeof mem === "number" && mem <= 4);
+  });
 
   return (
     <Canvas
       scene={scene}
       camera={camera}
-      dpr={[1, 1.5]}
+      dpr={lowPower ? [1, 1] : [1, 1.25]}
       gl={(props) => {
         const renderer = new WebGLRenderer({
           ...props,
-          antialias: true,
+          antialias: !lowPower,
           alpha: true,
           powerPreference: "high-performance",
         });
@@ -324,11 +334,7 @@ export function World({
         position={new Vector3(-200, 500, 200)}
         intensity={0.85}
       />
-      <Globe
-        globeConfig={resolvedConfig}
-        data={data}
-        onReady={onReady}
-      />
+      <Globe globeConfig={resolvedConfig} data={data} onReady={onReady} />
       <OrbitControls
         enablePan={false}
         enableZoom={false}

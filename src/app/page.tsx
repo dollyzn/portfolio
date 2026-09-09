@@ -1,7 +1,7 @@
 import { Intro } from "@/components/intro";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
-import { CursorGlow } from "@/components/layout/cursor-glow";
+import { CustomCursor } from "@/components/layout/custom-cursor";
 import { SectionRail } from "@/components/layout/section-rail";
 import { Hero } from "@/components/sections/hero";
 import { About } from "@/components/sections/about";
@@ -16,7 +16,7 @@ export default function Home() {
   return (
     <>
       <Intro />
-      <CursorGlow />
+      <CustomCursor />
       <Navbar />
       <SectionRail />
       <main id="conteudo" className="flex-1">

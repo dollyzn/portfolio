@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { motion, useInView, type MotionValue } from "motion/react";
 import { globeArcs, globeConfig } from "@/lib/globe-arcs";
-import { preloadGlobe } from "@/lib/preload-globe";
+import { markGlobeReady } from "@/lib/boot-gate";
 import { cn } from "@/lib/utils";
 
 const World = dynamic(
@@ -31,28 +31,10 @@ export function HeroVisual({
   driftY: MotionValue<number>;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const inView = useInView(containerRef, { margin: "160px" });
+  const inView = useInView(containerRef, { margin: "200px" });
   const [ready, setReady] = useState(false);
-  const [mount3d, setMount3d] = useState(false);
-
-  useEffect(() => {
-    preloadGlobe();
-
-    // espera a primeira pintura (e a intro, se estiver na frente) antes
-    // de montar o WebGL — o GeoJSON ainda trava a thread por um instante
-    const start = () => setMount3d(true);
-    const idle =
-      typeof window.requestIdleCallback === "function"
-        ? window.requestIdleCallback(start, { timeout: 450 })
-        : window.setTimeout(start, 180);
-
-    return () => {
-      if (typeof window.cancelIdleCallback === "function") {
-        window.cancelIdleCallback(idle as number);
-      }
-      window.clearTimeout(idle as number);
-    };
-  }, []);
+  // monta imediatamente (atrás da intro) pra aquecer o WebGL
+  const [mount3d] = useState(true);
 
   return (
     <div
@@ -115,8 +97,12 @@ export function HeroVisual({
             <World
               globeConfig={globeConfig}
               data={globeArcs}
-              paused={!inView}
-              onReady={() => setReady(true)}
+              // mantém o loop rodando atrás da intro pra aquecer; pausa só fora da vista depois
+              paused={!inView && ready}
+              onReady={() => {
+                setReady(true);
+                markGlobeReady();
+              }}
             />
           </div>
         ) : null}

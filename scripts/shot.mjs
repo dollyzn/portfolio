@@ -1,4 +1,4 @@
-// Helper de verificação visual - não faz parte do build.
+// Helper de verificação visual — não faz parte do build.
 // uso: node scripts/shot.mjs <largura> <altura> <scrollY> <saida> [reduced]
 import { chromium } from "playwright";
 
@@ -8,11 +8,9 @@ const [w = 1440, h = 900, y = 0, out = "/tmp/shot.png", mode] =
 const browser = await chromium.launch({ args: ["--use-gl=swiftshader"] });
 const page = await browser.newPage({
   viewport: { width: Number(w), height: Number(h) },
-  reducedMotion: mode === "reduced" ? "reduce" : "no-preference",
+  // por padrão pula a intro (reduced-motion); passe "motion" pra testar com ela
+  reducedMotion: mode === "motion" ? "no-preference" : "reduce",
 });
-// pula a intro: ela é verificada por scripts/shot-intro.mjs
-await page.addInitScript(() => sessionStorage.setItem("ns-intro", "1"));
-
 const errors = [];
 page.on("pageerror", (e) => errors.push(e.message.slice(0, 200)));
 page.on("console", (m) => {

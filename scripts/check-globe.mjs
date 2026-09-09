@@ -6,6 +6,7 @@ const browser = await chromium.launch({ args: ["--use-gl=swiftshader"] });
 const page = await browser.newPage({
   viewport: { width: 1440, height: 900 },
   hasTouch: true,
+  reducedMotion: "reduce",
 });
 const errors = [];
 page.on("pageerror", (e) => errors.push(e.message.slice(0, 300)));
@@ -16,7 +17,6 @@ page.on("console", (m) => {
 
 // mede tarefas longas desde o começo do carregamento
 await page.addInitScript(() => {
-  sessionStorage.setItem("ns-intro", "1");
   window.__long = [];
   new PerformanceObserver((list) => {
     for (const entry of list.getEntries())
@@ -58,8 +58,8 @@ const mobile = await browser.newPage({
   viewport: { width: 390, height: 844 },
   hasTouch: true,
   isMobile: true,
+  reducedMotion: "reduce",
 });
-await mobile.addInitScript(() => sessionStorage.setItem("ns-intro", "1"));
 await mobile.goto("http://localhost:3000", { waitUntil: "load" });
 await mobile.waitForSelector("canvas", { timeout: 10000 });
 await mobile.waitForTimeout(2200);
