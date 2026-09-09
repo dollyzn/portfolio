@@ -70,13 +70,29 @@ configure_firewall() {
   ok "firewall ativo"
 }
 
+git_as_owner() {
+  local owner
+  owner="$(stat -c '%U' "${APP_DIR}" 2>/dev/null || echo root)"
+  if [[ "${EUID}" -eq 0 && "${owner}" != "root" ]]; then
+    sudo -u "${owner}" -H git -C "${APP_DIR}" "$@"
+  else
+    git -C "${APP_DIR}" "$@"
+  fi
+}
+
 sync_repo() {
   if [[ -f "${APP_DIR}/docker-compose.yml" ]]; then
     log "atualizando código em ${APP_DIR}…"
     if [[ -d "${APP_DIR}/.git" ]]; then
-      git -C "${APP_DIR}" fetch --all --prune
-      git -C "${APP_DIR}" checkout "${BRANCH}"
-      git -C "${APP_DIR}" pull --ff-only origin "${BRANCH}"
+      # evita "dubious ownership" e usa a chave SSH do dono do diretório
+      git config --global --add safe.directory "${APP_DIR}" 2>/dev/null || true
+      if ! git_as_owner fetch --all --prune \
+        || ! git_as_owner checkout "${BRANCH}" \
+        || ! git_as_owner pull --ff-only origin "${BRANCH}"; then
+        warn "git pull falhou — seguindo com o código já presente em ${APP_DIR}"
+      else
+        ok "código atualizado"
+      fi
     else
       warn "pasta existe sem git — usando arquivos locais"
     fi
