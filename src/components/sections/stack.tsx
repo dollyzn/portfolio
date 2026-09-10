@@ -62,7 +62,7 @@ function PrimaryGrid() {
       <div
         ref={ref}
         onMouseMove={handleMove}
-        className="group/grid relative isolate overflow-hidden rounded-2xl border border-white/[0.07]"
+        className="group/grid relative isolate overflow-hidden rounded-2xl border border-line"
       >
         {/* brilho único acompanhando o cursor na grade inteira */}
         <span
@@ -70,7 +70,7 @@ function PrimaryGrid() {
           className="pointer-events-none absolute inset-0 -z-10 opacity-0 transition-opacity duration-500 group-hover/grid:opacity-100"
           style={{
             background:
-              "radial-gradient(340px circle at var(--gx, 50%) var(--gy, 50%), rgba(76,177,252,0.09), transparent 70%)",
+              "radial-gradient(340px circle at var(--gx, 50%) var(--gy, 50%), color-mix(in oklab, var(--electric) 9%, transparent), transparent 70%)",
           }}
         />
 
@@ -107,8 +107,8 @@ function TechCell({ tech, index }: { tech: Tech; index: number }) {
       }}
       className={cn(
         "group/cell relative flex h-full flex-col items-center justify-center gap-3 px-3 py-8 text-center transition-colors duration-500 hover:bg-electric/[0.035] sm:gap-4 sm:py-12",
-        col < 2 && "border-r border-white/[0.06]",
-        row < 2 && "border-b border-white/[0.06]",
+        col < 2 && "border-r border-line",
+        row < 2 && "border-b border-line",
       )}
     >
       {/* cantos que aparecem no hover */}
@@ -120,7 +120,7 @@ function TechCell({ tech, index }: { tech: Tech; index: number }) {
       <span className="relative block">
         <TechGlyph
           icon={tech.icon}
-          className="size-8 text-mist transition-all duration-500 group-hover/cell:scale-110 group-hover/cell:text-cyan-bright group-hover/cell:drop-shadow-[0_0_14px_rgba(114,222,254,0.55)] motion-reduce:group-hover/cell:scale-100 sm:size-10"
+          className="size-8 text-mist transition-all duration-500 group-hover/cell:scale-110 group-hover/cell:text-cyan-bright group-hover/cell:drop-shadow-[0_0_14px_color-mix(in_oklab,var(--cyan-bright)_55%,transparent)] motion-reduce:group-hover/cell:scale-100 sm:size-10"
         />
       </span>
 
@@ -137,7 +137,7 @@ function TechCell({ tech, index }: { tech: Tech; index: number }) {
         </span>
       </span>
 
-      <span className="pointer-events-none absolute left-3 top-3 font-mono text-[9px] tracking-[0.14em] text-white/[0.09] transition-colors duration-500 group-hover/cell:text-electric/40">
+      <span className="pointer-events-none absolute left-3 top-3 font-mono text-[9px] tracking-[0.14em] text-dim/35 transition-colors duration-500 group-hover/cell:text-electric/40">
         {String(index + 1).padStart(2, "0")}
       </span>
     </motion.div>
@@ -170,7 +170,7 @@ function SecondaryRow() {
             <li key={tech.name}>
               <span
                 title={tech.note}
-                className="group/tag inline-flex cursor-default select-none items-center gap-2 rounded-lg border border-white/[0.07] bg-white/[0.014] px-3 py-2 transition-all duration-300 hover:-translate-y-px hover:border-electric/40 hover:bg-electric/[0.06] hover:shadow-[0_0_22px_-8px_rgba(76,177,252,0.7)] motion-reduce:hover:translate-y-0"
+                className="group/tag inline-flex cursor-default select-none items-center gap-2 rounded-lg border border-line bg-surface px-3 py-2 transition-all duration-300 hover:-translate-y-px hover:border-electric/40 hover:bg-electric/[0.06] hover:shadow-[0_0_22px_-8px_color-mix(in_oklab,var(--electric)_70%,transparent)] motion-reduce:hover:translate-y-0"
               >
                 <TechGlyph
                   icon={tech.icon}
@@ -191,7 +191,7 @@ function SecondaryRow() {
 function Topics() {
   return (
     <Reveal delay={0.12}>
-      <div className="mt-12 border-t border-white/[0.06] pt-8">
+      <div className="mt-12 border-t border-line pt-8">
         <p className="font-mono text-[10.5px] uppercase tracking-[0.24em] text-dim">
           E os assuntos por trás delas
         </p>

@@ -5,7 +5,7 @@ import { motion } from "motion/react";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { cn } from "@/lib/utils";
 
-/** Marca NS - proporção original 412 × 640. */
+/** Marca NS — versão escura no light mode, clara no dark mode. */
 export function LogoMark({
   className,
   priority,
@@ -14,16 +14,34 @@ export function LogoMark({
   priority?: boolean;
 }) {
   return (
-    <Image
-      src="/logo-mark.webp"
-      alt=""
-      aria-hidden
-      width={412}
-      height={640}
-      priority={priority}
-      loading="eager"
-      className={cn("h-full w-auto select-none object-contain", className)}
-    />
+    <>
+      <Image
+        src="/logo-dark.png"
+        alt=""
+        aria-hidden
+        width={1254}
+        height={1254}
+        priority={priority}
+        loading="eager"
+        className={cn(
+          "h-full w-auto select-none object-contain dark:hidden",
+          className,
+        )}
+      />
+      <Image
+        src="/logo-mark.webp"
+        alt=""
+        aria-hidden
+        width={412}
+        height={640}
+        priority={priority}
+        loading="eager"
+        className={cn(
+          "hidden h-full w-auto select-none object-contain dark:block",
+          className,
+        )}
+      />
+    </>
   );
 }
 
@@ -48,7 +66,7 @@ export function Logo({
       >
         <LogoMark
           priority
-          className="drop-shadow-[0_0_10px_rgba(76,177,252,0.28)] transition-[filter] duration-500 group-hover/logo:drop-shadow-[0_0_16px_rgba(114,222,254,0.6)]"
+          className="drop-shadow-[0_0_10px_color-mix(in_oklab,var(--electric)_30%,transparent)] transition-[filter] duration-500 group-hover/logo:drop-shadow-[0_0_16px_color-mix(in_oklab,var(--cyan-bright)_55%,transparent)]"
         />
         <span
           aria-hidden

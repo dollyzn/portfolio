@@ -56,13 +56,11 @@ export function SectionRail() {
                       "block h-px transition-colors duration-500",
                       isActive
                         ? "w-6 bg-electric"
-                        : "w-2.5 bg-white/20 group-hover:w-4 group-hover:bg-electric/60",
+                        : "w-2.5 bg-line-strong group-hover:w-4 group-hover:bg-electric/60",
                     )}
                   />
                 </span>
-                <span className="sr-only">
-                  Ir para a seção {stop.label}
-                </span>
+                <span className="sr-only">Ir para a seção {stop.label}</span>
               </a>
             </li>
           );

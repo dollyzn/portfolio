@@ -1,124 +1,127 @@
-# Portfólio - Natã Santos
+# Meu portfólio
 
-Portfólio pessoal de um desenvolvedor full stack. Estética dark azul-marinho / azul
-elétrico, tipografia editorial e microinterações discretas.
+Meu site pessoal — sou desenvolvedor full stack em Brasília.
+One-page com dark/light mode, globo 3D interativo, intro animada e seções de experiência, stack, projetos e contato.
+
+**Site:** [nsantos.dev](https://nsantos.dev) · **Contato:** [contato@nsantos.dev](mailto:contato@nsantos.dev)
+
+---
 
 ## Stack
 
-Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · Motion · Lucide ·
-primitivos no estilo shadcn/ui (cva + Radix Slot).
+| Camada | Tecnologia |
+| --- | --- |
+| Framework | [Next.js 16](https://nextjs.org) (App Router) |
+| UI | React 19 · TypeScript · Tailwind CSS v4 |
+| Animação | Motion · Animate UI (switch / theme toggler) |
+| Tema | `next-themes` (light / dark / system) + View Transitions |
+| 3D | Three.js · React Three Fiber · three-globe |
+| Ícones | Lucide · Simple Icons |
+| Estilo de componentes | CVA · Radix Slot · Base UI |
 
-## Rodando localmente
+## O que tem aqui
+
+- Tema claro e escuro com transição circular (`tr-circle`) e switch animado
+- Intro sincronizada com o warm-up do WebGL
+- Globo 3D com órbita e arcos a partir de Brasília
+- Conteúdo desacoplado dos componentes (`site.ts` / `content.ts`)
+- SEO: metadata, sitemap, robots, Open Graph e JSON-LD
+- Acessibilidade: `prefers-reduced-motion`, skip link, foco visível
+- Deploy via Vercel ou VPS (Docker + nginx)
+
+## Pré-requisitos
+
+- Node.js 20+
+- [pnpm](https://pnpm.io) 9+
+
+## Como rodar
 
 ```bash
 pnpm install
 pnpm dev
 ```
 
-## Onde editar o conteúdo
+Abra [http://localhost:3000](http://localhost:3000).
 
-Todo o texto e os dados ficam fora dos componentes:
+### Scripts
 
-| Arquivo              | O que contém                                                 |
-| -------------------- | ------------------------------------------------------------ |
-| `src/lib/site.ts`    | nome, e-mail, GitHub, localização, links da navbar           |
-| `src/lib/content.ts` | experiências, stack, projetos, princípios, formação, idiomas |
+| Comando | Descrição |
+| --- | --- |
+| `pnpm dev` | servidor de desenvolvimento |
+| `pnpm build` | build de produção |
+| `pnpm start` | sobe o build localmente |
+| `pnpm lint` | ESLint |
 
-### Publicar um projeto real
+### Variáveis de ambiente
 
-Em `src/lib/content.ts`, cada projeto tem `repo` e `demo`. Basta trocar pelas URLs
-finais - `demo: null` faz o card exibir "Demo em breve" automaticamente. Os projetos
-atuais estão marcados como `Projeto pessoal / conceito`; ajuste o campo `kind` quando
-substituir por trabalhos reais.
+Copie `.env.example` e ajuste se necessário:
 
-Os mockups são desenhados em HTML/SVG em `src/components/ui/project-mockup.tsx`,
-indexados por `slug`. Para um projeto novo, adicione um bloco lá ou aponte o `slug`
-para um mockup existente.
+```bash
+NEXT_PUBLIC_SITE_URL=https://nsantos.dev
+```
 
-## Deploy na Vercel
+`NEXT_PUBLIC_SITE_URL` entra no **build** (canonical, sitemap, Open Graph).
 
-Importe o repositório na Vercel — não há configuração extra. Defina a variável
-`NEXT_PUBLIC_SITE_URL` com o domínio final para que canonical, sitemap e OpenGraph
-apontem para o endereço correto.
+## Onde edito o conteúdo
 
-A imagem OpenGraph e o favicon são gerados em build por `src/app/opengraph-image.tsx`
-e `src/app/icon.tsx`.
+| Arquivo | Conteúdo |
+| --- | --- |
+| `src/lib/site.ts` | nome, e-mail, GitHub, URL, navbar |
+| `src/lib/content.ts` | experiência, stack, projetos, princípios, formação |
+| `src/app/globals.css` | tokens de cor (light/dark), tipografia, utilitários |
 
-## Deploy em VPS (Hetzner / Ubuntu + nginx)
+### Projetos
 
-O Compose sobe **só o Next.js em `127.0.0.1:3000`**. O HTTPS fica com o
-**nginx do host** (o mesmo que já serve o Chatwoot).
+Em `content.ts`, cada projeto tem `repo` e `demo`. Com `demo: null`, o card mostra “Demo em breve”.
+Os mockups ficam em `src/components/ui/project-mockup.tsx`, indexados por `slug`.
 
-### Arquivos
+## Deploy
+
+### Vercel
+
+Importe o repositório e defina `NEXT_PUBLIC_SITE_URL` com o domínio final.
+
+### VPS (Docker + nginx)
+
+O Compose sobe o Next.js em `127.0.0.1:3000`; o HTTPS fica no nginx do host.
 
 | Arquivo | Função |
 | --- | --- |
-| `Dockerfile` | build multi-stage → imagem mínima |
-| `docker-compose.yml` | serviço `web` em `127.0.0.1:3000` |
-| `deploy/nginx.nsantos.dev.conf` | site nginx → `:3000` |
-| `.env.example` | domínio / porta / URL pública |
-| `scripts/deploy.sh` | provisiona Docker e sobe o stack |
-| `scripts/update.sh` | `git pull` + rebuild |
-
-### 1. DNS
-
-- `A` de `nsantos.dev` → IP do VPS
-- `A` de `www.nsantos.dev` → mesmo IP
-
-### 2. Subir a app
+| `Dockerfile` | build multi-stage |
+| `docker-compose.yml` | serviço `web` |
+| `deploy/nginx.nsantos.dev.conf` | proxy nginx → `:3000` |
+| `scripts/deploy.sh` / `scripts/update.sh` | provisionamento e update |
 
 ```bash
-cd /home/chatwoot/nsantos
-docker compose down
-docker rm -f portfolio-caddy-1 2>/dev/null
 docker compose up -d --build
-curl -I http://127.0.0.1:3000
-```
-
-### 3. Nginx (HTTP primeiro — sem SSL no arquivo)
-
-```bash
 sudo cp deploy/nginx.nsantos.dev.conf /etc/nginx/sites-available/nsantos.dev
 sudo ln -sf /etc/nginx/sites-available/nsantos.dev /etc/nginx/sites-enabled/
 sudo nginx -t && sudo systemctl reload nginx
-```
-
-### 4. HTTPS com certbot
-
-```bash
 sudo certbot --nginx -d nsantos.dev -d www.nsantos.dev
 ```
 
-### 5. Atualizar depois
+Atualizar depois:
 
 ```bash
-cd /home/chatwoot/nsantos
 git pull
 docker compose up -d --build
 ```
 
-### Variáveis
+## Estrutura
 
-```bash
-SITE_DOMAIN=nsantos.dev
-NEXT_PUBLIC_SITE_URL=https://nsantos.dev
-APP_PORT=3000
+```
+src/
+  app/                 # rotas, layout, metadata, OG
+  components/
+    layout/            # navbar, footer, theme switch, cursor
+    sections/          # hero, about, stack, projetos…
+    animate-ui/        # primitivos animados (switch, toggler)
+    ui/                # botões, mockups, globe…
+  lib/                 # site, content, utils
+  hooks/
+public/                # logos e assets estáticos
 ```
 
-`NEXT_PUBLIC_SITE_URL` entra no **build**. Se mudar o domínio, faça rebuild.
+## Licença
 
-### Logs
-
-```bash
-docker compose logs -f web
-docker compose ps
-```
-
-## Design system
-
-Os tokens de cor, tipografia e utilitários (malha técnica, grão, gradientes de texto)
-estão em `src/app/globals.css`, dentro do bloco `@theme`. A paleta foi amostrada da
-imagem de referência: `#02040A`, `#050C3A`, `#061E6D`, `#4CB1FC`, `#72DEFE`.
-
-Toda animação passa por `useReducedMotion` e há um fallback em CSS, então
-`prefers-reduced-motion: reduce` desliga o movimento sem esconder conteúdo.
+MIT — veja [LICENSE](./LICENSE).

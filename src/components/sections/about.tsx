@@ -103,7 +103,7 @@ export function About() {
           <dl>
             {facts.map((f) => (
               <StaggerItem key={f.key}>
-                <div className="group flex items-baseline justify-between gap-4 border-t border-white/[0.06] py-3.5 transition-colors duration-300 hover:border-electric/25">
+                <div className="group flex items-baseline justify-between gap-4 border-t border-line py-3.5 transition-colors duration-300 hover:border-electric/25">
                   <dt className="text-[13px] text-dim">{f.key}</dt>
                   <dd className="text-[13.5px] text-mist transition-colors duration-300 group-hover:text-paper">
                     {f.value}

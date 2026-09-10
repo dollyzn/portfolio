@@ -15,7 +15,12 @@ export function CopyEmail({
   const [copied, setCopied] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
+  useEffect(
+    () => () => {
+      if (timer.current) clearTimeout(timer.current);
+    },
+    [],
+  );
 
   const copy = async () => {
     try {
@@ -34,7 +39,7 @@ export function CopyEmail({
       onClick={copy}
       aria-label={`Copiar endereço de e-mail ${email}`}
       className={cn(
-        "group relative inline-flex items-center gap-3 rounded-full border border-white/[0.08] bg-white/[0.015] py-2.5 pl-5 pr-3.5 transition-all duration-300 hover:border-electric/35 hover:bg-electric/[0.05]",
+        "group relative inline-flex items-center gap-3 rounded-full border border-line-strong bg-surface py-2.5 pl-5 pr-3.5 transition-all duration-300 hover:border-electric/35 hover:bg-electric/[0.05]",
         className,
       )}
     >
@@ -42,7 +47,7 @@ export function CopyEmail({
         {email}
       </span>
 
-      <span className="relative grid size-7 place-items-center rounded-full bg-white/[0.04] text-slate-blue transition-colors group-hover:text-electric">
+      <span className="relative grid size-7 place-items-center rounded-full bg-surface-2 text-slate-blue transition-colors group-hover:text-electric">
         <AnimatePresence mode="wait" initial={false}>
           {copied ? (
             <motion.span

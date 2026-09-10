@@ -14,7 +14,7 @@ export function Contact() {
     >
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
         <div className="bg-tech-grid absolute inset-0 [mask-image:radial-gradient(80%_70%_at_50%_60%,#000_10%,transparent_70%)]" />
-        <div className="absolute bottom-[-20rem] left-1/2 size-[44rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(6,30,109,0.55),rgba(37,99,235,0.07)_46%,transparent_66%)] blur-3xl" />
+        <div className="absolute bottom-[-20rem] left-1/2 size-[44rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,var(--glow-navy),var(--glow-deep)_46%,transparent_66%)] blur-3xl" />
       </div>
 
       <div className="mx-auto w-full max-w-4xl text-center">
@@ -40,8 +40,8 @@ export function Contact() {
         <Reveal delay={0.2}>
           <p className="mx-auto mt-7 max-w-xl text-[16px] leading-[1.75] text-slate-blue">
             Estou sempre interessado em bons projetos, desafios técnicos e
-            oportunidades de construir produtos que resolvam algo de verdade.
-            Se for o seu caso, me escreve.
+            oportunidades de construir produtos que resolvam algo de verdade. Se
+            for o seu caso, me escreve.
           </p>
         </Reveal>
 
@@ -72,7 +72,7 @@ export function Contact() {
         </Reveal>
 
         <Reveal delay={0.4}>
-          <div className="mx-auto mt-16 flex max-w-md flex-wrap items-center justify-center gap-x-6 gap-y-3 border-t border-white/[0.07] pt-7 font-mono text-[11px] uppercase tracking-[0.18em] text-dim">
+          <div className="mx-auto mt-16 flex max-w-md flex-wrap items-center justify-center gap-x-6 gap-y-3 border-t border-line pt-7 font-mono text-[11px] uppercase tracking-[0.18em] text-dim">
             <span className="text-mist">{site.name}</span>
             <span className="inline-flex items-center gap-1.5">
               <MapPin className="size-3" strokeWidth={1.7} />

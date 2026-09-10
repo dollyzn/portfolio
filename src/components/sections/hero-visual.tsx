@@ -18,7 +18,7 @@ function GlobeSkeleton({ className }: { className?: string }) {
       aria-hidden
       className={cn("grid size-full place-items-center", className)}
     >
-      <div className="size-[64%] animate-pulse rounded-full border border-white/[0.06] bg-[radial-gradient(circle,rgba(6,30,109,0.4),transparent_70%)]" />
+      <div className="size-[64%] animate-pulse rounded-full border border-line bg-[radial-gradient(circle,var(--glow-navy),transparent_70%)]" />
     </div>
   );
 }
@@ -46,7 +46,7 @@ export function HeroVisual({
         style={{ x: driftX, y: driftY }}
         className="absolute inset-[-16%] -z-10"
       >
-        <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_50%,rgba(6,30,109,0.72),rgba(5,12,58,0.24)_48%,transparent_70%)] blur-2xl" />
+        <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_50%,var(--glow-navy),color-mix(in_oklab,var(--navy-900)_40%,transparent)_48%,transparent_70%)] blur-2xl" />
         <div className="absolute left-1/2 top-1/2 size-[42%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-electric/16 blur-[80px]" />
       </motion.div>
 

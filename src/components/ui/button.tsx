@@ -19,9 +19,9 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          "bg-paper text-void shadow-[0_0_0_1px_rgba(238,243,251,0.85),0_12px_40px_-18px_rgba(76,177,252,0.6)] hover:shadow-[0_0_0_1px_rgba(114,222,254,0.9),0_16px_52px_-16px_rgba(76,177,252,0.85)] before:bg-[linear-gradient(110deg,transparent_30%,rgba(2,4,10,0.14)_50%,transparent_70%)]",
+          "bg-paper text-void shadow-[0_0_0_1px_color-mix(in_oklab,var(--paper)_85%,transparent),0_12px_40px_-18px_color-mix(in_oklab,var(--electric)_55%,transparent)] hover:shadow-[0_0_0_1px_color-mix(in_oklab,var(--cyan-bright)_70%,transparent),0_16px_52px_-16px_color-mix(in_oklab,var(--electric)_75%,transparent)] before:bg-[linear-gradient(110deg,transparent_30%,color-mix(in_oklab,var(--void)_55%,transparent)_50%,transparent_70%)]",
         outline:
-          "border border-white/10 bg-white/[0.02] text-mist hover:border-electric/40 hover:bg-electric/[0.07] hover:text-paper before:bg-[linear-gradient(110deg,transparent_30%,rgba(114,222,254,0.14)_50%,transparent_70%)]",
+          "border border-line-strong bg-surface text-mist hover:border-electric/40 hover:bg-electric/[0.07] hover:text-paper before:bg-[linear-gradient(110deg,transparent_30%,color-mix(in_oklab,var(--cyan-bright)_14%,transparent)_50%,transparent_70%)]",
         ghost: "text-slate-blue hover:text-paper before:hidden",
       },
       size: {

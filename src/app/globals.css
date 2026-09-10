@@ -1,25 +1,110 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /*
-  Paleta amostrada diretamente da imagem de referência:
-  preto-azulado, marinho profundo, azul elétrico e cyan de alta luz.
+  Tokens semânticos: light em :root, dark em .dark.
+  Azul mais profundo no light para contraste; cyan/elétrico
+  mais luminosos no dark para o glow característico.
 */
+:root {
+  --void: #f2f5fb;
+  --abyss: #e6ecf7;
+  --panel: #ffffff;
+  --navy-950: #d7e4f8;
+  --navy-900: #c0d4f4;
+  --navy-800: #8eb0e8;
+  --blue-600: #1d4ed8;
+  --blue-500: #2563eb;
+  --electric: #1558d6;
+  --cyan-bright: #0a7ea4;
+  --paper: #0a1220;
+  --mist: #2f3f56;
+  --slate-blue: #4a5d78;
+  --dim: #6b7c94;
+  --hairline: rgba(28, 70, 140, 0.14);
+  --surface: rgba(18, 48, 100, 0.045);
+  --surface-2: rgba(18, 48, 100, 0.08);
+  --line: rgba(28, 70, 140, 0.12);
+  --line-strong: rgba(28, 70, 140, 0.2);
+  --input: #cfd9ea;
+  --primary-foreground: #f7faff;
+  --glow-navy: rgba(37, 99, 235, 0.18);
+  --glow-deep: rgba(21, 88, 214, 0.14);
+  --selection-fg: #0a1220;
+  --scrollbar-track: var(--void);
+  --scrollbar-thumb: #c5d0e4;
+  --scrollbar-thumb-hover: #a8b6d0;
+  --grid-line: rgba(37, 99, 235, 0.08);
+  --noise-opacity: 0.03;
+  --noise-blend: multiply;
+  --gradient-accent-a: #0b6bb8;
+  --gradient-accent-b: var(--cyan-bright);
+  --gradient-accent-c: var(--electric);
+}
+
+.dark {
+  --void: #02040a;
+  --abyss: #04060f;
+  --panel: #070b16;
+  --navy-950: #030826;
+  --navy-900: #050c3a;
+  --navy-800: #061e6d;
+  --blue-600: #2563eb;
+  --blue-500: #3772cc;
+  --electric: #4cb1fc;
+  --cyan-bright: #72defe;
+  --paper: #eef3fb;
+  --mist: #b6c4da;
+  --slate-blue: #7f8fa8;
+  --dim: #5a6880;
+  --hairline: rgba(120, 160, 220, 0.12);
+  --surface: rgba(255, 255, 255, 0.014);
+  --surface-2: rgba(255, 255, 255, 0.04);
+  --line: rgba(255, 255, 255, 0.07);
+  --line-strong: rgba(255, 255, 255, 0.12);
+  --input: #1a2438;
+  --primary-foreground: #02040a;
+  --glow-navy: rgba(6, 30, 109, 0.5);
+  --glow-deep: rgba(37, 99, 235, 0.14);
+  --selection-fg: #fff;
+  --scrollbar-track: var(--void);
+  --scrollbar-thumb: #131c30;
+  --scrollbar-thumb-hover: #1d2b48;
+  --grid-line: rgba(120, 170, 240, 0.055);
+  --noise-opacity: 0.045;
+  --noise-blend: soft-light;
+  --gradient-accent-a: #9ad9ff;
+  --gradient-accent-b: var(--cyan-bright);
+  --gradient-accent-c: var(--electric);
+}
+
 @theme {
-  --color-void: #02040a;
-  --color-abyss: #04060f;
-  --color-panel: #070b16;
-  --color-navy-950: #030826;
-  --color-navy-900: #050c3a;
-  --color-navy-800: #061e6d;
-  --color-blue-600: #2563eb;
-  --color-blue-500: #3772cc;
-  --color-electric: #4cb1fc;
-  --color-cyan-bright: #72defe;
-  --color-paper: #eef3fb;
-  --color-mist: #b6c4da;
-  --color-slate-blue: #7f8fa8;
-  --color-dim: #5a6880;
-  --color-hairline: rgba(120, 160, 220, 0.12);
+  --color-void: var(--void);
+  --color-abyss: var(--abyss);
+  --color-panel: var(--panel);
+  --color-navy-950: var(--navy-950);
+  --color-navy-900: var(--navy-900);
+  --color-navy-800: var(--navy-800);
+  --color-blue-600: var(--blue-600);
+  --color-blue-500: var(--blue-500);
+  --color-electric: var(--electric);
+  --color-cyan-bright: var(--cyan-bright);
+  --color-paper: var(--paper);
+  --color-mist: var(--mist);
+  --color-slate-blue: var(--slate-blue);
+  --color-dim: var(--dim);
+  --color-hairline: var(--hairline);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-input: var(--input);
+  --color-primary: var(--electric);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-background: var(--void);
+  --color-foreground: var(--paper);
+  --color-ring: var(--electric);
 
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
@@ -50,11 +135,14 @@
     font-synthesis-weight: none;
     text-rendering: optimizeLegibility;
     overflow-x: clip;
+    transition:
+      background-color 0.35s var(--ease-soft),
+      color 0.35s var(--ease-soft);
   }
 
   ::selection {
     background: color-mix(in oklab, var(--color-electric) 32%, transparent);
-    color: #fff;
+    color: var(--selection-fg);
   }
 
   h1,
@@ -76,47 +164,37 @@
     border-radius: 4px;
   }
 
-  /* Scrollbar discreta, alinhada à identidade */
   ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
   }
   ::-webkit-scrollbar-track {
-    background: var(--color-void);
+    background: var(--scrollbar-track);
   }
   ::-webkit-scrollbar-thumb {
-    background: #131c30;
-    border: 3px solid var(--color-void);
+    background: var(--scrollbar-thumb);
+    border: 3px solid var(--scrollbar-track);
     border-radius: 999px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #1d2b48;
+    background: var(--scrollbar-thumb-hover);
   }
 }
 
 @layer utilities {
-  /* Malha técnica de fundo - hairlines, nunca xadrez pesado */
   .bg-tech-grid {
     background-image:
-      linear-gradient(
-        to right,
-        rgba(120, 170, 240, 0.055) 1px,
-        transparent 1px
-      ),
-      linear-gradient(
-        to bottom,
-        rgba(120, 170, 240, 0.055) 1px,
-        transparent 1px
-      );
+      linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
     background-size: 72px 72px;
   }
 
   .text-gradient-accent {
     background: linear-gradient(
       100deg,
-      #9ad9ff 0%,
-      var(--color-cyan-bright) 42%,
-      var(--color-electric) 100%
+      var(--gradient-accent-a) 0%,
+      var(--gradient-accent-b) 42%,
+      var(--gradient-accent-c) 100%
     );
     -webkit-background-clip: text;
     background-clip: text;
@@ -136,14 +214,13 @@
     color: transparent;
   }
 
-  /* Grão sutil: tira o aspecto "chapado" do fundo escuro */
   .noise-overlay::after {
     content: "";
     position: absolute;
     inset: 0;
     pointer-events: none;
-    opacity: 0.045;
-    mix-blend-mode: soft-light;
+    opacity: var(--noise-opacity);
+    mix-blend-mode: var(--noise-blend);
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
   }
 
@@ -156,7 +233,7 @@
     background: linear-gradient(
       110deg,
       transparent 25%,
-      rgba(114, 222, 254, 0.16) 48%,
+      color-mix(in oklab, var(--color-cyan-bright) 16%, transparent) 48%,
       transparent 62%
     );
   }
@@ -210,7 +287,6 @@ html:not([data-intro="done"]) body > nav {
   }
 }
 
-/* Marquee da seção de stack: duas cópias da lista, translação de -50% */
 @keyframes marquee-x {
   from {
     transform: translate3d(0, 0, 0);
@@ -235,17 +311,14 @@ html:not([data-intro="done"]) body > nav {
   }
 }
 
-/* Marca-passo do cursor: variáveis atualizadas via JS no Hero */
 .glow-follow {
   background: radial-gradient(
     260px circle at var(--mx, 50%) var(--my, 50%),
-    rgba(76, 177, 252, 0.14),
+    color-mix(in oklab, var(--color-electric) 14%, transparent),
     transparent 70%
   );
 }
 
-/* O canvas do globo precisa recusar o pan nativo — senão o mobile
-   trata o arrasto como scroll e o OrbitControls nunca recebe o gesto. */
 [data-globe] canvas {
   touch-action: none !important;
 }

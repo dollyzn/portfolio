@@ -40,7 +40,7 @@ export function SpotlightCard({
       ref={ref as never}
       onMouseMove={handleMove}
       className={cn(
-        "group/spot relative isolate overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.014] transition-colors duration-500 hover:border-electric/25",
+        "group/spot relative isolate overflow-hidden rounded-2xl border border-line bg-surface transition-colors duration-500 hover:border-electric/25",
         className,
       )}
       style={
@@ -55,7 +55,7 @@ export function SpotlightCard({
         className="pointer-events-none absolute inset-0 -z-10 opacity-0 transition-opacity duration-500 group-hover/spot:opacity-100"
         style={{
           background:
-            "radial-gradient(var(--spot-r) circle at var(--sx, 50%) var(--sy, 50%), rgba(76,177,252,var(--spot-i)), transparent 72%)",
+            "radial-gradient(var(--spot-r) circle at var(--sx, 50%) var(--sy, 50%), color-mix(in oklab, var(--electric) calc(var(--spot-i) * 100%), transparent), transparent 72%)",
         }}
       />
       {children}

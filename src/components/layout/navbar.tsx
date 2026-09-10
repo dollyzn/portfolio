@@ -11,6 +11,7 @@ import { ArrowUpRight, Menu, X } from "lucide-react";
 import { GithubIcon } from "@/components/ui/icons";
 import { Logo } from "@/components/ui/logo";
 import { Button } from "@/components/ui/button";
+import { ThemeSwitch } from "@/components/layout/theme-switch";
 import { useActiveSection } from "@/hooks/use-active-section";
 import { navLinks, site } from "@/lib/site";
 import { cn } from "@/lib/utils";
@@ -57,7 +58,7 @@ export function Navbar() {
           className={cn(
             "relative transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
             scrolled
-              ? "border-b border-white/[0.06] bg-void/72 backdrop-blur-xl backdrop-saturate-150"
+              ? "border-b border-line bg-void/72 backdrop-blur-xl backdrop-saturate-150"
               : "border-b border-transparent bg-transparent",
           )}
         >
@@ -116,12 +117,14 @@ export function Navbar() {
             </ul>
 
             <div className="flex items-center gap-1.5">
+              <ThemeSwitch className="mr-1" />
+
               <a
                 href={site.github}
                 target="_blank"
                 rel="noreferrer noopener"
                 aria-label="Perfil no GitHub (abre em nova aba)"
-                className="grid size-10 place-items-center rounded-full text-slate-blue transition-colors duration-300 hover:bg-white/[0.04] hover:text-paper"
+                className="grid size-10 place-items-center rounded-full text-slate-blue transition-colors duration-300 hover:bg-surface-2 hover:text-paper"
               >
                 <GithubIcon className="size-[17px]" />
               </a>
@@ -147,7 +150,7 @@ export function Navbar() {
                 aria-label={open ? "Fechar menu" : "Abrir menu"}
                 aria-expanded={open}
                 aria-controls="menu-mobile"
-                className="grid size-10 place-items-center rounded-full text-paper transition-colors hover:bg-white/[0.04] lg:hidden"
+                className="grid size-10 place-items-center rounded-full text-paper transition-colors hover:bg-surface-2 lg:hidden"
               >
                 {open ? (
                   <X className="size-5" strokeWidth={1.6} />
@@ -201,7 +204,7 @@ export function Navbar() {
                     <a
                       href={link.href}
                       onClick={() => setOpen(false)}
-                      className="flex items-baseline gap-4 border-b border-white/[0.05] py-4 text-3xl font-medium tracking-tight text-paper"
+                      className="flex items-baseline gap-4 border-b border-line py-4 text-3xl font-medium tracking-tight text-paper"
                     >
                       <span className="font-mono text-xs text-electric">
                         {link.index}
