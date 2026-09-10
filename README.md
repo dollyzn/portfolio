@@ -1,7 +1,7 @@
-# Portfólio — Natã Santos
+# Meu portfólio
 
-Portfólio pessoal de [Natã Santos](https://nsantos.dev), desenvolvedor full stack em Brasília.
-Site one-page com dark/light mode, globo 3D interativo, intro animada e seções de experiência, stack, projetos e contato.
+Meu site pessoal — sou desenvolvedor full stack em Brasília.
+One-page com dark/light mode, globo 3D interativo, intro animada e seções de experiência, stack, projetos e contato.
 
 **Site:** [nsantos.dev](https://nsantos.dev) · **Contato:** [contato@nsantos.dev](mailto:contato@nsantos.dev)
 
@@ -19,7 +19,7 @@ Site one-page com dark/light mode, globo 3D interativo, intro animada e seções
 | Ícones | Lucide · Simple Icons |
 | Estilo de componentes | CVA · Radix Slot · Base UI |
 
-## Funcionalidades
+## O que tem aqui
 
 - Tema claro e escuro com transição circular (`tr-circle`) e switch animado
 - Intro sincronizada com o warm-up do WebGL
@@ -62,7 +62,7 @@ NEXT_PUBLIC_SITE_URL=https://nsantos.dev
 
 `NEXT_PUBLIC_SITE_URL` entra no **build** (canonical, sitemap, Open Graph).
 
-## Onde editar o conteúdo
+## Onde edito o conteúdo
 
 | Arquivo | Conteúdo |
 | --- | --- |
@@ -124,4 +124,4 @@ public/                # logos e assets estáticos
 
 ## Licença
 
-Distribuído sob a licença [MIT](./LICENSE).
+MIT — veja [LICENSE](./LICENSE).
