@@ -57,10 +57,6 @@ function ThemeToggler({
   children,
   ...props
 }: ThemeTogglerProps) {
-  const [preview, setPreview] = React.useState<null | {
-    effective: ThemeSelection;
-    resolved: Resolved;
-  }>(null);
   const [current, setCurrent] = React.useState<{
     effective: ThemeSelection;
     resolved: Resolved;
@@ -69,41 +65,28 @@ function ThemeToggler({
     resolved: resolvedTheme,
   });
 
-  React.useEffect(() => {
-    if (
-      preview &&
-      theme === preview.effective &&
-      resolvedTheme === preview.resolved
-    ) {
-      setPreview(null);
-    }
-  }, [theme, resolvedTheme, preview]);
-
   const [fromClip, toClip] = getClipKeyframes(direction);
 
   const toggleTheme = React.useCallback(
-    async (theme: ThemeSelection) => {
-      const resolved = theme === "system" ? getSystemEffective() : theme;
+    async (nextTheme: ThemeSelection) => {
+      const resolved =
+        nextTheme === "system" ? getSystemEffective() : nextTheme;
 
-      setCurrent({ effective: theme, resolved });
-      onImmediateChange?.(theme);
+      setCurrent({ effective: nextTheme, resolved });
+      onImmediateChange?.(nextTheme);
 
-      if (theme === "system" && resolved === resolvedTheme) {
-        setTheme(theme);
+      if (nextTheme === "system" && resolved === resolvedTheme) {
+        setTheme(nextTheme);
         return;
       }
 
       if (!document.startViewTransition) {
-        flushSync(() => {
-          setPreview({ effective: theme, resolved });
-        });
-        setTheme(theme);
+        setTheme(nextTheme);
         return;
       }
 
       await document.startViewTransition(() => {
         flushSync(() => {
-          setPreview({ effective: theme, resolved });
           document.documentElement.classList.toggle(
             "dark",
             resolved === "dark",
@@ -121,7 +104,7 @@ function ThemeToggler({
           },
         )
         .finished.finally(() => {
-          setTheme(theme);
+          setTheme(nextTheme);
         });
     },
     [onImmediateChange, resolvedTheme, fromClip, toClip, setTheme],

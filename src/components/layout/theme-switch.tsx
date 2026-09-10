@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
 import { Moon, Sun } from "lucide-react";
 import { Switch } from "@/components/animate-ui/components/base/switch";
@@ -14,13 +14,15 @@ type ThemeSwitchProps = {
   className?: string;
 };
 
+const emptySubscribe = () => () => {};
+
 export function ThemeSwitch({ className }: ThemeSwitchProps) {
   const { theme, resolvedTheme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false,
+  );
 
   if (!mounted || !resolvedTheme) {
     return (
