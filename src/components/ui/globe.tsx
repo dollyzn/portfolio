@@ -60,7 +60,7 @@ interface WorldProps {
   onReady?: () => void;
 }
 
-/** Cede a thread principal — rAF + timeout evita long-tasks contínuos. */
+/** Cede a thread principal - rAF + timeout evita long-tasks contínuos. */
 function yieldToMain(ms = 32) {
   return new Promise<void>((resolve) => {
     requestAnimationFrame(() => {
@@ -129,7 +129,7 @@ export function Globe({ globeConfig, data, onReady }: WorldProps) {
     config.shininess,
   ]);
 
-  // Continentes/arcos entram em fatias com yield — o hexPolygonsData é o
+  // Continentes/arcos entram em fatias com yield - o hexPolygonsData é o
   // long-task pesado; só roda depois do canvas já estar no ar.
   useEffect(() => {
     const globe = globeRef.current;
@@ -220,7 +220,7 @@ export function Globe({ globeConfig, data, onReady }: WorldProps) {
         .hexPolygonMargin(0.75)
         .hexPolygonColor(() => config.polygonColor);
 
-      // só avisa a intro depois do trabalho pesado — progresso sai do 0%
+      // só avisa a intro depois do trabalho pesado - progresso sai do 0%
       await yieldToMain(32);
       if (cancelled) return;
       onReadyRef.current?.();

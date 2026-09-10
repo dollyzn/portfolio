@@ -1,4 +1,4 @@
-# Build e runtime em imagens Chainguard (Wolfi) — base quase sem CVEs.
+# Build e runtime em imagens Chainguard (Wolfi) - base quase sem CVEs.
 # O scanner do IDE analisa CADA stage; por isso deps/builder também precisam
 # sair do node oficial (Debian/Alpine), não só o runner.
 

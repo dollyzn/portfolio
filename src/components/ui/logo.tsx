@@ -5,7 +5,7 @@ import { motion } from "motion/react";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { cn } from "@/lib/utils";
 
-/** Marca NS — versão escura no light mode, clara no dark mode. */
+/** Marca NS - versão escura no light mode, clara no dark mode. */
 export function LogoMark({
   className,
   priority,

@@ -1,4 +1,4 @@
-// Verifica jank de carregamento e interação do globo — não faz parte do build.
+// Verifica jank de carregamento e interação do globo - não faz parte do build.
 // uso: node scripts/check-globe.mjs
 import { chromium } from "playwright";
 

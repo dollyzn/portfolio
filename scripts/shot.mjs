@@ -1,4 +1,4 @@
-// Helper de verificação visual — não faz parte do build.
+// Helper de verificação visual - não faz parte do build.
 // uso: node scripts/shot.mjs <largura> <altura> <scrollY> <saida> [reduced]
 import { chromium } from "playwright";
 

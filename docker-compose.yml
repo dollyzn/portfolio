@@ -1,18 +1,18 @@
+# Projeto isolado — não colide com o stack antigo em /home/chatwoot/nsantos
+name: portfolio
+
 services:
   web:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://nsantos.dev}
+    image: ghcr.io/dollyzn/portfolio:${IMAGE_TAG:-latest}
     restart: unless-stopped
-    # só no loopback — o nginx do host faz o HTTPS
+    # host 3003 → container 3000; nginx do host faz o HTTPS
     ports:
-      - "127.0.0.1:${APP_PORT:-3000}:3000"
+      - "127.0.0.1:${APP_PORT:-3003}:3000"
     environment:
       NODE_ENV: production
       NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://nsantos.dev}
     healthcheck:
+      # dentro do container a app escuta em 3000
       test:
         [
           "CMD",

@@ -121,7 +121,7 @@ export function HeroVisual({
         arraste para girar
       </span>
       <span className="pointer-events-none absolute -bottom-1 left-1/2 hidden -translate-x-1/2 font-mono text-[9.5px] uppercase tracking-[0.24em] text-dim/60 lg:block">
-        brasília · df — arraste para girar
+        brasília · df - arraste para girar
       </span>
     </div>
   );

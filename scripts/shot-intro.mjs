@@ -1,4 +1,4 @@
-// Helper de verificação visual da intro — não faz parte do build.
+// Helper de verificação visual da intro - não faz parte do build.
 // uso: node scripts/shot-intro.mjs <largura> <altura> [prefixo]
 import { chromium } from "playwright";
 

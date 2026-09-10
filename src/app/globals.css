@@ -241,7 +241,7 @@
 
 /* ── Intro ──────────────────────────────────────────────────────
    O conteúdo começa escondido: a intro é decidida no cliente e não pode
-   haver flash do Hero antes dela. data-intro="done" libera com transição —
+   haver flash do Hero antes dela. data-intro="done" libera com transição -
    e essa transição roda no compositor, então continua fluida mesmo
    enquanto o globo 3D bloqueia a thread principal para se montar.
    Sem JavaScript, o <noscript> do layout libera tudo. */
