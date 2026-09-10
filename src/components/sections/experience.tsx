@@ -41,7 +41,7 @@ export function ExperienceSection() {
         {/* trilho da timeline */}
         <div
           aria-hidden
-          className="absolute left-0 top-2 hidden h-[calc(100%-1rem)] w-px bg-white/[0.1] sm:block"
+          className="absolute left-0 top-2 hidden h-[calc(100%-1rem)] w-px bg-line-strong sm:block"
         >
           <motion.div
             style={{ scaleY: progress }}
@@ -69,7 +69,7 @@ function ExperienceItem({ job, index }: { job: Experience; index: number }) {
 
   return (
     <Reveal delay={index * 0.05}>
-      <article className="group relative border-b border-white/[0.06] py-9 last:border-b-0 sm:py-11">
+      <article className="group relative border-b border-line py-9 last:border-b-0 sm:py-11">
         {/* nó na timeline */}
         <span
           aria-hidden
@@ -83,8 +83,8 @@ function ExperienceItem({ job, index }: { job: Experience; index: number }) {
           <span className="font-mono text-[10.5px] uppercase tracking-[0.2em] text-electric">
             {job.period}
           </span>
-          <span aria-hidden className="h-px w-5 bg-white/10" />
-          <span className="rounded-full border border-white/[0.08] px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-dim">
+          <span aria-hidden className="h-px w-5 bg-line-strong" />
+          <span className="rounded-full border border-line-strong px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-dim">
             {job.stage}
           </span>
         </div>
@@ -131,7 +131,7 @@ function ExperienceItem({ job, index }: { job: Experience; index: number }) {
             {job.stack.map((s) => (
               <li
                 key={s}
-                className="rounded border border-white/[0.06] px-2 py-1 font-mono text-[11px] tracking-tight text-dim transition-colors duration-300 hover:border-electric/30 hover:text-mist"
+                className="rounded border border-line px-2 py-1 font-mono text-[11px] tracking-tight text-dim transition-colors duration-300 hover:border-electric/30 hover:text-mist"
               >
                 {s}
               </li>

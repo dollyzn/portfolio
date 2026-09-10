@@ -6,7 +6,7 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative border-t border-white/[0.06] px-6 py-12 sm:px-8 lg:px-12">
+    <footer className="relative border-t border-line px-6 py-12 sm:px-8 lg:px-12">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-[15px] font-medium text-paper">{site.name}</p>
@@ -26,21 +26,21 @@ export function Footer() {
               target="_blank"
               rel="noreferrer noopener"
               aria-label="GitHub (abre em nova aba)"
-              className="grid size-10 place-items-center rounded-full text-slate-blue transition-colors duration-300 hover:bg-white/[0.04] hover:text-paper"
+              className="grid size-10 place-items-center rounded-full text-slate-blue transition-colors duration-300 hover:bg-surface-2 hover:text-paper"
             >
               <GithubIcon className="size-[17px]" />
             </a>
             <a
               href={`mailto:${site.email}`}
               aria-label={`Enviar e-mail para ${site.email}`}
-              className="grid size-10 place-items-center rounded-full text-slate-blue transition-colors duration-300 hover:bg-white/[0.04] hover:text-paper"
+              className="grid size-10 place-items-center rounded-full text-slate-blue transition-colors duration-300 hover:bg-surface-2 hover:text-paper"
             >
               <Mail className="size-[18px]" strokeWidth={1.6} />
             </a>
             <a
               href="#top"
               aria-label="Voltar ao topo"
-              className="group ml-1 grid size-10 place-items-center rounded-full border border-white/[0.08] text-slate-blue transition-colors duration-300 hover:border-electric/35 hover:text-electric"
+              className="group ml-1 grid size-10 place-items-center rounded-full border border-line-strong text-slate-blue transition-colors duration-300 hover:border-electric/35 hover:text-electric"
             >
               <ArrowUp
                 className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5"

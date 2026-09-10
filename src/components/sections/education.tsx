@@ -35,7 +35,7 @@ export function Education() {
             {education.map((e, i) => (
               <li key={e.institution}>
                 <Reveal delay={i * 0.07}>
-                  <div className="group flex flex-col gap-1.5 border-t border-white/[0.07] py-6 transition-colors duration-500 hover:border-electric/25 sm:flex-row sm:items-baseline sm:justify-between sm:gap-8">
+                  <div className="group flex flex-col gap-1.5 border-t border-line py-6 transition-colors duration-500 hover:border-electric/25 sm:flex-row sm:items-baseline sm:justify-between sm:gap-8">
                     <div>
                       <h4 className="text-[1.05rem] font-medium text-paper">
                         {e.course}
@@ -74,7 +74,7 @@ export function Education() {
                       {l.level}
                     </span>
                   </div>
-                  <div className="mt-3 h-px w-full bg-white/[0.07]">
+                  <div className="mt-3 h-px w-full bg-line">
                     <motion.div
                       initial={
                         reduced ? { scaleX: l.value / 100 } : { scaleX: 0 }
@@ -95,7 +95,7 @@ export function Education() {
           </ul>
 
           <Reveal delay={0.2}>
-            <p className="mt-10 border-l border-white/[0.08] pl-5 text-[14px] leading-relaxed text-dim">
+            <p className="mt-10 border-l border-line-strong pl-5 text-[14px] leading-relaxed text-dim">
               Leio documentação, artigos e código em inglês todo dia - é onde a
               informação chega primeiro.
             </p>

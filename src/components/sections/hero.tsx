@@ -56,7 +56,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.15, ease: EASE }}
-            className="inline-flex items-center gap-2.5 rounded-full border border-white/[0.07] bg-white/[0.02] py-1.5 pl-3 pr-4"
+            className="inline-flex items-center gap-2.5 rounded-full border border-line bg-surface py-1.5 pl-3 pr-4"
           >
             <span className="relative flex size-1.5">
               <span className="absolute inline-flex size-full animate-ping rounded-full bg-cyan-bright opacity-60 motion-reduce:hidden" />
@@ -93,7 +93,7 @@ export function Hero() {
             className="mt-7 flex flex-wrap items-center gap-x-2.5 gap-y-1 font-mono text-[11px] uppercase tracking-[0.2em] text-electric sm:text-[11.5px]"
           >
             <span>Desenvolvedor Full Stack</span>
-            <span aria-hidden className="hidden text-white/15 sm:inline">
+            <span aria-hidden className="hidden text-dim/50 sm:inline">
               /
             </span>
             <span className="text-slate-blue">
@@ -143,7 +143,7 @@ export function Hero() {
             className="mt-10 flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-[11px] uppercase tracking-[0.18em] text-dim"
           >
             <span>Brasília, DF - Brasil</span>
-            <span className="hidden h-3 w-px bg-white/10 sm:block" />
+            <span className="hidden h-3 w-px bg-line-strong sm:block" />
             <span>3+ anos desenvolvendo para web</span>
           </motion.div>
         </div>
@@ -215,9 +215,9 @@ function HeroBackdrop({
       <div className="bg-tech-grid absolute inset-0 [mask-image:radial-gradient(120%_85%_at_50%_0%,#000_20%,transparent_75%)]" />
       <motion.div
         style={{ x: glowX, y: glowY }}
-        className="absolute -top-40 right-[-10%] size-[46rem] rounded-full bg-[radial-gradient(circle,rgba(6,30,109,0.5),transparent_62%)] blur-3xl"
+        className="absolute -top-40 right-[-10%] size-[46rem] rounded-full bg-[radial-gradient(circle,var(--glow-navy),transparent_62%)] blur-3xl"
       />
-      <div className="absolute -left-40 top-1/3 size-[34rem] rounded-full bg-[radial-gradient(circle,rgba(37,99,235,0.14),transparent_65%)] blur-3xl" />
+      <div className="absolute -left-40 top-1/3 size-[34rem] rounded-full bg-[radial-gradient(circle,var(--glow-deep),transparent_65%)] blur-3xl" />
       <div className="absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-void to-transparent" />
     </div>
   );

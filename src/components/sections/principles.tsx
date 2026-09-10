@@ -9,9 +9,9 @@ export function Principles() {
       className="relative scroll-mt-24 overflow-hidden px-6 py-28 sm:px-8 md:py-40 lg:px-12"
     >
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/[0.08] to-transparent" />
-        <div className="absolute left-1/2 top-0 size-[42rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(5,12,58,0.75),transparent_66%)] blur-2xl" />
-        <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/[0.08] to-transparent" />
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-electric/25 to-transparent dark:via-white/[0.08]" />
+        <div className="absolute left-1/2 top-0 size-[42rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,var(--glow-navy),transparent_66%)] blur-2xl" />
+        <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-electric/25 to-transparent dark:via-white/[0.08]" />
       </div>
 
       <div className="mx-auto w-full max-w-6xl">
@@ -39,8 +39,8 @@ export function Principles() {
           {principles.map((p, i) => (
             <li key={p.index}>
               <Reveal delay={i * 0.08}>
-                <div className="group grid gap-5 border-t border-white/[0.07] py-10 transition-colors duration-500 hover:border-electric/25 md:grid-cols-[7rem_1fr] md:gap-10 md:py-14">
-                  <span className="font-mono text-[2.5rem] leading-none text-white/[0.09] transition-colors duration-500 group-hover:text-electric/45 md:text-[3.5rem]">
+                <div className="group grid gap-5 border-t border-line py-10 transition-colors duration-500 hover:border-electric/25 md:grid-cols-[7rem_1fr] md:gap-10 md:py-14">
+                  <span className="font-mono text-[2.5rem] leading-none text-dim/35 transition-colors duration-500 group-hover:text-electric/45 md:text-[3.5rem]">
                     {p.index}
                   </span>
                   <div className="max-w-3xl">

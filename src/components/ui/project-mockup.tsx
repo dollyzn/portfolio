@@ -15,11 +15,11 @@ export function ProjectMockup({
     <div
       aria-hidden
       className={cn(
-        "relative h-full w-full overflow-hidden bg-[radial-gradient(120%_100%_at_50%_0%,#081127_0%,#03060f_60%,#02040a_100%)]",
+        "relative h-full w-full overflow-hidden bg-[radial-gradient(120%_100%_at_50%_0%,var(--navy-950)_0%,var(--abyss)_55%,var(--void)_100%)]",
         className,
       )}
     >
-      <div className="bg-tech-grid absolute inset-0 opacity-[0.55]" />
+      <div className="bg-tech-grid absolute inset-0 opacity-40 dark:opacity-[0.55]" />
       <div className="absolute -right-16 -top-16 size-56 rounded-full bg-electric/12 blur-[64px]" />
 
       <div className="relative flex h-full flex-col p-4 sm:p-5">
@@ -38,10 +38,10 @@ export function ProjectMockup({
 function Chrome() {
   return (
     <div className="flex items-center gap-2">
-      <span className="size-1.5 rounded-full bg-white/12" />
-      <span className="size-1.5 rounded-full bg-white/12" />
+      <span className="size-1.5 rounded-full bg-line-strong" />
+      <span className="size-1.5 rounded-full bg-line-strong" />
       <span className="size-1.5 rounded-full bg-electric/50" />
-      <div className="ml-2 h-4 flex-1 rounded-full border border-white/[0.06] bg-white/[0.015]" />
+      <div className="ml-2 h-4 flex-1 rounded-full border border-line bg-surface" />
     </div>
   );
 }
@@ -52,24 +52,32 @@ function Bar({ w, tone = "dim" }: { w: string; tone?: "dim" | "mid" | "hot" }) {
       ? "bg-cyan-bright/70"
       : tone === "mid"
         ? "bg-electric/45"
-        : "bg-white/[0.09]";
-  return <span className={cn("block h-1.5 rounded-full", color)} style={{ width: w }} />;
+        : "bg-surface-2";
+  return (
+    <span
+      className={cn("block h-1.5 rounded-full", color)}
+      style={{ width: w }}
+    />
+  );
 }
 
 function EventFlow() {
   const bars = [42, 68, 34, 88, 56, 74, 96, 62, 80];
   return (
     <div className="grid h-full grid-cols-[26%_1fr] gap-3">
-      <div className="space-y-2.5 border-r border-white/[0.05] pr-3">
+      <div className="space-y-2.5 border-r border-line pr-3">
         {["hot", "dim", "dim", "dim", "dim"].map((t, i) => (
           <div key={i} className="flex items-center gap-1.5">
             <span
               className={cn(
                 "size-1.5 rounded-sm",
-                t === "hot" ? "bg-cyan-bright/80" : "bg-white/10",
+                t === "hot" ? "bg-cyan-bright/80" : "bg-line-strong",
               )}
             />
-            <Bar w={i === 0 ? "70%" : `${52 + ((i * 13) % 34)}%`} tone={t as "hot" | "dim"} />
+            <Bar
+              w={i === 0 ? "70%" : `${52 + ((i * 13) % 34)}%`}
+              tone={t as "hot" | "dim"}
+            />
           </div>
         ))}
       </div>
@@ -79,7 +87,7 @@ function EventFlow() {
           {["1.2k", "318", "97%"].map((v, i) => (
             <div
               key={v}
-              className="rounded-md border border-white/[0.06] bg-white/[0.015] p-2"
+              className="rounded-md border border-line bg-panel/70 p-2 dark:bg-surface"
             >
               <span
                 className={cn(
@@ -96,7 +104,7 @@ function EventFlow() {
           ))}
         </div>
 
-        <div className="flex min-h-0 flex-1 items-end gap-[5px] rounded-md border border-white/[0.06] bg-white/[0.012] p-2.5">
+        <div className="flex min-h-0 flex-1 items-end gap-[5px] rounded-md border border-line bg-panel/70 p-2.5 dark:bg-surface">
           {bars.map((h, i) => (
             <span
               key={i}
@@ -128,7 +136,7 @@ function NexusApi() {
       {rows.map((r, i) => (
         <div
           key={i}
-          className="flex items-center gap-2.5 rounded border border-white/[0.05] bg-white/[0.012] px-2 py-[7px]"
+          className="flex items-center gap-2.5 rounded border border-line bg-panel/70 px-2 py-[7px] dark:bg-surface"
         >
           <span
             className={cn(
@@ -137,7 +145,7 @@ function NexusApi() {
                 ? "bg-cyan-bright/12 text-cyan-bright"
                 : r.m === "POST"
                   ? "bg-electric/14 text-electric"
-                  : "bg-white/[0.05] text-slate-blue",
+                  : "bg-surface-2 text-slate-blue",
             )}
           >
             {r.m}
@@ -170,7 +178,7 @@ function DevBoard() {
             <span
               className={cn(
                 "size-1 rounded-full",
-                c === 1 ? "bg-cyan-bright/80" : "bg-white/12",
+                c === 1 ? "bg-cyan-bright/80" : "bg-line-strong",
               )}
             />
             <Bar w="48%" />
@@ -182,7 +190,7 @@ function DevBoard() {
                 "space-y-1.5 rounded-md border p-2",
                 c === 1 && i === 0
                   ? "border-electric/25 bg-electric/[0.05]"
-                  : "border-white/[0.06] bg-white/[0.014]",
+                  : "border-line bg-panel/70 dark:bg-surface",
               )}
             >
               <Bar w="82%" tone={c === 1 && i === 0 ? "mid" : "dim"} />
@@ -207,7 +215,10 @@ function Checkpoint() {
         ].map((pos) => (
           <span
             key={pos}
-            className={cn("absolute size-5 rounded-[3px] border-cyan-bright/60", pos)}
+            className={cn(
+              "absolute size-5 rounded-[3px] border-cyan-bright/60",
+              pos,
+            )}
           />
         ))}
         <div className="absolute inset-[18%] grid grid-cols-4 grid-rows-4 gap-1 opacity-70">
@@ -218,12 +229,12 @@ function Checkpoint() {
                 "rounded-[2px]",
                 [0, 3, 5, 6, 9, 10, 12, 15].includes(i)
                   ? "bg-electric/45"
-                  : "bg-white/[0.06]",
+                  : "bg-surface-2",
               )}
             />
           ))}
         </div>
-        <span className="absolute inset-x-[10%] top-1/2 h-px bg-cyan-bright/60 shadow-[0_0_12px_rgba(114,222,254,0.6)]" />
+        <span className="absolute inset-x-[10%] top-1/2 h-px bg-cyan-bright/60 shadow-[0_0_12px_color-mix(in_oklab,var(--cyan-bright)_55%,transparent)]" />
       </div>
     </div>
   );

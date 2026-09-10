@@ -156,7 +156,7 @@ export function IntroOverlay() {
       />
       <div
         aria-hidden
-        className="absolute left-1/2 top-1/2 size-[28rem] max-w-[90vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(6,30,109,0.55),transparent_68%)] blur-3xl"
+        className="absolute left-1/2 top-1/2 size-[28rem] max-w-[90vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,var(--glow-navy),transparent_68%)] blur-3xl"
       />
 
       <div className="absolute inset-0 flex flex-col items-center justify-center px-6">
@@ -224,7 +224,7 @@ export function IntroOverlay() {
         </motion.p>
       </div>
 
-      <div className="absolute inset-x-0 bottom-0 h-px bg-white/[0.06]">
+      <div className="absolute inset-x-0 bottom-0 h-px bg-line">
         <motion.div
           initial={{ scaleX: 0 }}
           animate={{ scaleX: progress / 100 }}

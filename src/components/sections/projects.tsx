@@ -44,7 +44,7 @@ export function Projects() {
 
       <Reveal delay={0.1}>
         <p className="mt-12 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.18em] text-dim">
-          <span aria-hidden className="h-px w-8 bg-white/10" />
+          <span aria-hidden className="h-px w-8 bg-line-strong" />
           Mais projetos no GitHub
           <a
             href="https://github.com/dollyzn"
@@ -116,7 +116,7 @@ function Featured() {
             <Links project={p} />
           </div>
 
-          <div className="relative order-1 min-h-[240px] border-b border-white/[0.06] sm:min-h-[320px] lg:order-2 lg:min-h-[460px] lg:border-b-0 lg:border-l">
+          <div className="relative order-1 min-h-[240px] border-b border-line sm:min-h-[320px] lg:order-2 lg:min-h-[460px] lg:border-b-0 lg:border-l">
             <ProjectMockup slug={p.slug} />
             <div
               aria-hidden
@@ -139,7 +139,7 @@ function ProjectCard({ project: p }: { project: Project }) {
       className="h-full"
     >
       <SpotlightCard as="article" className="flex h-full flex-col">
-        <div className="relative h-40 border-b border-white/[0.06]">
+        <div className="relative h-40 border-b border-line">
           <ProjectMockup slug={p.slug} />
           <div
             aria-hidden
@@ -174,7 +174,7 @@ function StackRow({ stack }: { stack: string[] }) {
       {stack.map((s) => (
         <li
           key={s}
-          className="rounded border border-white/[0.06] bg-white/[0.015] px-2 py-1 font-mono text-[10.5px] tracking-tight text-dim"
+          className="rounded border border-line bg-surface px-2 py-1 font-mono text-[10.5px] tracking-tight text-dim"
         >
           {s}
         </li>
@@ -192,7 +192,7 @@ function Links({
   compact?: boolean;
 }) {
   return (
-    <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-white/[0.05] pt-5">
+    <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-line pt-5">
       <a
         href={p.repo}
         target="_blank"
