@@ -121,6 +121,9 @@
   html {
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
+    /* Reserva a faixa do scrollbar mesmo com overflow:hidden na intro
+       — evita o “empurrão” quando a barra volta a aparecer. */
+    scrollbar-gutter: stable;
   }
 
   html.has-custom-cursor,
@@ -240,50 +243,35 @@
 }
 
 /* ── Intro ──────────────────────────────────────────────────────
-   O conteúdo começa escondido: a intro é decidida no cliente e não pode
-   haver flash do Hero antes dela. data-intro="done" libera com transição -
-   e essa transição roda no compositor, então continua fluida mesmo
-   enquanto o globo 3D bloqueia a thread principal para se montar.
+   O header permanece no fluxo (destino do layoutId da marca).
+   O conteúdo da página só entra em "revealing" / "done".
    Sem JavaScript, o <noscript> do layout libera tudo. */
 
 #conteudo,
-body > header,
 body > footer,
-body > nav {
-  transition:
-    opacity 800ms var(--ease-out-expo),
-    transform 1100ms var(--ease-out-expo),
-    filter 800ms var(--ease-out-expo);
+body > nav:not(header nav) {
+  transition: opacity 500ms var(--ease-out-expo);
 }
 
-html:not([data-intro="done"]) body {
+html:not([data-intro="done"]):not([data-intro="revealing"]) body {
   overflow: hidden;
 }
 
-html:not([data-intro="done"]) #conteudo,
-html:not([data-intro="done"]) body > header,
-html:not([data-intro="done"]) body > footer,
-html:not([data-intro="done"]) body > nav {
+html:not([data-intro="done"]):not([data-intro="revealing"]) #conteudo,
+html:not([data-intro="done"]):not([data-intro="revealing"]) body > footer {
   opacity: 0;
-  transform: scale(1.03);
-  filter: blur(10px);
   pointer-events: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  #conteudo,
-  body > header,
-  body > footer,
-  body > nav {
-    transition: opacity 200ms linear;
+  html:not([data-intro="done"]) #conteudo,
+  html:not([data-intro="done"]) body > footer {
+    opacity: 1;
+    pointer-events: auto;
   }
 
-  html:not([data-intro="done"]) #conteudo,
-  html:not([data-intro="done"]) body > header,
-  html:not([data-intro="done"]) body > footer,
-  html:not([data-intro="done"]) body > nav {
-    transform: none;
-    filter: none;
+  html:not([data-intro="done"]) body {
+    overflow: visible;
   }
 }
 

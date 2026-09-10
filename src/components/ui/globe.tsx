@@ -220,7 +220,7 @@ export function Globe({ globeConfig, data, onReady }: WorldProps) {
         .hexPolygonMargin(0.75)
         .hexPolygonColor(() => config.polygonColor);
 
-      // só avisa a intro depois do trabalho pesado - progresso sai do 0%
+      // avisa a intro: trabalho pesado do globo pronto
       await yieldToMain(32);
       if (cancelled) return;
       onReadyRef.current?.();

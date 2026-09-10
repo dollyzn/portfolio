@@ -1,85 +1,113 @@
 "use client";
 
-import Image from "next/image";
-import { motion } from "motion/react";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { useRef } from "react";
+import { motion, type Transition } from "motion/react";
 import { cn } from "@/lib/utils";
 
-/** Marca NS - versão escura no light mode, clara no dark mode. */
+/** Paths do monograma NS — `public/logo.svg`. */
+export const LOGO_PATHS = [
+  "M311 191L312 883L419 960L419 419L883 840L882 1015L645 1016L645 1185L977 1018L977 783L524 370L311 191Z",
+  "M511 585L511 725L797 985L839 985L840 883L511 585Z",
+  "M649 129L649 253L868 415L869 606L977 701L978 365L649 129Z",
+] as const;
+
+const DRAW_EASE = "easeInOut" as const;
+
+type LogoMarkProps = {
+  className?: string;
+  /**
+   * `true` — anima pathLength 0→1 + fillOpacity.
+   * `"pending"` — mantém invisível (aguardando boot do globo).
+   * `false` — marca já completa (header).
+   */
+  draw?: boolean | "pending";
+  onDrawComplete?: () => void;
+};
+
 export function LogoMark({
   className,
-  priority,
-}: {
-  className?: string;
-  priority?: boolean;
-}) {
-  return (
-    <>
-      <Image
-        src="/logo-dark.png"
-        alt=""
-        aria-hidden
-        width={1254}
-        height={1254}
-        priority={priority}
-        loading="eager"
-        className={cn(
-          "h-full w-auto select-none object-contain dark:hidden",
-          className,
-        )}
-      />
-      <Image
-        src="/logo-mark.webp"
-        alt=""
-        aria-hidden
-        width={412}
-        height={640}
-        priority={priority}
-        loading="eager"
-        className={cn(
-          "hidden h-full w-auto select-none object-contain dark:block",
-          className,
-        )}
-      />
-    </>
-  );
-}
+  draw = false,
+  onDrawComplete,
+}: LogoMarkProps) {
+  const doneRef = useRef(false);
+  const isDrawing = draw === true;
+  const isPending = draw === "pending";
 
-export function Logo({
-  className,
-  showWordmark = true,
-}: {
-  className?: string;
-  showWordmark?: boolean;
-}) {
-  const reduced = useReducedMotion();
+  const drawTransition: Transition = {
+    pathLength: { duration: 1.45, ease: DRAW_EASE },
+    fillOpacity: { duration: 0.7, delay: 0.75, ease: "easeOut" },
+    strokeOpacity: { duration: 0.45, delay: 1.15, ease: "easeOut" },
+  };
+
+  const target = isPending
+    ? { pathLength: 0, fillOpacity: 0, strokeOpacity: 0 }
+    : { pathLength: 1, fillOpacity: 1, strokeOpacity: 0 };
 
   return (
-    <span
-      className={cn("group/logo inline-flex items-center gap-2.5", className)}
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 1254 1254"
+      fill="none"
+      aria-hidden
+      className={cn("h-full w-full select-none", className)}
     >
-      <motion.span
-        className="relative block h-7"
-        initial={reduced ? false : { opacity: 0, scale: 0.85, y: -2 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-      >
-        <LogoMark
-          priority
-          className="drop-shadow-[0_0_10px_color-mix(in_oklab,var(--electric)_30%,transparent)] transition-[filter] duration-500 group-hover/logo:drop-shadow-[0_0_16px_color-mix(in_oklab,var(--cyan-bright)_55%,transparent)]"
-        />
-        <span
-          aria-hidden
-          className="pointer-events-none absolute left-1/2 top-1/2 -z-10 size-8 -translate-x-1/2 -translate-y-1/2 rounded-full bg-electric/25 opacity-0 blur-lg transition-opacity duration-500 group-hover/logo:opacity-100"
-        />
-      </motion.span>
-
-      {showWordmark ? (
-        <span className="text-[15px] font-medium tracking-[-0.02em] text-paper">
-          NATÃ
-          <span className="text-electric">.</span>
-        </span>
-      ) : null}
-    </span>
+      <g>
+        {LOGO_PATHS.map((d, i) => (
+          <motion.path
+            key={d}
+            d={d}
+            fill="currentColor"
+            stroke="var(--electric)"
+            strokeWidth={isDrawing || isPending ? 18 : 0}
+            strokeLinejoin="round"
+            strokeLinecap="round"
+            initial={
+              isDrawing || isPending
+                ? {
+                    pathLength: 0,
+                    fillOpacity: 0,
+                    strokeOpacity: isDrawing ? 1 : 0,
+                  }
+                : { pathLength: 1, fillOpacity: 1, strokeOpacity: 0 }
+            }
+            animate={
+              isDrawing
+                ? { pathLength: 1, fillOpacity: 1, strokeOpacity: 0 }
+                : target
+            }
+            transition={
+              isDrawing
+                ? {
+                    ...drawTransition,
+                    pathLength: {
+                      ...drawTransition.pathLength,
+                      delay: i * 0.08,
+                    },
+                    fillOpacity: {
+                      ...drawTransition.fillOpacity,
+                      delay: 0.75 + i * 0.06,
+                    },
+                    strokeOpacity: {
+                      ...drawTransition.strokeOpacity,
+                      delay: 1.15 + i * 0.04,
+                    },
+                  }
+                : { duration: 0 }
+            }
+            onAnimationComplete={() => {
+              if (
+                !isDrawing ||
+                i !== LOGO_PATHS.length - 1 ||
+                doneRef.current
+              ) {
+                return;
+              }
+              doneRef.current = true;
+              onDrawComplete?.();
+            }}
+          />
+        ))}
+      </g>
+    </svg>
   );
 }

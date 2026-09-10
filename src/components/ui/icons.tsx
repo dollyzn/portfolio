@@ -1,6 +1,6 @@
 /**
- * Lucide não distribui mais glifos de marca, então o ícone do GitHub vem
- * do conjunto gerado em `tech-icons.tsx`. Reexportado aqui porque é usado
- * fora da seção de stack (navbar, hero, projetos e rodapé).
+ * Lucide não distribui mais glifos de marca, então os ícones de GitHub /
+ * LinkedIn vêm do conjunto gerado em `tech-icons.tsx`. Reexportados aqui
+ * porque são usados fora da seção de stack (navbar, contato e rodapé).
  */
-export { GithubIcon } from "./tech-icons";
+export { GithubIcon, LinkedinIcon } from "./tech-icons";

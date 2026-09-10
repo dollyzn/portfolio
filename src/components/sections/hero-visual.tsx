@@ -1,10 +1,10 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { motion, useInView, type MotionValue } from "motion/react";
 import { globeArcs, globeConfig } from "@/lib/globe-arcs";
-import { markGlobeReady } from "@/lib/boot-gate";
+import { markGlobeReady, resetGlobeReady } from "@/lib/boot-gate";
 import { cn } from "@/lib/utils";
 
 const World = dynamic(
@@ -35,6 +35,12 @@ export function HeroVisual({
   const [ready, setReady] = useState(false);
   // monta imediatamente (atrás da intro) pra aquecer o WebGL
   const [mount3d] = useState(true);
+
+  useEffect(() => {
+    return () => {
+      resetGlobeReady();
+    };
+  }, []);
 
   return (
     <div

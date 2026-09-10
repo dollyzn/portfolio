@@ -2,16 +2,22 @@
 
 import { useRef, useState } from "react";
 import { AnimatePresence, motion, useScroll, useSpring } from "motion/react";
+import { useLocale, useTranslations } from "next-intl";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { ChevronDown } from "lucide-react";
 import { Section, SectionHeader } from "@/components/ui/section";
 import { Reveal } from "@/components/ui/reveal";
-import { experiences, type Experience } from "@/lib/content";
+import { getContent, type Experience } from "@/content";
+import type { AppLocale } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 
 const VISIBLE = 3;
 
 export function ExperienceSection() {
+  const t = useTranslations("experience");
+  const locale = useLocale() as AppLocale;
+  const { experiences } = getContent(locale);
+
   const trackRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: trackRef,
@@ -24,17 +30,17 @@ export function ExperienceSection() {
   });
 
   return (
-    <Section id="experiencia" label="Experiência profissional">
+    <Section id="experiencia" label={t("label")}>
       <SectionHeader
         index="03"
-        eyebrow="Experiência"
+        eyebrow={t("eyebrow")}
         title={
           <>
-            Do rack de servidores{" "}
-            <span className="text-slate-blue">ao deploy em produção.</span>
+            {t("titleLead")}{" "}
+            <span className="text-slate-blue">{t("titleAccent")}</span>
           </>
         }
-        description="Uma linha razoavelmente direta: comecei consertando o que já existia, passei a construir para a web e hoje trabalho nas duas pontas da aplicação."
+        description={t("description")}
       />
 
       <div ref={trackRef} className="relative">
@@ -62,6 +68,7 @@ export function ExperienceSection() {
 }
 
 function ExperienceItem({ job, index }: { job: Experience; index: number }) {
+  const t = useTranslations("experience");
   const [expanded, setExpanded] = useState(false);
   const reduced = useReducedMotion();
   const rest = job.highlights.slice(VISIBLE);
@@ -147,8 +154,8 @@ function ExperienceItem({ job, index }: { job: Experience; index: number }) {
               className="inline-flex items-center gap-1.5 text-[13px] text-slate-blue transition-colors duration-300 hover:text-electric"
             >
               {expanded
-                ? "Ver menos"
-                : `Ver mais ${rest.length} ${rest.length === 1 ? "item" : "itens"}`}
+                ? t("expandLess")
+                : t("expandMore", { count: rest.length })}
               <ChevronDown
                 className={cn(
                   "size-3.5 transition-transform duration-400",

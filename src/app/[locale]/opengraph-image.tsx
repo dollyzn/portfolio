@@ -1,13 +1,22 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
+import { getTranslations } from "next-intl/server";
 import { site } from "@/lib/site";
+import type { AppLocale } from "@/i18n/routing";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = `${site.name} - ${site.role}`;
+export const alt = `${site.name} - Portfolio`;
 
-export default async function OpengraphImage() {
+type Props = {
+  params: Promise<{ locale: string }>;
+};
+
+export default async function OpengraphImage({ params }: Props) {
+  const { locale: raw } = await params;
+  const locale = raw as AppLocale;
+  const t = await getTranslations({ locale, namespace: "meta" });
   const mark = await readFile(join(process.cwd(), "public", "logo-mark.png"));
   const markSrc = `data:image/png;base64,${mark.toString("base64")}`;
 
@@ -24,7 +33,6 @@ export default async function OpengraphImage() {
         position: "relative",
       }}
     >
-      {/* satori não renderiza radial-gradient com fidelidade; usamos camadas lineares */}
       <div
         style={{
           position: "absolute",
@@ -50,7 +58,7 @@ export default async function OpengraphImage() {
       <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
         <img src={markSrc} alt="" width={41} height={64} />
         <div style={{ color: "#7F8FA8", fontSize: 22, letterSpacing: 4 }}>
-          PORTFÓLIO
+          {t("ogBadge")}
         </div>
       </div>
 
@@ -74,15 +82,15 @@ export default async function OpengraphImage() {
             letterSpacing: 1,
           }}
         >
-          {site.role}
+          {t("role")}
         </div>
         <div style={{ marginTop: 12, color: "#7F8FA8", fontSize: 26 }}>
-          React · Node.js · TypeScript
+          {t("ogStack")}
         </div>
       </div>
 
       <div style={{ display: "flex", color: "#5A6880", fontSize: 22 }}>
-        {site.location}
+        {t("location")}
       </div>
     </div>,
     size,

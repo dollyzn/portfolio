@@ -1,14 +1,13 @@
 "use client";
 
-import dynamic from "next/dynamic";
+import { IntroProvider } from "@/components/intro/intro-context";
+import { IntroBrand } from "@/components/intro/intro-brand";
 
-// Client-only: o overlay lê sessionStorage e prefers-reduced-motion na
-// primeira renderização, então não pode passar pelo SSR.
-const IntroOverlay = dynamic(
-  () => import("./intro-overlay").then((m) => m.IntroOverlay),
-  { ssr: false },
-);
-
-export function Intro() {
-  return <IntroOverlay />;
+export function Intro({ children }: { children: React.ReactNode }) {
+  return (
+    <IntroProvider>
+      <IntroBrand />
+      {children}
+    </IntroProvider>
+  );
 }

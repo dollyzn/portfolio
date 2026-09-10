@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { AnimatePresence, motion } from "motion/react";
+import { useIntro } from "@/components/intro/intro-context";
 
 type Splash = { id: number; x: number; y: number };
 
@@ -27,11 +28,13 @@ const getServerSnapshot = () => false;
  * Só em ponteiro fino; respeita prefers-reduced-motion.
  */
 export function CustomCursor() {
-  const enabled = useSyncExternalStore(
+  const { isComplete } = useIntro();
+  const pointerOk = useSyncExternalStore(
     subscribe,
     getSnapshot,
     getServerSnapshot,
   );
+  const enabled = pointerOk && isComplete;
   const [hovering, setHovering] = useState(false);
   const [splashes, setSplashes] = useState<Splash[]>([]);
   const dotRef = useRef<HTMLDivElement>(null);
@@ -39,7 +42,10 @@ export function CustomCursor() {
   const idRef = useRef(0);
 
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled) {
+      document.documentElement.classList.remove("has-custom-cursor");
+      return;
+    }
 
     document.documentElement.classList.add("has-custom-cursor");
 

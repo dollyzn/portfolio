@@ -2,37 +2,43 @@
 
 import { ArrowUpRight, Lock } from "lucide-react";
 import { motion } from "motion/react";
+import { useLocale, useTranslations } from "next-intl";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { Section, SectionHeader } from "@/components/ui/section";
 import { Reveal } from "@/components/ui/reveal";
 import { SpotlightCard } from "@/components/ui/spotlight-card";
 import { ProjectMockup } from "@/components/ui/project-mockup";
 import { GithubIcon } from "@/components/ui/icons";
-import { featuredProject, projects, type Project } from "@/lib/content";
+import { getContent, type Project } from "@/content";
+import type { AppLocale } from "@/i18n/routing";
+import { site } from "@/lib/site";
 
 export function Projects() {
+  const t = useTranslations("projects");
+  const locale = useLocale() as AppLocale;
+  const { featuredProject, projects } = getContent(locale);
+
   return (
-    <Section id="projetos" label="Projetos">
+    <Section id="projetos" label={t("label")}>
       <SectionHeader
         index="04"
-        eyebrow="Projetos"
+        eyebrow={t("eyebrow")}
         title={
           <>
-            Coisas que eu construí{" "}
-            <span className="text-slate-blue">para entender melhor.</span>
+            {t("titleLead")}{" "}
+            <span className="text-slate-blue">{t("titleAccent")}</span>
           </>
         }
         description={
           <>
-            Os projetos abaixo são{" "}
-            <span className="text-mist">pessoais e conceituais</span> - eu os
-            uso para estudar arquitetura e testar decisões técnicas. Trabalhos
-            profissionais estão descritos na seção de experiência.
+            {t("descriptionBefore")}{" "}
+            <span className="text-mist">{t("descriptionEmphasis")}</span>{" "}
+            {t("descriptionAfter")}
           </>
         }
       />
 
-      <Featured />
+      <Featured project={featuredProject} />
 
       <div className="mt-6 grid gap-6 md:grid-cols-3">
         {projects.map((p, i) => (
@@ -45,9 +51,9 @@ export function Projects() {
       <Reveal delay={0.1}>
         <p className="mt-12 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.18em] text-dim">
           <span aria-hidden className="h-px w-8 bg-line-strong" />
-          Mais projetos no GitHub
+          {t("more")}
           <a
-            href="https://github.com/dollyzn"
+            href={site.github}
             target="_blank"
             rel="noreferrer noopener"
             className="inline-flex items-center gap-1 text-electric transition-colors hover:text-cyan-bright"
@@ -61,9 +67,9 @@ export function Projects() {
   );
 }
 
-function Featured() {
+function Featured({ project: p }: { project: Project }) {
+  const t = useTranslations("projects");
   const reduced = useReducedMotion();
-  const p = featuredProject;
 
   return (
     <Reveal>
@@ -80,7 +86,7 @@ function Featured() {
           <div className="order-2 flex flex-col justify-center p-7 sm:p-10 lg:order-1">
             <div className="flex flex-wrap items-center gap-3">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-cyan-bright/25 bg-cyan-bright/[0.06] px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-cyan-bright">
-                Em destaque
+                {t("featured")}
               </span>
               <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-dim">
                 {p.kind}
@@ -183,7 +189,6 @@ function StackRow({ stack }: { stack: string[] }) {
   );
 }
 
-/** Troque `repo` / `demo` em `src/lib/content.ts` pelas URLs reais. */
 function Links({
   project: p,
   compact,
@@ -191,18 +196,21 @@ function Links({
   project: Project;
   compact?: boolean;
 }) {
+  const t = useTranslations("projects");
+  const tA11y = useTranslations("a11y");
+
   return (
     <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-line pt-5">
       <a
         href={p.repo}
         target="_blank"
         rel="noreferrer noopener"
-        aria-label={`Repositório de ${p.name} no GitHub (abre em nova aba)`}
+        aria-label={tA11y("projectRepo", { name: p.name })}
         className="group/link inline-flex items-center gap-2 text-[13.5px] text-mist transition-colors duration-300 hover:text-paper"
       >
         <GithubIcon className="size-[15px] opacity-70 transition-opacity group-hover/link:opacity-100" />
         <span className="relative">
-          Código
+          {t("code")}
           <span
             aria-hidden
             className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-electric transition-transform duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/link:scale-x-100"
@@ -218,7 +226,7 @@ function Links({
           className="group/link inline-flex items-center gap-1.5 text-[13.5px] text-mist transition-colors duration-300 hover:text-paper"
         >
           <span className="relative">
-            Live demo
+            {t("demo")}
             <span
               aria-hidden
               className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-electric transition-transform duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/link:scale-x-100"
@@ -232,10 +240,10 @@ function Links({
       ) : (
         <span
           className="inline-flex items-center gap-1.5 text-[13px] text-dim"
-          title="Demo ainda não publicada"
+          title={t("soonTitle")}
         >
           <Lock className="size-3.5" strokeWidth={1.6} />
-          {compact ? "Em breve" : "Demo em breve"}
+          {compact ? t("soonCompact") : t("soon")}
         </span>
       )}
     </div>

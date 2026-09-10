@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
+import { useTranslations } from "next-intl";
 import { Check, Copy } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -12,6 +13,7 @@ export function CopyEmail({
   email: string;
   className?: string;
 }) {
+  const tA11y = useTranslations("a11y");
   const [copied, setCopied] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -37,7 +39,7 @@ export function CopyEmail({
     <button
       type="button"
       onClick={copy}
-      aria-label={`Copiar endereço de e-mail ${email}`}
+      aria-label={tA11y("copyEmail", { email })}
       className={cn(
         "group relative inline-flex items-center gap-3 rounded-full border border-line-strong bg-surface py-2.5 pl-5 pr-3.5 transition-all duration-300 hover:border-electric/35 hover:bg-electric/[0.05]",
         className,
@@ -84,13 +86,13 @@ export function CopyEmail({
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
             className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-cyan-bright/25 bg-cyan-bright/[0.08] px-3 py-1 font-mono text-[10.5px] uppercase tracking-[0.16em] text-cyan-bright backdrop-blur-sm"
           >
-            E-mail copiado
+            {tA11y("copyToast")}
           </motion.span>
         ) : null}
       </AnimatePresence>
 
       <span aria-live="polite" className="sr-only">
-        {copied ? "E-mail copiado para a área de transferência" : ""}
+        {copied ? tA11y("copyDone") : ""}
       </span>
     </button>
   );

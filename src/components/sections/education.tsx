@@ -1,24 +1,29 @@
 "use client";
 
 import { motion } from "motion/react";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { useLocale, useTranslations } from "next-intl";
 import { GraduationCap, Languages } from "lucide-react";
+import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { Section, SectionHeader } from "@/components/ui/section";
 import { Reveal } from "@/components/ui/reveal";
-import { education, languages } from "@/lib/content";
+import { getContent } from "@/content";
+import type { AppLocale } from "@/i18n/routing";
 
 export function Education() {
+  const t = useTranslations("education");
+  const locale = useLocale() as AppLocale;
+  const { education, languages } = getContent(locale);
   const reduced = useReducedMotion();
 
   return (
-    <Section id="formacao" label="Formação e idiomas">
+    <Section id="formacao" label={t("label")}>
       <SectionHeader
         index="06"
-        eyebrow="Formação"
+        eyebrow={t("eyebrow")}
         title={
           <>
-            Base formal{" "}
-            <span className="text-slate-blue">e estudo contínuo.</span>
+            {t("titleLead")}{" "}
+            <span className="text-slate-blue">{t("titleAccent")}</span>
           </>
         }
       />
@@ -28,7 +33,7 @@ export function Education() {
           <SubTitle
             icon={<GraduationCap className="size-3.5" strokeWidth={1.7} />}
           >
-            Educação
+            {t("subtitleSchool")}
           </SubTitle>
 
           <ul className="mt-7">
@@ -61,7 +66,7 @@ export function Education() {
 
         <div>
           <SubTitle icon={<Languages className="size-3.5" strokeWidth={1.7} />}>
-            Idiomas
+            {t("subtitleLanguages")}
           </SubTitle>
 
           <ul className="mt-7 space-y-7">
@@ -96,8 +101,7 @@ export function Education() {
 
           <Reveal delay={0.2}>
             <p className="mt-10 border-l border-line-strong pl-5 text-[14px] leading-relaxed text-dim">
-              Leio documentação, artigos e código em inglês todo dia - é onde a
-              informação chega primeiro.
+              {t("note")}
             </p>
           </Reveal>
         </div>

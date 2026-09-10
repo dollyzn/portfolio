@@ -1,0 +1,175 @@
+{
+  "meta": {
+    "titleDefault": "Natã Santos - Desenvolvedor Full Stack",
+    "titleTemplate": "%s - Natã Santos",
+    "description": "Desenvolvedor Full Stack com 3+ anos construindo aplicações web com React, Node.js e TypeScript - da interface às regras de negócio e integrações.",
+    "keywords": "Natã Santos, Desenvolvedor Full Stack, React, Node.js, TypeScript, Desenvolvedor Brasília, Portfólio",
+    "siteName": "Natã Santos - Portfólio",
+    "role": "Desenvolvedor Full Stack",
+    "location": "Brasília, DF - Brasil",
+    "ogBadge": "PORTFÓLIO",
+    "ogStack": "React · Node.js · TypeScript"
+  },
+  "nav": {
+    "about": "Sobre",
+    "stack": "Stack",
+    "experience": "Experiência",
+    "projects": "Projetos",
+    "contact": "Contato",
+    "cta": "Fale comigo",
+    "brand": "NATÃ",
+    "mobileEmail": "Enviar e-mail",
+    "locale": "Idioma",
+    "localePt": "Português",
+    "localeEn": "Inglês"
+  },
+  "rail": {
+    "top": "Início",
+    "sobre": "Sobre",
+    "stack": "Stack",
+    "experiencia": "Experiência",
+    "projetos": "Projetos",
+    "principios": "Princípios",
+    "formacao": "Formação",
+    "contato": "Contato",
+    "goto": "Ir para a seção {label}"
+  },
+  "intro": {
+    "name": "NATÃ SANTOS",
+    "role": "Full Stack Developer"
+  },
+  "hero": {
+    "availability": "Disponível para novos desafios",
+    "greeting": "Olá, me chamo",
+    "name": "Natã.",
+    "verb": "Eu construo",
+    "rotate": ["interfaces.", "APIs.", "produtos.", "sistemas."],
+    "role": "Desenvolvedor Full Stack",
+    "stack": "React · Node.js · TypeScript",
+    "bio": "Construo aplicações web completas - da interface às regras de negócio e integrações. Gosto de código que continua fazendo sentido meses depois e de produtos que aguentam o mundo real, não só o happy path.",
+    "ctaProjects": "Ver projetos",
+    "ctaGithub": "GitHub",
+    "location": "Brasília, DF - Brasil",
+    "years": "3+ anos desenvolvendo para web",
+    "scroll": "Role"
+  },
+  "about": {
+    "label": "Sobre mim",
+    "eyebrow": "Sobre",
+    "titleLead": "Desenvolvedor full stack,",
+    "titleAccent": "curioso pelos dois lados da aplicação.",
+    "lead": "Eu gosto de entender como as coisas funcionam dos dois lados da aplicação. Posso estar ajustando uma interface em React e, pouco depois, modelando uma regra de negócio ou uma integração no backend.",
+    "p1Before": "São mais de três anos construindo para a web. Nesse tempo trabalhei com",
+    "p1Highlight": "React, Node.js, TypeScript e SQL",
+    "p1After": "em aplicações que precisavam funcionar de verdade: autenticação, integrações com serviços externos, APIs REST e interfaces responsivas que aguentam uso real.",
+    "p2": "Já toquei sistemas de gestão de eventos, gateways de pagamento, fluxos de reserva, inscrição e check-in. Aprendi que a parte difícil quase nunca é escrever o código - é entender o problema bem o suficiente para não escrever código demais.",
+    "p3": "Comecei em suporte e infraestrutura, e acho que isso deixou marca: gosto de saber o que acontece embaixo da abstração. Hoje estou cursando Engenharia de Software e puxando esse fio em direção a arquitetura, backend e sistemas mais próximos do hardware.",
+    "studying": "Estudando agora",
+    "curious": [
+      "Arquitetura de software",
+      "Backend e modelagem de dados",
+      "Visão computacional",
+      "Sistemas embarcados"
+    ],
+    "summary": "Resumo",
+    "facts": {
+      "experience": { "key": "Experiência", "value": "3+ anos" },
+      "base": { "key": "Base", "value": "Brasília, DF" },
+      "role": { "key": "Atuação", "value": "Full Stack" },
+      "education": { "key": "Formação", "value": "Eng. de Software" },
+      "languages": { "key": "Idiomas", "value": "PT · EN" }
+    }
+  },
+  "stack": {
+    "label": "Tecnologias",
+    "eyebrow": "Stack",
+    "titleLead": "As ferramentas que eu uso",
+    "titleAccent": "quase todo dia.",
+    "description": "Nenhuma lista de logos por vaidade - só o que eu realmente escrevo, mantenho ou estudo neste momento.",
+    "secondary": "Também trabalho com",
+    "topics": "E os assuntos por trás delas",
+    "categories": {
+      "Frontend": "Frontend",
+      "Backend": "Backend",
+      "Ferramentas": "Ferramentas"
+    }
+  },
+  "experience": {
+    "label": "Experiência profissional",
+    "eyebrow": "Experiência",
+    "titleLead": "Do rack de servidores",
+    "titleAccent": "ao deploy em produção.",
+    "description": "Uma linha razoavelmente direta: comecei consertando o que já existia, passei a construir para a web e hoje trabalho nas duas pontas da aplicação.",
+    "expandLess": "Ver menos",
+    "expandMore": "Ver mais {count} {count, plural, one {item} other {itens}}"
+  },
+  "projects": {
+    "label": "Projetos",
+    "eyebrow": "Projetos",
+    "titleLead": "Coisas que eu construí",
+    "titleAccent": "para entender melhor.",
+    "descriptionBefore": "Os projetos abaixo são",
+    "descriptionEmphasis": "pessoais e conceituais",
+    "descriptionAfter": "- eu os uso para estudar arquitetura e testar decisões técnicas. Trabalhos profissionais estão descritos na seção de experiência.",
+    "more": "Mais projetos no GitHub",
+    "featured": "Em destaque",
+    "code": "Código",
+    "demo": "Live demo",
+    "soon": "Demo em breve",
+    "soonCompact": "Em breve",
+    "soonTitle": "Demo ainda não publicada"
+  },
+  "principles": {
+    "eyebrow": "Princípios",
+    "titleLead": "Como eu penso",
+    "titleAccent": "software.",
+    "sectionLabel": "Como eu penso software"
+  },
+  "education": {
+    "label": "Formação e idiomas",
+    "eyebrow": "Formação",
+    "titleLead": "Base formal",
+    "titleAccent": "e estudo contínuo.",
+    "subtitleSchool": "Educação",
+    "subtitleLanguages": "Idiomas",
+    "note": "Leio documentação, artigos e código em inglês todo dia - é onde a informação chega primeiro."
+  },
+  "contact": {
+    "eyebrow": "Contato",
+    "title": "Tem alguma ideia em mente?",
+    "body": "Estou sempre interessado em bons projetos, desafios técnicos e oportunidades de construir produtos que resolvam algo de verdade. Se for o seu caso, me escreve.",
+    "ctaEmail": "Enviar e-mail",
+    "ctaGithub": "GitHub",
+    "ctaLinkedin": "LinkedIn",
+    "mailtoSubject": "Vamos conversar",
+    "sectionLabel": "Contato"
+  },
+  "footer": {
+    "role": "Software Developer",
+    "blurb": "Feito com Next.js, TypeScript e uma quantidade de café que não cabe neste rodapé.",
+    "copyright": "© {year} - Brasília, DF"
+  },
+  "a11y": {
+    "skip": "Pular para o conteúdo",
+    "navMain": "Navegação principal",
+    "navMobile": "Navegação mobile",
+    "navHome": "Natã Santos - início",
+    "navGithub": "Perfil no GitHub (abre em nova aba)",
+    "navLinkedin": "Perfil no LinkedIn (abre em nova aba)",
+    "menuOpen": "Abrir menu",
+    "menuClose": "Fechar menu",
+    "themeLight": "Ativar modo claro",
+    "themeDark": "Ativar modo escuro",
+    "heroSection": "Apresentação",
+    "heroScroll": "Ir para a seção Sobre",
+    "projectRepo": "Repositório de {name} no GitHub (abre em nova aba)",
+    "footerGithub": "GitHub (abre em nova aba)",
+    "footerLinkedin": "LinkedIn (abre em nova aba)",
+    "footerEmail": "Enviar e-mail para {email}",
+    "footerTop": "Voltar ao topo",
+    "railNav": "Índice das seções",
+    "copyEmail": "Copiar endereço de e-mail {email}",
+    "copyDone": "E-mail copiado para a área de transferência",
+    "copyToast": "E-mail copiado"
+  }
+}
