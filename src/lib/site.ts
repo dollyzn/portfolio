@@ -4,6 +4,7 @@ export const site = {
   location: "Brasília, DF - Brasil",
   email: "contato@nsantos.dev",
   github: "https://github.com/dollyzn",
+  linkedin: "https://linkedin.com/in/natasantos",
   // defina NEXT_PUBLIC_SITE_URL na Vercel para o domínio final
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://nsantos.dev",
   description:

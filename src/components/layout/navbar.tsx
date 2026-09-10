@@ -8,30 +8,43 @@ import {
   useScroll,
 } from "motion/react";
 import { ArrowUpRight, Menu, X } from "lucide-react";
-import { GithubIcon } from "@/components/ui/icons";
-import { Logo } from "@/components/ui/logo";
+import { GithubIcon, LinkedinIcon } from "@/components/ui/icons";
+import { LogoMark } from "@/components/ui/logo";
 import { Button } from "@/components/ui/button";
 import { ThemeSwitch } from "@/components/layout/theme-switch";
+import { useIntro } from "@/components/intro/intro-context";
 import { useActiveSection } from "@/hooks/use-active-section";
 import { navLinks, site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 const sectionIds = navLinks.map((l) => l.href.slice(1));
+const EASE = [0.16, 1, 0.3, 1] as const;
+const LAYOUT_SPRING = { type: "spring" as const, stiffness: 200, damping: 30 };
+
+const navItemVariants = {
+  hidden: { opacity: 0, y: -8, filter: "blur(4px)" },
+  visible: { opacity: 1, y: 0, filter: "blur(0px)" },
+};
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const { scrollY, scrollYProgress } = useScroll();
   const active = useActiveSection(sectionIds);
+  const { phase, setPhase, isRevealing, isComplete, reduced } = useIntro();
+
+  const logoInHeader = phase !== "booting" && phase !== "drawing";
+  const chromeVisible = isRevealing || reduced;
 
   useMotionValueEvent(scrollY, "change", (v) => setScrolled(v > 24));
 
   useEffect(() => {
+    if (!isComplete) return;
     document.body.style.overflow = open ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
-  }, [open]);
+  }, [open, isComplete]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
@@ -48,12 +61,7 @@ export function Navbar() {
         Pular para o conteúdo
       </a>
 
-      <motion.header
-        initial={{ y: -28, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-        className="fixed inset-x-0 top-0 z-50"
-      >
+      <header className="fixed inset-x-0 top-0 z-50">
         <div
           className={cn(
             "relative transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
@@ -71,18 +79,64 @@ export function Navbar() {
           >
             <a
               href="#top"
-              className="rounded-lg"
+              className="group/logo relative z-[70] inline-flex items-center gap-2.5 rounded-lg"
               aria-label="Natã Santos - início"
             >
-              <Logo />
+              {/* Reserva o espaço da marca no header durante o draw central. */}
+              <span className="relative block size-7">
+                {logoInHeader ? (
+                  <motion.span
+                    layoutId="brand-logo"
+                    transition={LAYOUT_SPRING}
+                    onLayoutAnimationComplete={() => {
+                      if (phase === "moving") setPhase("revealing");
+                    }}
+                    className="absolute inset-0 block text-paper"
+                  >
+                    <LogoMark className="drop-shadow-[0_0_10px_color-mix(in_oklab,var(--electric)_30%,transparent)] transition-[filter] duration-500 group-hover/logo:drop-shadow-[0_0_16px_color-mix(in_oklab,var(--cyan-bright)_55%,transparent)]" />
+                    <span
+                      aria-hidden
+                      className="pointer-events-none absolute left-1/2 top-1/2 -z-10 size-8 -translate-x-1/2 -translate-y-1/2 rounded-full bg-electric/25 opacity-0 blur-lg transition-opacity duration-500 group-hover/logo:opacity-100"
+                    />
+                  </motion.span>
+                ) : null}
+              </span>
+
+              <motion.span
+                initial={false}
+                animate={
+                  chromeVisible
+                    ? { opacity: 1, y: 0, filter: "blur(0px)" }
+                    : { opacity: 0, y: -8, filter: "blur(4px)" }
+                }
+                transition={{ duration: 0.45, ease: EASE, delay: 0.05 }}
+                className="text-[15px] font-medium tracking-[-0.02em] text-paper"
+              >
+                NATÃ
+                <span className="text-electric">.</span>
+              </motion.span>
             </a>
 
-            <ul className="hidden items-center gap-1 lg:flex">
+            <motion.ul
+              initial="hidden"
+              animate={chromeVisible ? "visible" : "hidden"}
+              variants={{
+                hidden: {},
+                visible: {
+                  transition: { staggerChildren: 0.05, delayChildren: 0.08 },
+                },
+              }}
+              className="hidden items-center gap-1 lg:flex"
+            >
               {navLinks.map((link) => {
                 const id = link.href.slice(1);
                 const isActive = active === id;
                 return (
-                  <li key={link.href}>
+                  <motion.li
+                    key={link.href}
+                    variants={navItemVariants}
+                    transition={{ duration: 0.4, ease: EASE }}
+                  >
                     <a
                       href={link.href}
                       aria-current={isActive ? "true" : undefined}
@@ -111,15 +165,32 @@ export function Navbar() {
                         />
                       ) : null}
                     </a>
-                  </li>
+                  </motion.li>
                 );
               })}
-            </ul>
+            </motion.ul>
 
-            <div className="flex items-center gap-1.5">
-              <ThemeSwitch className="mr-1" />
+            <motion.div
+              initial="hidden"
+              animate={chromeVisible ? "visible" : "hidden"}
+              variants={{
+                hidden: {},
+                visible: {
+                  transition: { staggerChildren: 0.06, delayChildren: 0.18 },
+                },
+              }}
+              className="flex items-center gap-1.5"
+            >
+              <motion.div
+                variants={navItemVariants}
+                transition={{ duration: 0.4, ease: EASE }}
+              >
+                <ThemeSwitch className="mr-1" />
+              </motion.div>
 
-              <a
+              <motion.a
+                variants={navItemVariants}
+                transition={{ duration: 0.4, ease: EASE }}
                 href={site.github}
                 target="_blank"
                 rel="noreferrer noopener"
@@ -127,24 +198,39 @@ export function Navbar() {
                 className="grid size-10 place-items-center rounded-full text-slate-blue transition-colors duration-300 hover:bg-surface-2 hover:text-paper"
               >
                 <GithubIcon className="size-[17px]" />
-              </a>
+              </motion.a>
 
-              <Button
-                asChild
-                size="sm"
-                variant="outline"
-                className="hidden sm:inline-flex"
+              <motion.a
+                variants={navItemVariants}
+                transition={{ duration: 0.4, ease: EASE }}
+                href={site.linkedin}
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label="Perfil no LinkedIn (abre em nova aba)"
+                className="grid size-10 place-items-center rounded-full text-slate-blue transition-colors duration-300 hover:bg-surface-2 hover:text-paper"
               >
-                <a href="#contato">
-                  Fale comigo
-                  <ArrowUpRight
-                    className="size-4 transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5"
-                    strokeWidth={1.7}
-                  />
-                </a>
-              </Button>
+                <LinkedinIcon className="size-[17px]" />
+              </motion.a>
 
-              <button
+              <motion.div
+                variants={navItemVariants}
+                transition={{ duration: 0.4, ease: EASE }}
+                className="hidden sm:block"
+              >
+                <Button asChild size="sm" variant="outline">
+                  <a href="#contato">
+                    Fale comigo
+                    <ArrowUpRight
+                      className="size-4 transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5"
+                      strokeWidth={1.7}
+                    />
+                  </a>
+                </Button>
+              </motion.div>
+
+              <motion.button
+                variants={navItemVariants}
+                transition={{ duration: 0.4, ease: EASE }}
                 type="button"
                 onClick={() => setOpen((v) => !v)}
                 aria-label={open ? "Fechar menu" : "Abrir menu"}
@@ -157,18 +243,17 @@ export function Navbar() {
                 ) : (
                   <Menu className="size-5" strokeWidth={1.6} />
                 )}
-              </button>
-            </div>
+              </motion.button>
+            </motion.div>
           </nav>
 
-          {/* progresso de leitura */}
           <motion.div
             aria-hidden
             style={{ scaleX: scrollYProgress }}
             className="absolute inset-x-0 bottom-0 h-px origin-left bg-gradient-to-r from-blue-600 via-electric to-cyan-bright"
           />
         </div>
-      </motion.header>
+      </header>
 
       <AnimatePresence>
         {open ? (
@@ -177,7 +262,7 @@ export function Navbar() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.35, ease: EASE }}
             className="fixed inset-0 z-40 bg-void/96 backdrop-blur-2xl lg:hidden"
           >
             <div
@@ -198,7 +283,7 @@ export function Navbar() {
                     transition={{
                       duration: 0.55,
                       delay: 0.06 + i * 0.06,
-                      ease: [0.16, 1, 0.3, 1],
+                      ease: EASE,
                     }}
                   >
                     <a

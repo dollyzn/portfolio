@@ -14,8 +14,7 @@ import { Contact } from "@/components/sections/contact";
 
 export default function Home() {
   return (
-    <>
-      <Intro />
+    <Intro>
       <CustomCursor />
       <Navbar />
       <SectionRail />
@@ -30,6 +29,6 @@ export default function Home() {
         <Contact />
       </main>
       <Footer />
-    </>
+    </Intro>
   );
 }

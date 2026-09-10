@@ -1,6 +1,6 @@
 /**
  * Porta de sincronização entre o globo 3D e a intro.
- * A intro fica em 0% até markGlobeReady(); depois segue o progresso.
+ * A intro fica em "booting" até markGlobeReady() (ou o teto de tempo).
  */
 
 type Listener = () => void;

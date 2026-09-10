@@ -2,7 +2,7 @@ import { ArrowUpRight, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Reveal, WordReveal } from "@/components/ui/reveal";
 import { CopyEmail } from "@/components/ui/copy-email";
-import { GithubIcon } from "@/components/ui/icons";
+import { GithubIcon, LinkedinIcon } from "@/components/ui/icons";
 import { site } from "@/lib/site";
 
 export function Contact() {
@@ -60,6 +60,12 @@ export function Contact() {
               <a href={site.github} target="_blank" rel="noreferrer noopener">
                 <GithubIcon className="size-4" />
                 GitHub
+              </a>
+            </Button>
+            <Button asChild variant="outline" size="lg">
+              <a href={site.linkedin} target="_blank" rel="noreferrer noopener">
+                <LinkedinIcon className="size-4" />
+                LinkedIn
               </a>
             </Button>
           </div>

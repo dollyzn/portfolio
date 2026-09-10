@@ -70,7 +70,7 @@ const jsonLd = {
   jobTitle: site.role,
   email: `mailto:${site.email}`,
   url: site.url,
-  sameAs: [site.github],
+  sameAs: [site.github, site.linkedin],
   address: {
     "@type": "PostalAddress",
     addressLocality: "Brasília",
@@ -88,7 +88,7 @@ const jsonLd = {
 };
 
 /** Sem JavaScript não existe intro: libera o conteúdo que o CSS esconde. */
-const noScriptCss = `#conteudo,body>header,body>footer,body>nav{opacity:1!important;transform:none!important;filter:none!important;pointer-events:auto!important}body{overflow:visible!important}`;
+const noScriptCss = `#conteudo,body>footer{opacity:1!important;pointer-events:auto!important}body{overflow:visible!important}`;
 
 export default function RootLayout({
   children,

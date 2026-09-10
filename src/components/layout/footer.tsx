@@ -1,5 +1,5 @@
 import { ArrowUp, Mail } from "lucide-react";
-import { GithubIcon } from "@/components/ui/icons";
+import { GithubIcon, LinkedinIcon } from "@/components/ui/icons";
 import { site } from "@/lib/site";
 
 export function Footer() {
@@ -29,6 +29,15 @@ export function Footer() {
               className="grid size-10 place-items-center rounded-full text-slate-blue transition-colors duration-300 hover:bg-surface-2 hover:text-paper"
             >
               <GithubIcon className="size-[17px]" />
+            </a>
+            <a
+              href={site.linkedin}
+              target="_blank"
+              rel="noreferrer noopener"
+              aria-label="LinkedIn (abre em nova aba)"
+              className="grid size-10 place-items-center rounded-full text-slate-blue transition-colors duration-300 hover:bg-surface-2 hover:text-paper"
+            >
+              <LinkedinIcon className="size-[17px]" />
             </a>
             <a
               href={`mailto:${site.email}`}

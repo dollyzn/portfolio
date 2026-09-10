@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { useIntro } from "@/components/intro/intro-context";
 import { useActiveSection } from "@/hooks/use-active-section";
 import { cn } from "@/lib/utils";
 
@@ -22,11 +23,19 @@ const ids = stops.map((s) => s.id);
 export function SectionRail() {
   const active = useActiveSection(ids);
   const reduced = useReducedMotion();
+  const { isRevealing, reduced: introReduced } = useIntro();
+  const visible = isRevealing || introReduced;
 
   return (
-    <nav
+    <motion.nav
       aria-label="Índice das seções"
-      className="fixed right-6 top-1/2 z-40 hidden -translate-y-1/2 xl:block"
+      initial={false}
+      animate={{ opacity: visible ? 1 : 0 }}
+      transition={{ duration: 0.5, delay: visible ? 0.5 : 0 }}
+      className={cn(
+        "fixed right-6 top-1/2 z-40 hidden -translate-y-1/2 xl:block",
+        !visible && "pointer-events-none",
+      )}
     >
       <ul className="flex flex-col items-end gap-3.5">
         {stops.map((stop) => {
@@ -66,6 +75,6 @@ export function SectionRail() {
           );
         })}
       </ul>
-    </nav>
+    </motion.nav>
   );
 }
