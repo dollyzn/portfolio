@@ -1,8 +1,11 @@
+import { getTranslations } from "next-intl/server";
 import { ArrowUp, Mail } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "@/components/ui/icons";
 import { site } from "@/lib/site";
 
-export function Footer() {
+export async function Footer() {
+  const t = await getTranslations("footer");
+  const tA11y = await getTranslations("a11y");
   const year = new Date().getFullYear();
 
   return (
@@ -10,12 +13,9 @@ export function Footer() {
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-[15px] font-medium text-paper">{site.name}</p>
-          <p className="mt-1 text-[13.5px] text-slate-blue">
-            Software Developer
-          </p>
+          <p className="mt-1 text-[13.5px] text-slate-blue">{t("role")}</p>
           <p className="mt-5 max-w-xs font-mono text-[11px] leading-relaxed text-dim">
-            Feito com Next.js, TypeScript e uma quantidade de café que não cabe
-            neste rodapé.
+            {t("blurb")}
           </p>
         </div>
 
@@ -25,7 +25,7 @@ export function Footer() {
               href={site.github}
               target="_blank"
               rel="noreferrer noopener"
-              aria-label="GitHub (abre em nova aba)"
+              aria-label={tA11y("footerGithub")}
               className="grid size-10 place-items-center rounded-full text-slate-blue transition-colors duration-300 hover:bg-surface-2 hover:text-paper"
             >
               <GithubIcon className="size-[17px]" />
@@ -34,21 +34,21 @@ export function Footer() {
               href={site.linkedin}
               target="_blank"
               rel="noreferrer noopener"
-              aria-label="LinkedIn (abre em nova aba)"
+              aria-label={tA11y("footerLinkedin")}
               className="grid size-10 place-items-center rounded-full text-slate-blue transition-colors duration-300 hover:bg-surface-2 hover:text-paper"
             >
               <LinkedinIcon className="size-[17px]" />
             </a>
             <a
               href={`mailto:${site.email}`}
-              aria-label={`Enviar e-mail para ${site.email}`}
+              aria-label={tA11y("footerEmail", { email: site.email })}
               className="grid size-10 place-items-center rounded-full text-slate-blue transition-colors duration-300 hover:bg-surface-2 hover:text-paper"
             >
               <Mail className="size-[18px]" strokeWidth={1.6} />
             </a>
             <a
               href="#top"
-              aria-label="Voltar ao topo"
+              aria-label={tA11y("footerTop")}
               className="group ml-1 grid size-10 place-items-center rounded-full border border-line-strong text-slate-blue transition-colors duration-300 hover:border-electric/35 hover:text-electric"
             >
               <ArrowUp
@@ -59,7 +59,7 @@ export function Footer() {
           </div>
 
           <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-dim">
-            © {year} - Brasília, DF
+            {t("copyright", { year })}
           </p>
         </div>
       </div>

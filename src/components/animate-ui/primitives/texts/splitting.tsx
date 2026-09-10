@@ -133,7 +133,16 @@ const SplittingText: React.FC<SplittingTextProps> = ({
   const perChar = stagger ?? 0.05;
   const baseDelaySec = (delay ?? 0) / 1000;
 
-  let globalIndex = 0;
+  const wordStartIndexes = tokens.reduce<number[]>((starts, tok, i) => {
+    if (i === 0) {
+      starts.push(0);
+      return starts;
+    }
+    const prev = tokens[i - 1]!;
+    const prevChars = /^\s+$/.test(prev) ? 0 : Array.from(prev).length;
+    starts.push(starts[i - 1]! + prevChars);
+    return starts;
+  }, []);
 
   return (
     <motion.span
@@ -151,8 +160,7 @@ const SplittingText: React.FC<SplittingTextProps> = ({
           return <span key={`space-${wi}`}>{tok}</span>;
         }
         const chars = Array.from(tok);
-        const wordDelay = baseDelaySec + perChar * globalIndex;
-        globalIndex += chars.length;
+        const wordDelay = baseDelaySec + perChar * wordStartIndexes[wi]!;
 
         return (
           <motion.span

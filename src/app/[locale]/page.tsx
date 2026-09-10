@@ -1,3 +1,5 @@
+import { hasLocale } from "next-intl";
+import { notFound } from "next/navigation";
 import { Intro } from "@/components/intro";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
@@ -11,8 +13,16 @@ import { Projects } from "@/components/sections/projects";
 import { Principles } from "@/components/sections/principles";
 import { Education } from "@/components/sections/education";
 import { Contact } from "@/components/sections/contact";
+import { routing } from "@/i18n/routing";
 
-export default function Home() {
+type Props = {
+  params: Promise<{ locale: string }>;
+};
+
+export default async function Home({ params }: Props) {
+  const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) notFound();
+
   return (
     <Intro>
       <CustomCursor />

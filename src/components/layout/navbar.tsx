@@ -7,13 +7,16 @@ import {
   useMotionValueEvent,
   useScroll,
 } from "motion/react";
+import { useTranslations } from "next-intl";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "@/components/ui/icons";
 import { LogoMark } from "@/components/ui/logo";
 import { Button } from "@/components/ui/button";
 import { ThemeSwitch } from "@/components/layout/theme-switch";
+import { LocaleSwitcher } from "@/components/layout/locale-switcher";
 import { useIntro } from "@/components/intro/intro-context";
 import { useActiveSection } from "@/hooks/use-active-section";
+import { hasGlobeWarmedUp } from "@/lib/boot-gate";
 import { navLinks, site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
@@ -27,13 +30,20 @@ const navItemVariants = {
 };
 
 export function Navbar() {
+  const t = useTranslations("nav");
+  const tA11y = useTranslations("a11y");
+  const tMeta = useTranslations("meta");
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const { scrollY, scrollYProgress } = useScroll();
   const active = useActiveSection(sectionIds);
   const { phase, setPhase, isRevealing, isComplete, reduced } = useIntro();
 
-  const logoInHeader = phase !== "booting" && phase !== "drawing";
+  // Espelha IntroBrand: na 1ª espera o estágio segura o layoutId;
+  // em reprise (globo já aquecido) a logo fica no header até "drawing".
+  const brandOnStage =
+    phase === "drawing" || (phase === "booting" && !hasGlobeWarmedUp());
+  const logoInHeader = !brandOnStage;
   const chromeVisible = isRevealing || reduced;
 
   useMotionValueEvent(scrollY, "change", (v) => setScrolled(v > 24));
@@ -58,7 +68,7 @@ export function Navbar() {
         href="#conteudo"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-paper focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-void"
       >
-        Pular para o conteúdo
+        {tA11y("skip")}
       </a>
 
       <header className="fixed inset-x-0 top-0 z-50">
@@ -71,7 +81,7 @@ export function Navbar() {
           )}
         >
           <nav
-            aria-label="Navegação principal"
+            aria-label={tA11y("navMain")}
             className={cn(
               "mx-auto flex max-w-6xl items-center justify-between px-6 transition-all duration-500 sm:px-8 lg:px-12",
               scrolled ? "h-16" : "h-20",
@@ -80,9 +90,8 @@ export function Navbar() {
             <a
               href="#top"
               className="group/logo relative z-[70] inline-flex items-center gap-2.5 rounded-lg"
-              aria-label="Natã Santos - início"
+              aria-label={tA11y("navHome")}
             >
-              {/* Reserva o espaço da marca no header durante o draw central. */}
               <span className="relative block size-7">
                 {logoInHeader ? (
                   <motion.span
@@ -112,7 +121,7 @@ export function Navbar() {
                 transition={{ duration: 0.45, ease: EASE, delay: 0.05 }}
                 className="text-[15px] font-medium tracking-[-0.02em] text-paper"
               >
-                NATÃ
+                {t("brand")}
                 <span className="text-electric">.</span>
               </motion.span>
             </a>
@@ -147,7 +156,7 @@ export function Navbar() {
                           : "text-slate-blue hover:text-paper",
                       )}
                     >
-                      {link.label}
+                      {t(link.key)}
                       <span
                         aria-hidden
                         className="absolute inset-x-3.5 bottom-1 h-px origin-left scale-x-0 bg-gradient-to-r from-electric to-cyan-bright transition-transform duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/nav:scale-x-100"
@@ -185,6 +194,13 @@ export function Navbar() {
                 variants={navItemVariants}
                 transition={{ duration: 0.4, ease: EASE }}
               >
+                <LocaleSwitcher className="mr-1 hidden sm:inline-flex" />
+              </motion.div>
+
+              <motion.div
+                variants={navItemVariants}
+                transition={{ duration: 0.4, ease: EASE }}
+              >
                 <ThemeSwitch className="mr-1" />
               </motion.div>
 
@@ -194,7 +210,7 @@ export function Navbar() {
                 href={site.github}
                 target="_blank"
                 rel="noreferrer noopener"
-                aria-label="Perfil no GitHub (abre em nova aba)"
+                aria-label={tA11y("navGithub")}
                 className="grid size-10 place-items-center rounded-full text-slate-blue transition-colors duration-300 hover:bg-surface-2 hover:text-paper"
               >
                 <GithubIcon className="size-[17px]" />
@@ -206,8 +222,8 @@ export function Navbar() {
                 href={site.linkedin}
                 target="_blank"
                 rel="noreferrer noopener"
-                aria-label="Perfil no LinkedIn (abre em nova aba)"
-                className="grid size-10 place-items-center rounded-full text-slate-blue transition-colors duration-300 hover:bg-surface-2 hover:text-paper"
+                aria-label={tA11y("navLinkedin")}
+                className="hidden size-10 place-items-center rounded-full text-slate-blue transition-colors duration-300 hover:bg-surface-2 hover:text-paper sm:grid"
               >
                 <LinkedinIcon className="size-[17px]" />
               </motion.a>
@@ -219,7 +235,7 @@ export function Navbar() {
               >
                 <Button asChild size="sm" variant="outline">
                   <a href="#contato">
-                    Fale comigo
+                    {t("cta")}
                     <ArrowUpRight
                       className="size-4 transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5"
                       strokeWidth={1.7}
@@ -233,7 +249,7 @@ export function Navbar() {
                 transition={{ duration: 0.4, ease: EASE }}
                 type="button"
                 onClick={() => setOpen((v) => !v)}
-                aria-label={open ? "Fechar menu" : "Abrir menu"}
+                aria-label={open ? tA11y("menuClose") : tA11y("menuOpen")}
                 aria-expanded={open}
                 aria-controls="menu-mobile"
                 className="grid size-10 place-items-center rounded-full text-paper transition-colors hover:bg-surface-2 lg:hidden"
@@ -270,7 +286,7 @@ export function Navbar() {
               aria-hidden
             />
             <nav
-              aria-label="Navegação mobile"
+              aria-label={tA11y("navMobile")}
               className="relative flex h-full flex-col justify-center px-8 pb-20"
             >
               <ul className="space-y-1">
@@ -294,7 +310,7 @@ export function Navbar() {
                       <span className="font-mono text-xs text-electric">
                         {link.index}
                       </span>
-                      {link.label}
+                      {t(link.key)}
                     </a>
                   </motion.li>
                 ))}
@@ -306,11 +322,12 @@ export function Navbar() {
                 transition={{ duration: 0.5, delay: 0.4 }}
                 className="mt-10 flex flex-col gap-3"
               >
+                <LocaleSwitcher />
                 <Button asChild variant="primary" size="lg">
-                  <a href={`mailto:${site.email}`}>Enviar e-mail</a>
+                  <a href={`mailto:${site.email}`}>{t("mobileEmail")}</a>
                 </Button>
                 <p className="font-mono text-[11px] tracking-[0.18em] text-dim">
-                  {site.location.toUpperCase()}
+                  {tMeta("location").toUpperCase()}
                 </p>
               </motion.div>
             </nav>

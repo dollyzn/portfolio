@@ -1,8 +1,10 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
+import { useTranslations } from "next-intl";
 import { LogoMark } from "@/components/ui/logo";
 import { useIntro } from "@/components/intro/intro-context";
+import { hasGlobeWarmedUp } from "@/lib/boot-gate";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 const LAYOUT_SPRING = { type: "spring" as const, stiffness: 200, damping: 30 };
@@ -10,10 +12,16 @@ const LAYOUT_SPRING = { type: "spring" as const, stiffness: 200, damping: 30 };
 /**
  * Estágio central da marca: espera o globo, desenha o SVG e cede o
  * layoutId="brand-logo" para o slot do header (shared layout).
+ *
+ * Na 1ª visita, espera o WebGL no centro (página ainda escondida).
+ * Em reprise (locale / soft nav), a logo fica no header até o globo
+ * aquecer de novo — só então voa ao centro e desenha, sem a travada.
  */
 export function IntroBrand() {
+  const t = useTranslations("intro");
   const { phase, setPhase, reduced } = useIntro();
-  const onStage = phase === "booting" || phase === "drawing";
+  const waitOnStage = phase === "booting" && !hasGlobeWarmedUp();
+  const onStage = phase === "drawing" || waitOnStage;
 
   if (reduced || !onStage) return null;
 
@@ -79,10 +87,10 @@ export function IntroBrand() {
             className="mt-8 flex flex-col items-center text-center"
           >
             <p className="text-[13px] font-medium tracking-[0.32em] text-paper sm:text-sm">
-              NATÃ SANTOS
+              {t("name")}
             </p>
             <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.28em] text-dim">
-              Full Stack Developer
+              {t("role")}
             </p>
           </motion.div>
         ) : null}

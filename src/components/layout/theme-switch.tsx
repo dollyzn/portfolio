@@ -1,13 +1,14 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { useTheme } from "next-themes";
+import { useTranslations } from "next-intl";
 import { Moon, Sun } from "lucide-react";
 import { Switch } from "@/components/animate-ui/components/base/switch";
 import {
   ThemeToggler,
   type ThemeSelection,
 } from "@/components/animate-ui/primitives/effects/theme-toggler";
+import { useTheme } from "@wrksz/themes/client";
 import { cn } from "@/lib/utils";
 
 type ThemeSwitchProps = {
@@ -17,6 +18,7 @@ type ThemeSwitchProps = {
 const emptySubscribe = () => () => {};
 
 export function ThemeSwitch({ className }: ThemeSwitchProps) {
+  const tA11y = useTranslations("a11y");
   const { theme, resolvedTheme, setTheme } = useTheme();
   const mounted = useSyncExternalStore(
     emptySubscribe,
@@ -50,7 +52,7 @@ export function ThemeSwitch({ className }: ThemeSwitchProps) {
             toggleTheme(checked ? "dark" : "light");
           }}
           aria-label={
-            resolved === "dark" ? "Ativar modo claro" : "Ativar modo escuro"
+            resolved === "dark" ? tA11y("themeLight") : tA11y("themeDark")
           }
           startIcon={<Sun strokeWidth={2.2} />}
           endIcon={<Moon strokeWidth={2.2} />}

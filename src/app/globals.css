@@ -121,6 +121,9 @@
   html {
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
+    /* Reserva a faixa do scrollbar mesmo com overflow:hidden na intro
+       — evita o “empurrão” quando a barra volta a aparecer. */
+    scrollbar-gutter: stable;
   }
 
   html.has-custom-cursor,

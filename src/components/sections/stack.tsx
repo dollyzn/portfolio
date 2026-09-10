@@ -2,46 +2,47 @@
 
 import { useRef } from "react";
 import { motion } from "motion/react";
+import { useLocale, useTranslations } from "next-intl";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { Section, SectionHeader } from "@/components/ui/section";
 import { Reveal } from "@/components/ui/reveal";
 import { TechGlyph } from "@/components/ui/tech-glyph";
-import {
-  primaryTech,
-  secondaryTech,
-  stackTopics,
-  type Tech,
-} from "@/lib/content";
+import { getContent, type Tech } from "@/content";
+import type { AppLocale } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
 export function Stack() {
+  const t = useTranslations("stack");
+  const locale = useLocale() as AppLocale;
+  const { primaryTech, secondaryTech, stackTopics } = getContent(locale);
+
   return (
-    <Section id="stack" label="Tecnologias">
+    <Section id="stack" label={t("label")}>
       <SectionHeader
         index="02"
-        eyebrow="Stack"
+        eyebrow={t("eyebrow")}
         title={
           <>
-            As ferramentas que eu uso{" "}
-            <span className="text-slate-blue">quase todo dia.</span>
+            {t("titleLead")}{" "}
+            <span className="text-slate-blue">{t("titleAccent")}</span>
           </>
         }
-        description="Nenhuma lista de logos por vaidade - só o que eu realmente escrevo, mantenho ou estudo neste momento."
+        description={t("description")}
       />
 
-      <PrimaryGrid />
-      <SecondaryRow />
-      <Topics />
-      <Marquee />
+      <PrimaryGrid techs={primaryTech} />
+      <SecondaryRow techs={secondaryTech} label={t("secondary")} />
+      <Topics topics={stackTopics} label={t("topics")} />
+      <Marquee primary={primaryTech} secondary={secondaryTech} />
     </Section>
   );
 }
 
 /* ── grade principal: matriz 3×3 em hairlines ─────────────────── */
 
-function PrimaryGrid() {
+function PrimaryGrid({ techs }: { techs: Tech[] }) {
   const ref = useRef<HTMLDivElement>(null);
   const frame = useRef(0);
 
@@ -75,7 +76,7 @@ function PrimaryGrid() {
         />
 
         <ul className="grid grid-cols-3">
-          {primaryTech.map((tech, i) => (
+          {techs.map((tech, i) => (
             <li key={tech.name}>
               <TechCell tech={tech} index={i} />
             </li>
@@ -87,6 +88,7 @@ function PrimaryGrid() {
 }
 
 function TechCell({ tech, index }: { tech: Tech; index: number }) {
+  const t = useTranslations("stack");
   const reduced = useReducedMotion();
   const col = index % 3;
   const row = Math.floor(index / 3);
@@ -132,7 +134,7 @@ function TechCell({ tech, index }: { tech: Tech; index: number }) {
         {/* categoria + nota entram no hover, sem empurrar o layout */}
         <span className="relative h-4 w-full">
           <span className="absolute inset-x-0 top-0 translate-y-1 font-mono text-[9.5px] uppercase tracking-[0.16em] text-electric opacity-0 transition-all duration-400 group-hover/cell:translate-y-0 group-hover/cell:opacity-100 sm:text-[10px]">
-            {tech.category}
+            {t(`categories.${tech.category}`)}
           </span>
         </span>
       </span>
@@ -158,15 +160,15 @@ function Corner({ className }: { className?: string }) {
 
 /* ── segunda linha: ferramentas de apoio ──────────────────────── */
 
-function SecondaryRow() {
+function SecondaryRow({ techs, label }: { techs: Tech[]; label: string }) {
   return (
     <Reveal delay={0.08}>
       <div className="mt-10">
         <p className="font-mono text-[10.5px] uppercase tracking-[0.24em] text-dim">
-          Também trabalho com
+          {label}
         </p>
         <ul className="mt-5 flex flex-wrap gap-2.5">
-          {secondaryTech.map((tech) => (
+          {techs.map((tech) => (
             <li key={tech.name}>
               <span
                 title={tech.note}
@@ -188,15 +190,15 @@ function SecondaryRow() {
   );
 }
 
-function Topics() {
+function Topics({ topics, label }: { topics: string[]; label: string }) {
   return (
     <Reveal delay={0.12}>
       <div className="mt-12 border-t border-line pt-8">
         <p className="font-mono text-[10.5px] uppercase tracking-[0.24em] text-dim">
-          E os assuntos por trás delas
+          {label}
         </p>
         <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
-          {stackTopics.map((topic) => (
+          {topics.map((topic) => (
             <li
               key={topic}
               className="group flex items-center gap-2 text-[13.5px] text-slate-blue transition-colors duration-300 hover:text-mist"
@@ -216,8 +218,14 @@ function Topics() {
 
 /* ── marquee lento na borda inferior da seção ─────────────────── */
 
-function Marquee() {
-  const all = [...primaryTech, ...secondaryTech];
+function Marquee({
+  primary,
+  secondary,
+}: {
+  primary: Tech[];
+  secondary: Tech[];
+}) {
+  const all = [...primary, ...secondary];
   const track = [...all, ...all];
 
   return (

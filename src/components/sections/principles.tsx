@@ -1,11 +1,17 @@
+import { getLocale, getTranslations } from "next-intl/server";
 import { Reveal } from "@/components/ui/reveal";
-import { principles } from "@/lib/content";
+import { getContent } from "@/content";
+import type { AppLocale } from "@/i18n/routing";
 
-export function Principles() {
+export async function Principles() {
+  const t = await getTranslations("principles");
+  const locale = (await getLocale()) as AppLocale;
+  const { principles } = getContent(locale);
+
   return (
     <section
       id="principios"
-      aria-label="Como eu penso software"
+      aria-label={t("sectionLabel")}
       className="relative scroll-mt-24 overflow-hidden px-6 py-28 sm:px-8 md:py-40 lg:px-12"
     >
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
@@ -22,16 +28,16 @@ export function Principles() {
             </span>
             <span className="h-px w-6 bg-electric/40" />
             <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-slate-blue">
-              Princípios
+              {t("eyebrow")}
             </span>
           </div>
         </Reveal>
 
         <Reveal delay={0.06}>
           <h2 className="mt-6 max-w-3xl text-[2.4rem] font-medium leading-[1.03] tracking-[-0.035em] sm:text-[3.4rem] md:text-[4.2rem]">
-            Como eu penso
+            {t("titleLead")}
             <br />
-            <span className="text-gradient-blue">software.</span>
+            <span className="text-gradient-blue">{t("titleAccent")}</span>
           </h2>
         </Reveal>
 
