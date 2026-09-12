@@ -1,8 +1,11 @@
+"use client";
+
 import React, {
   type ComponentPropsWithoutRef,
   type CSSProperties,
 } from "react";
 
+import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 
 export interface ShimmerButtonProps extends ComponentPropsWithoutRef<"button"> {
@@ -82,17 +85,26 @@ export const ShimmerButton = React.forwardRef<
     );
 
     if (href) {
+      const external =
+        href.startsWith("mailto:") ||
+        href.startsWith("http://") ||
+        href.startsWith("https://");
+      const onClick = props.onClick as unknown as React.MouseEventHandler<
+        HTMLAnchorElement
+      >;
+
+      if (external) {
+        return (
+          <a href={href} style={style} className={classes} onClick={onClick}>
+            {visual}
+          </a>
+        );
+      }
+
       return (
-        <a
-          href={href}
-          style={style}
-          className={classes}
-          onClick={
-            props.onClick as unknown as React.MouseEventHandler<HTMLAnchorElement>
-          }
-        >
+        <Link href={href} style={style} className={classes} onClick={onClick}>
           {visual}
-        </a>
+        </Link>
       );
     }
 

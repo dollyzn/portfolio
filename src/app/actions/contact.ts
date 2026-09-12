@@ -6,6 +6,9 @@ import {
   contactEmailHtml,
   contactEmailSubject,
   contactEmailText,
+  receiptEmailHtml,
+  receiptEmailSubject,
+  receiptEmailText,
 } from "@/lib/contact-email";
 import {
   fieldErrorsFromZod,
@@ -88,19 +91,30 @@ async function deliver(payload: ContactPayload) {
   if (!apiKey || apiKey === "re_xxxxxxxxx") return false;
 
   const resend = new Resend(apiKey);
+  const from = envOr(
+    process.env.CONTACT_FROM,
+    "Natã Santos <onboarding@resend.dev>",
+  );
 
   try {
-    const { error } = await resend.emails.send({
-      from: envOr(
-        process.env.CONTACT_FROM,
-        "Natã Santos <onboarding@resend.dev>",
-      ),
-      to: envOr(process.env.CONTACT_TO, site.email),
-      replyTo: payload.email,
-      subject: contactEmailSubject(payload),
-      html: contactEmailHtml(payload),
-      text: contactEmailText(payload),
-    });
+    const { error } = await resend.batch.send([
+      {
+        from,
+        to: envOr(process.env.CONTACT_TO, site.email),
+        replyTo: payload.email,
+        subject: contactEmailSubject(payload),
+        html: contactEmailHtml(payload),
+        text: contactEmailText(payload),
+      },
+      {
+        from,
+        to: payload.email,
+        replyTo: site.email,
+        subject: receiptEmailSubject(payload),
+        html: receiptEmailHtml(payload),
+        text: receiptEmailText(payload),
+      },
+    ]);
 
     if (error) {
       console.error("[contact] resend", error.message);
