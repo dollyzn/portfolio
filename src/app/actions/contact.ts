@@ -1,11 +1,13 @@
 "use server";
 
 import { headers } from "next/headers";
+import { getLocale } from "next-intl/server";
 import { Resend } from "resend";
 import {
   contactEmailHtml,
   contactEmailSubject,
   contactEmailText,
+  mailLocale,
   receiptEmailHtml,
   receiptEmailSubject,
   receiptEmailText,
@@ -86,7 +88,10 @@ function read(formData: FormData, key: string) {
   return typeof value === "string" ? value : "";
 }
 
-async function deliver(payload: ContactPayload) {
+async function deliver(
+  payload: ContactPayload,
+  locale: ReturnType<typeof mailLocale>,
+) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey || apiKey === "re_xxxxxxxxx") return false;
 
@@ -110,9 +115,9 @@ async function deliver(payload: ContactPayload) {
         from,
         to: payload.email,
         replyTo: site.email,
-        subject: receiptEmailSubject(payload),
-        html: receiptEmailHtml(payload),
-        text: receiptEmailText(payload),
+        subject: receiptEmailSubject(payload, locale),
+        html: receiptEmailHtml(payload, locale),
+        text: receiptEmailText(payload, locale),
       },
     ]);
 
@@ -162,7 +167,10 @@ export async function submitContact(
   if (!captcha.ok) return { ok: false, error: "captcha" };
 
   const { name, email, company, intent, message } = parsed.data;
-  const sent = await deliver({ name, email, company, intent, message });
+  const sent = await deliver(
+    { name, email, company, intent, message },
+    mailLocale(read(formData, "locale") || (await getLocale())),
+  );
 
   if (!sent) return { ok: false, error: "mail" };
   return { ok: true };

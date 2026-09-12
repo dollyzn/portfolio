@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import type { TurnstileInstance } from "@marsidev/react-turnstile";
 import { ArrowUpRight, Check, LoaderCircle } from "lucide-react";
 import { submitContact } from "@/app/actions/contact";
@@ -35,6 +35,7 @@ const EMPTY_VALUES = {
 
 export function ContactForm() {
   const t = useTranslations("contact");
+  const locale = useLocale();
   const formId = useId();
   const turnstileRef = useRef<TurnstileInstance>(undefined);
   const successRef = useRef<HTMLHeadingElement>(null);
@@ -210,6 +211,7 @@ export function ContactForm() {
             transition={{ duration: EXIT_MS / 1000, ease: EASE }}
             className="relative space-y-5"
           >
+            <input type="hidden" name="locale" value={locale} />
             <div className="sr-only">
               <label htmlFor={`${formId}-website`}>{t("honeypot")}</label>
               <input
