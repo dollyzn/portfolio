@@ -21,7 +21,8 @@
     "mobileEmail": "Enviar e-mail",
     "locale": "Idioma",
     "localePt": "Português",
-    "localeEn": "Inglês"
+    "localeEn": "Inglês",
+    "colophon": "Colophon"
   },
   "rail": {
     "top": "Início",
@@ -147,7 +148,65 @@
   "footer": {
     "role": "Software Developer",
     "blurb": "Feito com Next.js, TypeScript e uma quantidade de café que não cabe neste rodapé.",
-    "copyright": "© {year} - Brasília, DF"
+    "copyright": "© {year} - Brasília, DF",
+    "colophon": "Colophon"
+  },
+  "command": {
+    "title": "Paleta de comandos",
+    "placeholder": "Ir para, trocar tema, copiar e-mail…",
+    "empty": "Nada encontrado.",
+    "open": "Abrir paleta de comandos",
+    "close": "Fechar paleta de comandos",
+    "navigate": "Navegar",
+    "actions": "Ações",
+    "theme": "Aparência",
+    "locale": "Idioma",
+    "colophon": "Colophon",
+    "copyEmail": "Copiar e-mail",
+    "copied": "E-mail copiado",
+    "openGithub": "Abrir GitHub",
+    "openLinkedin": "Abrir LinkedIn",
+    "sendEmail": "Enviar e-mail",
+    "themeLight": "Modo claro",
+    "themeDark": "Modo escuro",
+    "themeSystem": "Seguir o sistema",
+    "localePt": "Português",
+    "localeEn": "English",
+    "current": "atual"
+  },
+  "colophon": {
+    "metaTitle": "Colophon",
+    "metaDescription": "Como este portfólio foi feito — stack, intro, i18n, tema e as decisões por trás do site.",
+    "eyebrow": "Bastidores",
+    "titleLead": "Como este site",
+    "titleAccent": "foi feito.",
+    "lead": "Não é um changelog. É o mapa das decisões que importam — as que você vê e as que tentam ficar invisíveis.",
+    "back": "Voltar ao início",
+    "source": "O código deste site está em {repo} no",
+    "stack": {
+      "title": "Stack",
+      "body": "Next.js 16 (App Router), React 19, TypeScript e Tailwind v4. Motion nas transições, Three.js no globo, next-intl no pt/en. Tema com @wrksz/themes para não brigar com o React 19."
+    },
+    "intro": {
+      "title": "A intro",
+      "body": "A logo desenha, voa para o header e só então o resto entra. O globo 3D esquenta atrás do palco — se ele travasse no meio da animação, você ia notar. Por isso a espera acontece antes do draw, não durante."
+    },
+    "i18n": {
+      "title": "Dois idiomas, um endereço",
+      "body": "Português é o padrão em /. Inglês mora em /en. As âncoras (#sobre, #projetos) ficam estáveis para o link compartilhado não quebrar. Na primeira visita, o idioma segue o do browser."
+    },
+    "theme": {
+      "title": "Claro e escuro",
+      "body": "Tokens semânticos, sem flash. O script de tema entra no HTML antes da pintura; o React não precisa injetar JavaScript inline no cliente só para isso."
+    },
+    "command": {
+      "title": "A paleta",
+      "body": "⌘K (ou Ctrl K) abre atalhos: seções, tema, idioma, e-mail, GitHub. É o tipo de detalhe que eu gostaria de encontrar no site de outra pessoa."
+    },
+    "type": {
+      "title": "Tipo e cor",
+      "body": "Geist Sans e Geist Mono. Azul elétrico no dark, azul mais profundo no light — o mesmo sistema, dois humores."
+    }
   },
   "a11y": {
     "skip": "Pular para o conteúdo",

@@ -29,5 +29,29 @@ export default function sitemap(): MetadataRoute.Sitemap {
         },
       },
     },
+    {
+      url: `${site.url}/colophon`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.4,
+      alternates: {
+        languages: {
+          pt: `${site.url}/colophon`,
+          en: `${site.url}/en/colophon`,
+        },
+      },
+    },
+    {
+      url: `${site.url}/en/colophon`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.35,
+      alternates: {
+        languages: {
+          pt: `${site.url}/colophon`,
+          en: `${site.url}/en/colophon`,
+        },
+      },
+    },
   ];
 }

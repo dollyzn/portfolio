@@ -2,8 +2,13 @@
 
 import { useSyncExternalStore } from "react";
 import { useTranslations } from "next-intl";
+import { motion } from "motion/react";
 import { Moon, Sun } from "lucide-react";
-import { Switch } from "@/components/animate-ui/components/base/switch";
+import {
+  Tooltip,
+  TooltipPanel,
+  TooltipTrigger,
+} from "@/components/animate-ui/components/base/tooltip";
 import {
   ThemeToggler,
   type ThemeSelection,
@@ -18,6 +23,7 @@ type ThemeSwitchProps = {
 const emptySubscribe = () => () => {};
 
 export function ThemeSwitch({ className }: ThemeSwitchProps) {
+  const t = useTranslations("command");
   const tA11y = useTranslations("a11y");
   const { theme, resolvedTheme, setTheme } = useTheme();
   const mounted = useSyncExternalStore(
@@ -30,10 +36,7 @@ export function ThemeSwitch({ className }: ThemeSwitchProps) {
     return (
       <span
         aria-hidden
-        className={cn(
-          "inline-flex h-5 w-8 shrink-0 rounded-full border border-line bg-surface",
-          className,
-        )}
+        className={cn("inline-flex h-10 w-[5.25rem] rounded-full", className)}
       />
     );
   }
@@ -46,23 +49,63 @@ export function ThemeSwitch({ className }: ThemeSwitchProps) {
       direction="tr-circle"
     >
       {({ resolved, toggleTheme }) => (
-        <Switch
-          checked={resolved === "dark"}
-          onCheckedChange={(checked) => {
-            toggleTheme(checked ? "dark" : "light");
-          }}
-          aria-label={
-            resolved === "dark" ? tA11y("themeLight") : tA11y("themeDark")
-          }
-          startIcon={<Sun strokeWidth={2.2} />}
-          endIcon={<Moon strokeWidth={2.2} />}
+        <div
+          role="group"
+          aria-label={t("theme")}
           className={cn(
-            "h-5 w-9 border-line shadow-none",
-            "data-[checked]:bg-electric data-[unchecked]:bg-input",
-            "dark:data-[unchecked]:bg-input",
+            "relative inline-flex h-10 items-center p-0.5",
             className,
           )}
-        />
+        >
+          <Tooltip delay={250}>
+            <TooltipTrigger
+              type="button"
+              onClick={() => toggleTheme("light")}
+              aria-label={tA11y("themeLight")}
+              aria-current={resolved === "light" ? "true" : undefined}
+              className={cn(
+                "relative z-10 grid size-9 place-items-center rounded-full transition-colors duration-300",
+                resolved === "light"
+                  ? "text-paper"
+                  : "text-dim hover:text-paper",
+              )}
+            >
+              {resolved === "light" ? (
+                <motion.span
+                  layoutId="theme-pill"
+                  className="absolute inset-0 rounded-full bg-electric/14"
+                  transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                />
+              ) : null}
+              <Sun className="relative size-3.5" strokeWidth={2.1} />
+            </TooltipTrigger>
+            <TooltipPanel>{t("themeLight")}</TooltipPanel>
+          </Tooltip>
+          <Tooltip delay={250}>
+            <TooltipTrigger
+              type="button"
+              onClick={() => toggleTheme("dark")}
+              aria-label={tA11y("themeDark")}
+              aria-current={resolved === "dark" ? "true" : undefined}
+              className={cn(
+                "relative z-10 grid size-9 place-items-center rounded-full transition-colors duration-300",
+                resolved === "dark"
+                  ? "text-paper"
+                  : "text-dim hover:text-paper",
+              )}
+            >
+              {resolved === "dark" ? (
+                <motion.span
+                  layoutId="theme-pill"
+                  className="absolute inset-0 rounded-full bg-electric/14"
+                  transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                />
+              ) : null}
+              <Moon className="relative size-3.5" strokeWidth={2.1} />
+            </TooltipTrigger>
+            <TooltipPanel>{t("themeDark")}</TooltipPanel>
+          </Tooltip>
+        </div>
       )}
     </ThemeToggler>
   );

@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { ArrowUp, Mail } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "@/components/ui/icons";
+import { Link } from "@/i18n/navigation";
 import { site } from "@/lib/site";
 
 export async function Footer() {
@@ -17,6 +18,12 @@ export async function Footer() {
           <p className="mt-5 max-w-xs font-mono text-[11px] leading-relaxed text-dim">
             {t("blurb")}
           </p>
+          <Link
+            href="/colophon"
+            className="mt-4 inline-flex font-mono text-[11px] uppercase tracking-[0.18em] text-slate-blue transition-colors hover:text-electric"
+          >
+            {t("colophon")}
+          </Link>
         </div>
 
         <div className="flex flex-col gap-5 sm:items-end">
@@ -46,8 +53,8 @@ export async function Footer() {
             >
               <Mail className="size-[18px]" strokeWidth={1.6} />
             </a>
-            <a
-              href="#top"
+            <Link
+              href="/#top"
               aria-label={tA11y("footerTop")}
               className="group ml-1 grid size-10 place-items-center rounded-full border border-line-strong text-slate-blue transition-colors duration-300 hover:border-electric/35 hover:text-electric"
             >
@@ -55,7 +62,7 @@ export async function Footer() {
                 className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5"
                 strokeWidth={1.7}
               />
-            </a>
+            </Link>
           </div>
 
           <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-dim">

@@ -9,13 +9,17 @@ import {
 } from "motion/react";
 import { useTranslations } from "next-intl";
 import { ArrowUpRight, Menu, X } from "lucide-react";
-import { GithubIcon, LinkedinIcon } from "@/components/ui/icons";
 import { LogoMark } from "@/components/ui/logo";
 import { Button } from "@/components/ui/button";
+import { CommandTrigger } from "@/components/layout/command-palette";
+import {
+  LocaleSwitcher,
+  LocaleSwitcherWide,
+} from "@/components/layout/locale-switcher";
 import { ThemeSwitch } from "@/components/layout/theme-switch";
-import { LocaleSwitcher } from "@/components/layout/locale-switcher";
 import { useIntro } from "@/components/intro/intro-context";
 import { useActiveSection } from "@/hooks/use-active-section";
+import { Link, usePathname } from "@/i18n/navigation";
 import { hasGlobeWarmedUp } from "@/lib/boot-gate";
 import { navLinks, site } from "@/lib/site";
 import { cn } from "@/lib/utils";
@@ -37,10 +41,10 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const { scrollY, scrollYProgress } = useScroll();
   const active = useActiveSection(sectionIds);
+  const pathname = usePathname();
+  const atHome = pathname === "/";
   const { phase, setPhase, isRevealing, isComplete, reduced } = useIntro();
 
-  // Espelha IntroBrand: na 1ª espera o estágio segura o layoutId;
-  // em reprise (globo já aquecido) a logo fica no header até "drawing".
   const brandOnStage =
     phase === "drawing" || (phase === "booting" && !hasGlobeWarmedUp());
   const logoInHeader = !brandOnStage;
@@ -87,8 +91,8 @@ export function Navbar() {
               scrolled ? "h-16" : "h-20",
             )}
           >
-            <a
-              href="#top"
+            <Link
+              href={atHome ? "/#top" : "/"}
               className="group/logo relative z-[70] inline-flex items-center gap-2.5 rounded-lg"
               aria-label={tA11y("navHome")}
             >
@@ -124,7 +128,7 @@ export function Navbar() {
                 {t("brand")}
                 <span className="text-electric">.</span>
               </motion.span>
-            </a>
+            </Link>
 
             <motion.ul
               initial="hidden"
@@ -146,8 +150,8 @@ export function Navbar() {
                     variants={navItemVariants}
                     transition={{ duration: 0.4, ease: EASE }}
                   >
-                    <a
-                      href={link.href}
+                    <Link
+                      href={`/${link.href}`}
                       aria-current={isActive ? "true" : undefined}
                       className={cn(
                         "group/nav relative block px-3.5 py-2 text-[13.5px] transition-colors duration-300",
@@ -173,7 +177,7 @@ export function Navbar() {
                           }}
                         />
                       ) : null}
-                    </a>
+                    </Link>
                   </motion.li>
                 );
               })}
@@ -188,45 +192,19 @@ export function Navbar() {
                   transition: { staggerChildren: 0.06, delayChildren: 0.18 },
                 },
               }}
-              className="flex items-center gap-1.5"
+              className="flex items-center gap-2"
             >
               <motion.div
                 variants={navItemVariants}
                 transition={{ duration: 0.4, ease: EASE }}
+                className="flex items-center rounded-full border border-line bg-surface/80 p-0.5"
               >
-                <LocaleSwitcher className="mr-1 hidden sm:inline-flex" />
+                <LocaleSwitcher layoutId="locale-pill-nav" />
+                <span aria-hidden className="mx-0.5 h-4 w-px bg-line" />
+                <ThemeSwitch />
+                <span aria-hidden className="mx-0.5 h-4 w-px bg-line" />
+                <CommandTrigger />
               </motion.div>
-
-              <motion.div
-                variants={navItemVariants}
-                transition={{ duration: 0.4, ease: EASE }}
-              >
-                <ThemeSwitch className="mr-1" />
-              </motion.div>
-
-              <motion.a
-                variants={navItemVariants}
-                transition={{ duration: 0.4, ease: EASE }}
-                href={site.github}
-                target="_blank"
-                rel="noreferrer noopener"
-                aria-label={tA11y("navGithub")}
-                className="grid size-10 place-items-center rounded-full text-slate-blue transition-colors duration-300 hover:bg-surface-2 hover:text-paper"
-              >
-                <GithubIcon className="size-[17px]" />
-              </motion.a>
-
-              <motion.a
-                variants={navItemVariants}
-                transition={{ duration: 0.4, ease: EASE }}
-                href={site.linkedin}
-                target="_blank"
-                rel="noreferrer noopener"
-                aria-label={tA11y("navLinkedin")}
-                className="hidden size-10 place-items-center rounded-full text-slate-blue transition-colors duration-300 hover:bg-surface-2 hover:text-paper sm:grid"
-              >
-                <LinkedinIcon className="size-[17px]" />
-              </motion.a>
 
               <motion.div
                 variants={navItemVariants}
@@ -234,13 +212,13 @@ export function Navbar() {
                 className="hidden sm:block"
               >
                 <Button asChild size="sm" variant="outline">
-                  <a href="#contato">
+                  <Link href="/#contato">
                     {t("cta")}
                     <ArrowUpRight
                       className="size-4 transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5"
                       strokeWidth={1.7}
                     />
-                  </a>
+                  </Link>
                 </Button>
               </motion.div>
 
@@ -302,8 +280,8 @@ export function Navbar() {
                       ease: EASE,
                     }}
                   >
-                    <a
-                      href={link.href}
+                    <Link
+                      href={`/${link.href}`}
                       onClick={() => setOpen(false)}
                       className="flex items-baseline gap-4 border-b border-line py-4 text-3xl font-medium tracking-tight text-paper"
                     >
@@ -311,7 +289,7 @@ export function Navbar() {
                         {link.index}
                       </span>
                       {t(link.key)}
-                    </a>
+                    </Link>
                   </motion.li>
                 ))}
               </ul>
@@ -322,7 +300,14 @@ export function Navbar() {
                 transition={{ duration: 0.5, delay: 0.4 }}
                 className="mt-10 flex flex-col gap-3"
               >
-                <LocaleSwitcher />
+                <LocaleSwitcherWide />
+                <Link
+                  href="/colophon"
+                  onClick={() => setOpen(false)}
+                  className="rounded-full border border-line px-4 py-3 text-center text-sm text-mist transition-colors hover:border-electric/35 hover:text-paper"
+                >
+                  {t("colophon")}
+                </Link>
                 <Button asChild variant="primary" size="lg">
                   <a href={`mailto:${site.email}`}>{t("mobileEmail")}</a>
                 </Button>

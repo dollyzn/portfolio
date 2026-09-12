@@ -21,7 +21,8 @@
     "mobileEmail": "Send email",
     "locale": "Language",
     "localePt": "Portuguese",
-    "localeEn": "English"
+    "localeEn": "English",
+    "colophon": "Colophon"
   },
   "rail": {
     "top": "Home",
@@ -147,7 +148,65 @@
   "footer": {
     "role": "Software Developer",
     "blurb": "Built with Next.js, TypeScript and more coffee than this footer can hold.",
-    "copyright": "© {year} - Brasília, DF"
+    "copyright": "© {year} - Brasília, DF",
+    "colophon": "Colophon"
+  },
+  "command": {
+    "title": "Command palette",
+    "placeholder": "Go to, switch theme, copy email…",
+    "empty": "Nothing found.",
+    "open": "Open command palette",
+    "close": "Close command palette",
+    "navigate": "Navigate",
+    "actions": "Actions",
+    "theme": "Appearance",
+    "locale": "Language",
+    "colophon": "Colophon",
+    "copyEmail": "Copy email",
+    "copied": "Email copied",
+    "openGithub": "Open GitHub",
+    "openLinkedin": "Open LinkedIn",
+    "sendEmail": "Send email",
+    "themeLight": "Light mode",
+    "themeDark": "Dark mode",
+    "themeSystem": "Match system",
+    "localePt": "Português",
+    "localeEn": "English",
+    "current": "current"
+  },
+  "colophon": {
+    "metaTitle": "Colophon",
+    "metaDescription": "How this portfolio was made — stack, intro, i18n, theme, and the decisions behind the site.",
+    "eyebrow": "Behind the scenes",
+    "titleLead": "How this site",
+    "titleAccent": "was made.",
+    "lead": "Not a changelog. A map of the decisions that matter — the ones you see and the ones that try to stay invisible.",
+    "back": "Back to home",
+    "source": "The source for this site lives at {repo} on",
+    "stack": {
+      "title": "Stack",
+      "body": "Next.js 16 (App Router), React 19, TypeScript and Tailwind v4. Motion for transitions, Three.js for the globe, next-intl for pt/en. Theming via @wrksz/themes so React 19 doesn't fight an inline script."
+    },
+    "intro": {
+      "title": "The intro",
+      "body": "The logo draws, flies to the header, then the rest comes in. The 3D globe warms up backstage — if it stalled mid-animation, you'd notice. That's why the wait happens before the draw, not during it."
+    },
+    "i18n": {
+      "title": "Two languages, one address",
+      "body": "Portuguese is the default at /. English lives at /en. Section hashes (#sobre, #projetos) stay stable so shared links don't break. On the first visit, the locale follows the browser."
+    },
+    "theme": {
+      "title": "Light and dark",
+      "body": "Semantic tokens, no flash. The theme script lands in the HTML before paint; React doesn't need to inject inline JavaScript on the client just for that."
+    },
+    "command": {
+      "title": "The palette",
+      "body": "⌘K (or Ctrl K) opens shortcuts: sections, theme, language, email, GitHub. The kind of detail I'd hope to find on someone else's site."
+    },
+    "type": {
+      "title": "Type and color",
+      "body": "Geist Sans and Geist Mono. Electric blue in dark mode, a deeper blue in light — the same system, two moods."
+    }
   },
   "a11y": {
     "skip": "Skip to content",

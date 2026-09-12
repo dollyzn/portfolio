@@ -253,11 +253,11 @@ body > nav:not(header nav) {
   transition: opacity 500ms var(--ease-out-expo);
 }
 
-html:not([data-intro="done"]):not([data-intro="revealing"]) body {
+html:not([data-intro="done"]):not([data-intro="revealing"]) body:not(:has(#conteudo[data-ready])) {
   overflow: hidden;
 }
 
-html:not([data-intro="done"]):not([data-intro="revealing"]) #conteudo,
+html:not([data-intro="done"]):not([data-intro="revealing"]) #conteudo:not([data-ready]),
 html:not([data-intro="done"]):not([data-intro="revealing"]) body > footer {
   opacity: 0;
   pointer-events: none;

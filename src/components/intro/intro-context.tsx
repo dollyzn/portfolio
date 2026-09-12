@@ -62,31 +62,44 @@ function readHash(): string {
   return hash;
 }
 
-export function IntroProvider({ children }: { children: React.ReactNode }) {
+export function IntroProvider({
+  children,
+  skip = false,
+}: {
+  children: React.ReactNode;
+  skip?: boolean;
+}) {
   const reduced = useSyncExternalStore(
     subscribeReduced,
     getReducedSnapshot,
     getReducedServerSnapshot,
   );
 
-  const [phase, setPhaseState] = useState<IntroPhase>("booting");
+  const [phase, setPhaseState] = useState<IntroPhase>(() =>
+    skip ? "complete" : "booting",
+  );
   const pendingHashRef = useRef("");
 
-  const effectivePhase = reduced ? "complete" : phase;
+  const effectivePhase = reduced || skip ? "complete" : phase;
 
   const setPhase = useCallback(
     (next: IntroPhase) => {
-      if (reduced) return;
+      if (reduced || skip) return;
       setPhaseState((prev) => {
         if (PHASE_ORDER.indexOf(next) <= PHASE_ORDER.indexOf(prev)) return prev;
         return next;
       });
     },
-    [reduced],
+    [reduced, skip],
   );
 
   // F5 / reload: trava scroll restoration e força o topo antes da paint.
   useLayoutEffect(() => {
+    if (skip) {
+      document.documentElement.dataset.intro = "done";
+      return;
+    }
+
     const previous = history.scrollRestoration;
     try {
       history.scrollRestoration = "manual";
@@ -104,11 +117,11 @@ export function IntroProvider({ children }: { children: React.ReactNode }) {
         /* ignore */
       }
     };
-  }, []);
+  }, [skip]);
 
   // Boot gate: espera o globo (ou o teto) antes de desenhar a logo.
   useEffect(() => {
-    if (reduced || effectivePhase !== "booting") return;
+    if (skip || reduced || effectivePhase !== "booting") return;
 
     let cancelled = false;
 
@@ -124,7 +137,7 @@ export function IntroProvider({ children }: { children: React.ReactNode }) {
       window.clearTimeout(cap);
       unsub();
     };
-  }, [reduced, effectivePhase, setPhase]);
+  }, [skip, reduced, effectivePhase, setPhase]);
 
   useEffect(() => {
     if (effectivePhase === "complete") {
