@@ -1,20 +1,74 @@
 import type { ContactIntent, ContactPayload } from "@/lib/contact";
+import type { AppLocale } from "@/i18n/routing";
 import { site } from "@/lib/site";
 
-const INTENT_LABEL: Record<ContactIntent, string> = {
-  project: "Projeto",
-  role: "Vaga",
-  collab: "Parceria",
-  other: "Outro",
+export function mailLocale(value: string | undefined): AppLocale {
+  return value === "en" ? "en" : "pt";
+}
+
+const INTENT_LABEL: Record<AppLocale, Record<ContactIntent, string>> = {
+  pt: {
+    project: "Projeto",
+    role: "Vaga",
+    collab: "Parceria",
+    other: "Outro",
+  },
+  en: {
+    project: "Project",
+    role: "Role",
+    collab: "Collab",
+    other: "Other",
+  },
 };
 
-const RECEIPT_LINE: Record<ContactIntent, string> = {
-  project:
-    "Projeto. Vou ler o contexto com calma antes de responder - sem chute.",
-  role: "Vaga. Se o encaixe fizer sentido, a gente conversa. Se não, eu digo.",
-  collab: "Parceria. Curto quando a ideia é clara dos dois lados.",
-  other: "Recebi. Já está comigo, não numa caixa preta.",
-};
+const RECEIPT = {
+  pt: {
+    htmlLang: "pt-BR",
+    dateLocale: "pt-BR",
+    eyebrow: "07 — Contato",
+    subject: (name: string) => `${name}, o sinal chegou.`,
+    heading: (name: string) => `${name}, o sinal chegou.`,
+    chip: "07 · sinal recebido",
+    line: {
+      project:
+        "Projeto. Vou ler o contexto com calma antes de responder - sem chute.",
+      role: "Vaga. Se o encaixe fizer sentido, a gente conversa. Se não, eu digo.",
+      collab: "Parceria. Curto quando a ideia é clara dos dois lados.",
+      other: "Recebi. Já está comigo, não numa caixa preta.",
+    } satisfies Record<ContactIntent, string>,
+    about: "Assunto",
+    company: "Empresa",
+    when: "Quando",
+    brasilia: "Brasília",
+    body: "Não é um ticket. É só o recado de que a mensagem não se perdeu no caminho. Se quiser acrescentar contexto, responde este e-mail - cai direto comigo.",
+    hello: (name: string) => `Olá, ${name}.`,
+    textClose: `Se quiser acrescentar algo, responde este e-mail - cai direto comigo: ${site.email}`,
+    cta: "Enquanto isso, o portfólio",
+  },
+  en: {
+    htmlLang: "en",
+    dateLocale: "en-GB",
+    eyebrow: "07 — Contact",
+    subject: (name: string) => `${name}, the signal got through.`,
+    heading: (name: string) => `${name}, the signal got through.`,
+    chip: "07 · signal received",
+    line: {
+      project:
+        "A project. I'll read the context carefully before I reply - no guessing.",
+      role: "A role. If it's a fit, we talk. If it isn't, I'll say so.",
+      collab: "A collab. I like it when the idea is clear on both sides.",
+      other: "Got it. It's with me - not in a black box.",
+    } satisfies Record<ContactIntent, string>,
+    about: "Subject",
+    company: "Company",
+    when: "When",
+    brasilia: "Brasília",
+    body: "This is not a ticket. Just a note that the message did not get lost on the way. If you want to add context, reply to this email - it comes straight to me.",
+    hello: (name: string) => `Hi, ${name}.`,
+    textClose: `If you want to add anything, reply to this email - it comes straight to me: ${site.email}`,
+    cta: "Meanwhile, the portfolio",
+  },
+} as const;
 
 const FONT =
   "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif";
@@ -42,8 +96,8 @@ function hostLabel() {
   return site.url.replace(/^https?:\/\//, "");
 }
 
-function stampedInBrasilia() {
-  return new Intl.DateTimeFormat("pt-BR", {
+function stampedInBrasilia(locale: AppLocale = "pt") {
+  return new Intl.DateTimeFormat(RECEIPT[locale].dateLocale, {
     timeZone: "America/Sao_Paulo",
     day: "2-digit",
     month: "short",
@@ -129,10 +183,10 @@ function emailDocument({
 </html>`;
 }
 
-function brandHeader() {
+function brandHeader(eyebrow = "07 — Contato") {
   return `<tr>
     <td style="padding:0 0 28px;font-family:${FONT};">
-      <p class="accent" style="margin:0;font-family:${MONO};font-size:11px;letter-spacing:0.28em;text-transform:uppercase;color:#1558d6;">07 — Contato</p>
+      <p class="accent" style="margin:0;font-family:${MONO};font-size:11px;letter-spacing:0.28em;text-transform:uppercase;color:#1558d6;">${escapeHtml(eyebrow)}</p>
       <h1 class="text" style="margin:10px 0 0;font-size:26px;line-height:1.15;letter-spacing:-0.03em;font-weight:500;color:#1a2332;">
         Natã<span class="accent" style="color:#1558d6;">.</span>
       </h1>
@@ -162,7 +216,7 @@ function metaRow(label: string, value: string) {
 }
 
 export function contactEmailSubject(payload: ContactPayload) {
-  return `[${INTENT_LABEL[payload.intent]}] ${payload.name}`;
+  return `[${INTENT_LABEL.pt[payload.intent]}] ${payload.name}`;
 }
 
 export function contactEmailText(payload: ContactPayload) {
@@ -172,7 +226,7 @@ export function contactEmailText(payload: ContactPayload) {
     `Nome: ${payload.name}`,
     `E-mail: ${payload.email}`,
     payload.company ? `Empresa: ${payload.company}` : null,
-    `Assunto: ${INTENT_LABEL[payload.intent]}`,
+    `Assunto: ${INTENT_LABEL.pt[payload.intent]}`,
     `Quando: ${stampedInBrasilia()} (Brasília)`,
     "",
     payload.message,
@@ -184,8 +238,8 @@ export function contactEmailText(payload: ContactPayload) {
 export function contactEmailHtml(payload: ContactPayload) {
   const name = escapeHtml(payload.name);
   const email = escapeHtml(payload.email);
-  const company = payload.company ? escapeHtml(payload.company) : "—";
-  const intent = escapeHtml(INTENT_LABEL[payload.intent]);
+  const company = payload.company ? escapeHtml(payload.company) : "-";
+  const intent = escapeHtml(INTENT_LABEL.pt[payload.intent]);
   const message = formatMessage(payload.message);
   const when = escapeHtml(stampedInBrasilia());
 
@@ -193,7 +247,7 @@ export function contactEmailHtml(payload: ContactPayload) {
             <tr>
               <td style="padding:0 0 22px;font-family:${FONT};">
                 <p class="muted" style="margin:0;font-size:15px;line-height:1.65;color:#5a6880;">
-                  Sinal novo no formulário. Sem caixa preta — o contexto está abaixo.
+                  Sinal novo no formulário. Sem caixa preta - o contexto está abaixo.
                 </p>
               </td>
             </tr>
@@ -236,27 +290,34 @@ export function contactEmailHtml(payload: ContactPayload) {
 
   return emailDocument({
     title: contactEmailSubject(payload),
-    preheader: `${payload.name} escreveu sobre ${INTENT_LABEL[payload.intent].toLowerCase()}.`,
+    preheader: `${payload.name} escreveu sobre ${INTENT_LABEL.pt[payload.intent].toLowerCase()}.`,
     body,
   });
 }
 
-export function receiptEmailSubject(payload: ContactPayload) {
-  return `${firstName(payload.name)}, o sinal chegou.`;
+export function receiptEmailSubject(
+  payload: ContactPayload,
+  locale: AppLocale = "pt",
+) {
+  return RECEIPT[locale].subject(firstName(payload.name));
 }
 
-export function receiptEmailText(payload: ContactPayload) {
+export function receiptEmailText(
+  payload: ContactPayload,
+  locale: AppLocale = "pt",
+) {
+  const copy = RECEIPT[locale];
   return [
-    `Olá, ${firstName(payload.name)}.`,
+    copy.hello(firstName(payload.name)),
     "",
-    RECEIPT_LINE[payload.intent],
+    copy.line[payload.intent],
     "",
-    `Assunto: ${INTENT_LABEL[payload.intent]}`,
-    payload.company ? `Empresa: ${payload.company}` : null,
-    `Quando: ${stampedInBrasilia()} (Brasília)`,
+    `${copy.about}: ${INTENT_LABEL[locale][payload.intent]}`,
+    payload.company ? `${copy.company}: ${payload.company}` : null,
+    `${copy.when}: ${stampedInBrasilia(locale)} (${copy.brasilia})`,
     "",
-    "Não é um ticket. É um recado de que a mensagem não se perdeu no caminho.",
-    `Se quiser acrescentar algo, responde este e-mail — cai direto comigo: ${site.email}`,
+    copy.body,
+    copy.textClose,
     "",
     site.name,
     site.url,
@@ -265,18 +326,21 @@ export function receiptEmailText(payload: ContactPayload) {
     .join("\n");
 }
 
-export function receiptEmailHtml(payload: ContactPayload) {
-  const name = escapeHtml(firstName(payload.name));
-  const intent = escapeHtml(INTENT_LABEL[payload.intent]);
-  const line = escapeHtml(RECEIPT_LINE[payload.intent]);
-  const when = escapeHtml(stampedInBrasilia());
+export function receiptEmailHtml(
+  payload: ContactPayload,
+  locale: AppLocale = "pt",
+) {
+  const copy = RECEIPT[locale];
+  const intent = escapeHtml(INTENT_LABEL[locale][payload.intent]);
+  const line = escapeHtml(copy.line[payload.intent]);
+  const when = escapeHtml(stampedInBrasilia(locale));
   const company = payload.company ? escapeHtml(payload.company) : null;
 
-  const body = `${brandHeader()}
+  const body = `${brandHeader(copy.eyebrow)}
             <tr>
               <td style="padding:0 0 8px;font-family:${FONT};">
                 <p class="text" style="margin:0;font-size:22px;line-height:1.25;letter-spacing:-0.03em;font-weight:500;color:#1a2332;">
-                  ${name}, o sinal chegou.
+                  ${escapeHtml(copy.heading(firstName(payload.name)))}
                 </p>
               </td>
             </tr>
@@ -290,39 +354,39 @@ export function receiptEmailHtml(payload: ContactPayload) {
             <tr>
               <td style="padding:0 0 6px;">
                 <span class="chip" style="display:inline-block;border:1px solid #1558d6;border-radius:999px;padding:6px 12px;font-family:${MONO};font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#1558d6;">
-                  07 · sinal recebido
+                  ${escapeHtml(copy.chip)}
                 </span>
               </td>
             </tr>
             <tr>
               <td style="padding:22px 0 0;">
                 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-                  ${metaRow("Assunto", intent)}
-                  ${company ? metaRow("Empresa", company) : ""}
-                  ${metaRow("Quando", `${when} · Brasília`)}
+                  ${metaRow(copy.about, intent)}
+                  ${company ? metaRow(copy.company, company) : ""}
+                  ${metaRow(copy.when, `${when} · ${copy.brasilia}`)}
                 </table>
               </td>
             </tr>
             <tr>
               <td style="padding:22px 0 0;font-family:${FONT};">
                 <p class="text" style="margin:0;font-size:15px;line-height:1.7;color:#1a2332;">
-                  Não é um ticket. É só o recado de que a mensagem não se perdeu no caminho.
-                  Se quiser acrescentar contexto, responde este e-mail — cai direto comigo.
+                  ${escapeHtml(copy.body)}
                 </p>
               </td>
             </tr>
             <tr>
               <td style="padding:26px 0 0;font-family:${FONT};">
                 <a class="btn" href="${escapeHtml(site.url)}" style="display:inline-block;background:#1a2332;color:#f4f7fb;text-decoration:none;border-radius:999px;padding:12px 18px;font-size:13px;font-weight:500;">
-                  Enquanto isso, o portfólio
+                  ${escapeHtml(copy.cta)}
                 </a>
               </td>
             </tr>
             ${emailFooter()}`;
 
   return emailDocument({
-    title: receiptEmailSubject(payload),
-    preheader: RECEIPT_LINE[payload.intent],
+    lang: copy.htmlLang,
+    title: receiptEmailSubject(payload, locale),
+    preheader: copy.line[payload.intent],
     body,
   });
 }
