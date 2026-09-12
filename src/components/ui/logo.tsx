@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { motion, type Transition } from "motion/react";
 import { cn } from "@/lib/utils";
 
-/** Paths do monograma NS — `public/logo.svg`. */
+/** Paths do monograma NS - `public/logo.svg`. */
 export const LOGO_PATHS = [
   "M311 191L312 883L419 960L419 419L883 840L882 1015L645 1016L645 1185L977 1018L977 783L524 370L311 191Z",
   "M511 585L511 725L797 985L839 985L840 883L511 585Z",
@@ -16,9 +16,9 @@ const DRAW_EASE = "easeInOut" as const;
 type LogoMarkProps = {
   className?: string;
   /**
-   * `true` — anima pathLength 0→1 + fillOpacity.
-   * `"pending"` — mantém invisível (aguardando boot do globo).
-   * `false` — marca já completa (header).
+   * `true` - anima pathLength 0→1 + fillOpacity.
+   * `"pending"` - mantém invisível (aguardando boot do globo).
+   * `false` - marca já completa (header).
    */
   draw?: boolean | "pending";
   onDrawComplete?: () => void;

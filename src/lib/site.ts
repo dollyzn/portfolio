@@ -7,7 +7,7 @@ export const site = {
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://nsantos.dev",
 } as const;
 
-/** Âncoras estáveis (PT) — labels vêm das messages. */
+/** Âncoras estáveis (PT) - labels vêm das messages. */
 export const navLinks = [
   { key: "about" as const, href: "#sobre", index: "01" },
   { key: "stack" as const, href: "#stack", index: "02" },

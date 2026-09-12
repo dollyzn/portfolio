@@ -37,7 +37,8 @@
   },
   "intro": {
     "name": "NATÃ SANTOS",
-    "role": "Full Stack Developer"
+    "role": "Full Stack Developer",
+    "loading": "Carregando"
   },
   "hero": {
     "availability": "Disponível para novos desafios",
@@ -176,11 +177,11 @@
   },
   "colophon": {
     "metaTitle": "Colophon",
-    "metaDescription": "Como este portfólio foi feito — stack, intro, i18n, tema e as decisões por trás do site.",
+    "metaDescription": "Como este portfólio foi feito - stack, intro, i18n, tema e as decisões por trás do site.",
     "eyebrow": "Bastidores",
     "titleLead": "Como este site",
     "titleAccent": "foi feito.",
-    "lead": "Não é um changelog. É o mapa das decisões que importam — as que você vê e as que tentam ficar invisíveis.",
+    "lead": "Não é um changelog. É o mapa das decisões que importam - as que você vê e as que tentam ficar invisíveis.",
     "back": "Voltar ao início",
     "source": "O código deste site está em {repo} no",
     "stack": {
@@ -189,7 +190,7 @@
     },
     "intro": {
       "title": "A intro",
-      "body": "A logo desenha, voa para o header e só então o resto entra. O globo 3D esquenta atrás do palco — se ele travasse no meio da animação, você ia notar. Por isso a espera acontece antes do draw, não durante."
+      "body": "A logo desenha, voa para o header e só então o resto entra. O globo 3D esquenta atrás do palco - se ele travasse no meio da animação, você ia notar. Por isso a espera acontece antes do draw, não durante."
     },
     "i18n": {
       "title": "Dois idiomas, um endereço",
@@ -205,7 +206,7 @@
     },
     "type": {
       "title": "Tipo e cor",
-      "body": "Geist Sans e Geist Mono. Azul elétrico no dark, azul mais profundo no light — o mesmo sistema, dois humores."
+      "body": "Geist Sans e Geist Mono. Azul elétrico no dark, azul mais profundo no light - o mesmo sistema, dois humores."
     }
   },
   "a11y": {

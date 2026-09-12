@@ -228,7 +228,7 @@ export const contentEn: LocaleContent = {
     {
       index: "02",
       title: "Good code stays readable after the feature ships.",
-      body: "The commit is the beginning of the code's life, not the end. I write for whoever opens that file in six months — usually me.",
+      body: "The commit is the beginning of the code's life, not the end. I write for whoever opens that file in six months - usually me.",
     },
     {
       index: "03",

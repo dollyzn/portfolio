@@ -2,7 +2,7 @@
   "meta": {
     "titleDefault": "Natã Santos - Full Stack Developer",
     "titleTemplate": "%s - Natã Santos",
-    "description": "Full Stack Developer with 3+ years building web applications with React, Node.js and TypeScript — from the interface to business rules and integrations.",
+    "description": "Full Stack Developer with 3+ years building web applications with React, Node.js and TypeScript - from the interface to business rules and integrations.",
     "keywords": "Natã Santos, Full Stack Developer, React, Node.js, TypeScript, Developer Brasília, Portfolio",
     "siteName": "Natã Santos - Portfolio",
     "role": "Full Stack Developer",
@@ -37,7 +37,8 @@
   },
   "intro": {
     "name": "NATÃ SANTOS",
-    "role": "Full Stack Developer"
+    "role": "Full Stack Developer",
+    "loading": "Loading"
   },
   "hero": {
     "availability": "Open to new challenges",
@@ -47,7 +48,7 @@
     "rotate": ["interfaces.", "APIs.", "products.", "systems."],
     "role": "Full Stack Developer",
     "stack": "React · Node.js · TypeScript",
-    "bio": "I build complete web applications — from the interface to business rules and integrations. I care about code that still makes sense months later, and products that hold up in the real world, not just the happy path.",
+    "bio": "I build complete web applications - from the interface to business rules and integrations. I care about code that still makes sense months later, and products that hold up in the real world, not just the happy path.",
     "ctaProjects": "View projects",
     "ctaGithub": "GitHub",
     "location": "Brasília, DF - Brazil",
@@ -63,7 +64,7 @@
     "p1Before": "I've spent more than three years building for the web. In that time I've worked with",
     "p1Highlight": "React, Node.js, TypeScript and SQL",
     "p1After": "on applications that had to work for real: authentication, third-party integrations, REST APIs and responsive interfaces that stand up to actual use.",
-    "p2": "I've shipped event management systems, payment gateways, reservation flows, registration and check-in. I've learned that the hard part is almost never writing the code — it's understanding the problem well enough not to write too much of it.",
+    "p2": "I've shipped event management systems, payment gateways, reservation flows, registration and check-in. I've learned that the hard part is almost never writing the code - it's understanding the problem well enough not to write too much of it.",
     "p3": "I started in support and infrastructure, and I think that left a mark: I like knowing what sits under the abstraction. Today I'm studying Software Engineering and pulling that thread toward architecture, backend and systems closer to the hardware.",
     "studying": "Studying now",
     "curious": [
@@ -86,7 +87,7 @@
     "eyebrow": "Stack",
     "titleLead": "The tools I use",
     "titleAccent": "almost every day.",
-    "description": "No vanity logo wall — only what I actually write, maintain or study right now.",
+    "description": "No vanity logo wall - only what I actually write, maintain or study right now.",
     "secondary": "I also work with",
     "topics": "And the topics behind them",
     "categories": {
@@ -111,7 +112,7 @@
     "titleAccent": "to understand better.",
     "descriptionBefore": "The projects below are",
     "descriptionEmphasis": "personal and conceptual",
-    "descriptionAfter": "— I use them to study architecture and test technical decisions. Professional work is covered in the experience section.",
+    "descriptionAfter": "- I use them to study architecture and test technical decisions. Professional work is covered in the experience section.",
     "more": "More projects on GitHub",
     "featured": "Featured",
     "code": "Code",
@@ -133,7 +134,7 @@
     "titleAccent": "and continuous learning.",
     "subtitleSchool": "Education",
     "subtitleLanguages": "Languages",
-    "note": "I read docs, articles and code in English every day — that's where the information arrives first."
+    "note": "I read docs, articles and code in English every day - that's where the information arrives first."
   },
   "contact": {
     "eyebrow": "Contact",
@@ -176,11 +177,11 @@
   },
   "colophon": {
     "metaTitle": "Colophon",
-    "metaDescription": "How this portfolio was made — stack, intro, i18n, theme, and the decisions behind the site.",
+    "metaDescription": "How this portfolio was made - stack, intro, i18n, theme, and the decisions behind the site.",
     "eyebrow": "Behind the scenes",
     "titleLead": "How this site",
     "titleAccent": "was made.",
-    "lead": "Not a changelog. A map of the decisions that matter — the ones you see and the ones that try to stay invisible.",
+    "lead": "Not a changelog. A map of the decisions that matter - the ones you see and the ones that try to stay invisible.",
     "back": "Back to home",
     "source": "The source for this site lives at {repo} on",
     "stack": {
@@ -189,7 +190,7 @@
     },
     "intro": {
       "title": "The intro",
-      "body": "The logo draws, flies to the header, then the rest comes in. The 3D globe warms up backstage — if it stalled mid-animation, you'd notice. That's why the wait happens before the draw, not during it."
+      "body": "The logo draws, flies to the header, then the rest comes in. The 3D globe warms up backstage - if it stalled mid-animation, you'd notice. That's why the wait happens before the draw, not during it."
     },
     "i18n": {
       "title": "Two languages, one address",
@@ -205,7 +206,7 @@
     },
     "type": {
       "title": "Type and color",
-      "body": "Geist Sans and Geist Mono. Electric blue in dark mode, a deeper blue in light — the same system, two moods."
+      "body": "Geist Sans and Geist Mono. Electric blue in dark mode, a deeper blue in light - the same system, two moods."
     }
   },
   "a11y": {

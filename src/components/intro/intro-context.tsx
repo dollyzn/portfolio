@@ -205,7 +205,7 @@ export function IntroProvider({
     return () => window.clearTimeout(id);
   }, [effectivePhase, setPhase]);
 
-  // Safety após o draw começar — o boot do globo já tem o próprio teto.
+  // Safety após o draw começar - o boot do globo já tem o próprio teto.
   useEffect(() => {
     if (
       reduced ||
