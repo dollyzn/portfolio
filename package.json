@@ -37,6 +37,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.3.4",
     "playwright": "^1.63.0",
+    "shadcn": "^4.21.0",
     "simple-icons": "^16.30.0",
     "tailwindcss": "^4",
     "typescript": "^5"
