@@ -89,9 +89,9 @@ export function Navbar() {
         <div
           className={cn(
             "relative transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
-            scrolled || open
+            chromeVisible && (scrolled || open)
               ? "border-b border-line bg-void/72 backdrop-blur-xl backdrop-saturate-150"
-              : "border-b border-transparent bg-transparent",
+              : "bg-transparent",
           )}
         >
           <nav
@@ -252,11 +252,13 @@ export function Navbar() {
             </motion.div>
           </nav>
 
-          <motion.div
-            aria-hidden
-            style={{ scaleX: scrollYProgress }}
-            className="absolute inset-x-0 bottom-0 h-px origin-left bg-gradient-to-r from-blue-600 via-electric to-cyan-bright"
-          />
+          {chromeVisible ? (
+            <motion.div
+              aria-hidden
+              style={{ scaleX: scrollYProgress }}
+              className="absolute inset-x-0 bottom-0 h-px origin-left bg-gradient-to-r from-blue-600 via-electric to-cyan-bright"
+            />
+          ) : null}
         </div>
       </header>
 
