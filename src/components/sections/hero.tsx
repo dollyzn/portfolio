@@ -34,6 +34,10 @@ const CHAR_TRANSITION = {
   ease: EASE,
 } as const;
 
+const CHAR_STAGGER = 0.028;
+const NAME_DELAY_MS = 180;
+const VERB_DELAY_MS = 260;
+
 const reveal = {
   hidden: { opacity: 0, y: 20, filter: "blur(8px)", scale: 0.98 },
   visible: { opacity: 1, y: 0, filter: "blur(0px)", scale: 1 },
@@ -132,8 +136,8 @@ export function Hero() {
                 <SplittingText
                   text={nameText}
                   type="chars"
-                  delay={180}
-                  stagger={0.028}
+                  delay={NAME_DELAY_MS}
+                  stagger={CHAR_STAGGER}
                   initial={CHAR_INITIAL}
                   animate={CHAR_ANIMATE}
                   transition={CHAR_TRANSITION}
@@ -150,8 +154,8 @@ export function Hero() {
                 <SplittingText
                   text={verbText}
                   type="chars"
-                  delay={260}
-                  stagger={0.028}
+                  delay={VERB_DELAY_MS}
+                  stagger={CHAR_STAGGER}
                   initial={CHAR_INITIAL}
                   animate={CHAR_ANIMATE}
                   transition={CHAR_TRANSITION}
@@ -161,7 +165,31 @@ export function Hero() {
               ) : (
                 <span className="invisible">{verbText}</span>
               )}
-              <TextRotate words={rotateWords} />
+              {active ? (
+                <TextRotate
+                  words={rotateWords}
+                  intro={{
+                    delay:
+                      VERB_DELAY_MS +
+                      Array.from(verbText.replace(/\s+/g, "")).length *
+                        CHAR_STAGGER *
+                        1000,
+                    stagger: CHAR_STAGGER,
+                    initial: CHAR_INITIAL,
+                    animate: CHAR_ANIMATE,
+                    transition: CHAR_TRANSITION,
+                    disableAnimation: reduced || introReduced,
+                  }}
+                />
+              ) : (
+                <span className="invisible inline-grid">
+                  <span className="invisible whitespace-nowrap">
+                    {rotateWords.reduce((a, b) =>
+                      a.length >= b.length ? a : b,
+                    )}
+                  </span>
+                </span>
+              )}
             </span>
           </h1>
 

@@ -184,6 +184,9 @@
     "lead": "Not a changelog. A map of the decisions that matter - the ones you see and the ones that try to stay invisible.",
     "back": "Back to home",
     "source": "The source for this site lives at {repo} on",
+    "snippetCaption": "The intro waits for the globe. The draw starts when WebGL says so - or when the ten-second cap fires.",
+    "index": "Index",
+    "stackLabel": "What holds the site up",
     "stack": {
       "title": "Stack",
       "body": "Next.js 16 (App Router), React 19, TypeScript and Tailwind v4. Motion for transitions, Three.js for the globe, next-intl for pt/en. Theming via @wrksz/themes so React 19 doesn't fight an inline script."

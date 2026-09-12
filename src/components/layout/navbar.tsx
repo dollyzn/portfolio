@@ -211,7 +211,12 @@ export function Navbar() {
                 transition={{ duration: 0.4, ease: EASE }}
                 className="hidden sm:block"
               >
-                <Button asChild size="sm" variant="outline">
+                <Button
+                  asChild
+                  size="sm"
+                  variant="outline"
+                  className="h-11 px-5"
+                >
                   <Link href="/#contato">
                     {t("cta")}
                     <ArrowUpRight

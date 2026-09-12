@@ -184,6 +184,9 @@
     "lead": "Não é um changelog. É o mapa das decisões que importam - as que você vê e as que tentam ficar invisíveis.",
     "back": "Voltar ao início",
     "source": "O código deste site está em {repo} no",
+    "snippetCaption": "A intro espera o globo. O draw só começa quando o WebGL avisa - ou quando o teto de dez segundos estoura.",
+    "index": "Índice",
+    "stackLabel": "O que segura o site",
     "stack": {
       "title": "Stack",
       "body": "Next.js 16 (App Router), React 19, TypeScript e Tailwind v4. Motion nas transições, Three.js no globo, next-intl no pt/en. Tema com @wrksz/themes para não brigar com o React 19."
