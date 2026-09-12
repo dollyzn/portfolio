@@ -23,7 +23,7 @@ import { useIntro } from "@/components/intro/intro-context";
 import { useActiveSection } from "@/hooks/use-active-section";
 import { Link, usePathname } from "@/i18n/navigation";
 import { hasGlobeWarmedUp } from "@/lib/boot-gate";
-import { navLinks, site } from "@/lib/site";
+import { navLinks } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 const sectionIds = navLinks.map((l) => l.href.slice(1));
@@ -320,7 +320,7 @@ export function Navbar() {
                   {t("colophon")}
                 </Link>
                 <ShimmerButton
-                  href={`mailto:${site.email}`}
+                  href="/#contato"
                   onClick={() => setOpen(false)}
                   background="var(--paper)"
                   shimmerColor="var(--shimmer-on-cta)"
