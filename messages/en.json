@@ -144,7 +144,48 @@
     "ctaGithub": "GitHub",
     "ctaLinkedin": "LinkedIn",
     "mailtoSubject": "Let's talk",
-    "sectionLabel": "Contact"
+    "sectionLabel": "Contact",
+    "intentLabel": "What is this about",
+    "intents": {
+      "project": "Project",
+      "role": "Role",
+      "collab": "Collab",
+      "other": "Other"
+    },
+    "name": "Name",
+    "namePlaceholder": "What should I call you",
+    "email": "Email",
+    "emailPlaceholder": "you@company.com",
+    "company": "Company",
+    "companyPlaceholder": "Optional",
+    "optional": "optional",
+    "required": "required",
+    "honeypot": "Leave this field blank",
+    "message": "Message",
+    "messagePlaceholder": "Context, timing, what you need - enough for me to reply with something useful.",
+    "submit": "Send message",
+    "sending": "Sending",
+    "successTitle": "Got it.",
+    "successBody": "I'll read it carefully and reply to the email you left.",
+    "sendAnother": "Send another",
+    "fieldErrors": {
+      "nameMin": "Name must be at least 2 characters.",
+      "nameMax": "Name can be at most 80 characters.",
+      "emailInvalid": "That email does not look valid.",
+      "emailMax": "Email can be at most 120 characters.",
+      "companyMax": "Company can be at most 80 characters.",
+      "intentInvalid": "Pick one of the listed subjects.",
+      "messageMin": "Message must be at least 20 characters.",
+      "messageMax": "Message can be at most 2000 characters.",
+      "captchaRequired": "Confirm you are not a robot before sending."
+    },
+    "errors": {
+      "captcha": "Bot verification failed. Please try again.",
+      "validation": "Review the highlighted fields and try again.",
+      "mail": "The email could not be delivered right now. Try again in a moment.",
+      "rate": "Too many attempts. Wait a few minutes.",
+      "generic": "Could not send right now. Try again in a moment."
+    }
   },
   "footer": {
     "role": "Software Developer",

@@ -11,6 +11,13 @@ services:
     environment:
       NODE_ENV: production
       NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://nsantos.dev}
+      NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${NEXT_PUBLIC_TURNSTILE_SITE_KEY:-}
+      TURNSTILE_SECRET: ${TURNSTILE_SECRET:-}
+      TURNSTILE_HOSTNAMES: ${TURNSTILE_HOSTNAMES:-nsantos.dev,www.nsantos.dev}
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      CONTACT_FROM: ${CONTACT_FROM:-}
+      CONTACT_TO: ${CONTACT_TO:-}
+      TRUST_CF_CONNECTING_IP: ${TRUST_CF_CONNECTING_IP:-}
     healthcheck:
       # dentro do container a app escuta em 3000
       test:
