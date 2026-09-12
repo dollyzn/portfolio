@@ -95,9 +95,13 @@ export function IntroProvider({
 
   // F5 / reload: trava scroll restoration e força o topo antes da paint.
   useLayoutEffect(() => {
-    if (skip) {
+    if (skip || reduced) {
       document.documentElement.dataset.intro = "done";
-      return;
+      if (skip) return;
+    } else {
+      // Antes da paint: se viemos do Colophon, o html ainda está em
+      // data-intro="done" e o hero vazaria por cima da intro.
+      document.documentElement.dataset.intro = "playing";
     }
 
     const previous = history.scrollRestoration;
@@ -117,7 +121,7 @@ export function IntroProvider({
         /* ignore */
       }
     };
-  }, [skip]);
+  }, [skip, reduced]);
 
   // Boot gate: espera o globo (ou o teto) antes de desenhar a logo.
   useEffect(() => {

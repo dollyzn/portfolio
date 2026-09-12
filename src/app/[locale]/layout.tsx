@@ -30,6 +30,7 @@ export const viewport: Viewport = {
     { media: "(prefers-color-scheme: dark)", color: "#02040A" },
   ],
   colorScheme: "dark light",
+  viewportFit: "cover",
 };
 
 type Props = {

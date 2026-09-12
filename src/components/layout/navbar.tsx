@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import {
   AnimatePresence,
   motion,
@@ -8,9 +8,11 @@ import {
   useScroll,
 } from "motion/react";
 import { useTranslations } from "next-intl";
-import { ArrowUpRight, Menu, X } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { LogoMark } from "@/components/ui/logo";
 import { Button } from "@/components/ui/button";
+import { MenuToggle } from "@/components/ui/menu-toggle";
+import { ShimmerButton } from "@/components/ui/shimmer-button";
 import { CommandTrigger } from "@/components/layout/command-palette";
 import {
   LocaleSwitcher,
@@ -43,7 +45,7 @@ export function Navbar() {
   const active = useActiveSection(sectionIds);
   const pathname = usePathname();
   const atHome = pathname === "/";
-  const { phase, setPhase, isRevealing, isComplete, reduced } = useIntro();
+  const { phase, setPhase, isRevealing, reduced } = useIntro();
 
   const brandOnStage =
     phase === "drawing" || (phase === "booting" && !hasGlobeWarmedUp());
@@ -52,13 +54,21 @@ export function Navbar() {
 
   useMotionValueEvent(scrollY, "change", (v) => setScrolled(v > 24));
 
-  useEffect(() => {
-    if (!isComplete) return;
-    document.body.style.overflow = open ? "hidden" : "";
+  useLayoutEffect(() => {
+    const html = document.documentElement;
+    const body = document.body;
+    if (!open) {
+      html.style.overflow = "";
+      body.style.overflow = "";
+      return;
+    }
+    html.style.overflow = "hidden";
+    body.style.overflow = "hidden";
     return () => {
-      document.body.style.overflow = "";
+      html.style.overflow = "";
+      body.style.overflow = "";
     };
-  }, [open, isComplete]);
+  }, [open]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
@@ -75,11 +85,11 @@ export function Navbar() {
         {tA11y("skip")}
       </a>
 
-      <header className="fixed inset-x-0 top-0 z-50">
+      <header className="fixed inset-x-0 top-0 z-50 pt-[env(safe-area-inset-top,0px)]">
         <div
           className={cn(
             "relative transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
-            scrolled
+            scrolled || open
               ? "border-b border-line bg-void/72 backdrop-blur-xl backdrop-saturate-150"
               : "border-b border-transparent bg-transparent",
           )}
@@ -211,7 +221,12 @@ export function Navbar() {
                 transition={{ duration: 0.4, ease: EASE }}
                 className="hidden sm:block"
               >
-                <Button asChild size="sm" variant="outline">
+                <Button
+                  asChild
+                  size="sm"
+                  variant="outline"
+                  className="h-11 px-5"
+                >
                   <Link href="/#contato">
                     {t("cta")}
                     <ArrowUpRight
@@ -232,11 +247,7 @@ export function Navbar() {
                 aria-controls="menu-mobile"
                 className="grid size-10 place-items-center rounded-full text-paper transition-colors hover:bg-surface-2 lg:hidden"
               >
-                {open ? (
-                  <X className="size-5" strokeWidth={1.6} />
-                ) : (
-                  <Menu className="size-5" strokeWidth={1.6} />
-                )}
+                <MenuToggle open={open} />
               </motion.button>
             </motion.div>
           </nav>
@@ -255,19 +266,19 @@ export function Navbar() {
             id="menu-mobile"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            exit={{ opacity: 0, pointerEvents: "none" }}
             transition={{ duration: 0.35, ease: EASE }}
-            className="fixed inset-0 z-40 bg-void/96 backdrop-blur-2xl lg:hidden"
+            className="fixed inset-0 z-40 overflow-y-auto overscroll-contain bg-void/96 backdrop-blur-2xl lg:hidden"
           >
             <div
-              className="bg-tech-grid absolute inset-0 opacity-40"
+              className="bg-tech-grid pointer-events-none absolute inset-0 opacity-40"
               aria-hidden
             />
             <nav
               aria-label={tA11y("navMobile")}
-              className="relative flex h-full flex-col justify-center px-8 pb-20"
+              className="relative mx-auto flex min-h-full w-full max-w-lg flex-col px-6 pt-[calc(env(safe-area-inset-top,0px)+6.25rem)] pb-[calc(env(safe-area-inset-bottom,0px)+2.5rem)] sm:px-8"
             >
-              <ul className="space-y-1">
+              <ul className="flex-1 space-y-1">
                 {navLinks.map((link, i) => (
                   <motion.li
                     key={link.href}
@@ -283,7 +294,7 @@ export function Navbar() {
                     <Link
                       href={`/${link.href}`}
                       onClick={() => setOpen(false)}
-                      className="flex items-baseline gap-4 border-b border-line py-4 text-3xl font-medium tracking-tight text-paper"
+                      className="flex items-baseline gap-3.5 border-b border-line py-3.5 text-[1.85rem] font-medium leading-tight tracking-tight text-paper sm:gap-4 sm:py-4 sm:text-3xl"
                     >
                       <span className="font-mono text-xs text-electric">
                         {link.index}
@@ -298,7 +309,7 @@ export function Navbar() {
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.4 }}
-                className="mt-10 flex flex-col gap-3"
+                className="mt-6 flex shrink-0 flex-col gap-3 sm:mt-8"
               >
                 <LocaleSwitcherWide />
                 <Link
@@ -308,10 +319,18 @@ export function Navbar() {
                 >
                   {t("colophon")}
                 </Link>
-                <Button asChild variant="primary" size="lg">
-                  <a href={`mailto:${site.email}`}>{t("mobileEmail")}</a>
-                </Button>
-                <p className="font-mono text-[11px] tracking-[0.18em] text-dim">
+                <ShimmerButton
+                  href={`mailto:${site.email}`}
+                  onClick={() => setOpen(false)}
+                  background="var(--paper)"
+                  shimmerColor="var(--shimmer-on-cta)"
+                  shimmerSize="0.14em"
+                  shimmerDuration="2.4s"
+                  className="h-12 w-full border-transparent text-[15px] font-medium text-void"
+                >
+                  {t("mobileEmail")}
+                </ShimmerButton>
+                <p className="pt-1 font-mono text-[11px] tracking-[0.18em] text-dim">
                   {tMeta("location").toUpperCase()}
                 </p>
               </motion.div>

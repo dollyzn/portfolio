@@ -11,6 +11,8 @@ import { ProjectMockup } from "@/components/ui/project-mockup";
 import { GithubIcon } from "@/components/ui/icons";
 import { getContent, type Project } from "@/content";
 import type { AppLocale } from "@/i18n/routing";
+import { BorderBeam } from "@/components/magicui/border-beam";
+import { RepoPreview } from "@/components/sections/repo-preview";
 import { site } from "@/lib/site";
 
 export function Projects() {
@@ -81,8 +83,15 @@ function Featured({ project: p }: { project: Project }) {
           as="article"
           radius={520}
           intensity={0.09}
-          className="grid overflow-hidden rounded-3xl lg:grid-cols-[1fr_1.06fr]"
+          className="relative grid overflow-hidden rounded-3xl lg:grid-cols-[1fr_1.06fr]"
         >
+          <BorderBeam
+            size={90}
+            duration={9}
+            borderWidth={1.2}
+            colorFrom="var(--electric)"
+            colorTo="var(--cyan-bright)"
+          />
           <div className="order-2 flex flex-col justify-center p-7 sm:p-10 lg:order-1">
             <div className="flex flex-wrap items-center gap-3">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-cyan-bright/25 bg-cyan-bright/[0.06] px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-cyan-bright">
@@ -119,7 +128,7 @@ function Featured({ project: p }: { project: Project }) {
             </ul>
 
             <StackRow stack={p.stack} />
-            <Links project={p} />
+            <Links project={p} preview />
           </div>
 
           <div className="relative order-1 min-h-[240px] border-b border-line sm:min-h-[320px] lg:order-2 lg:min-h-[460px] lg:border-b-0 lg:border-l">
@@ -192,31 +201,37 @@ function StackRow({ stack }: { stack: string[] }) {
 function Links({
   project: p,
   compact,
+  preview,
 }: {
   project: Project;
   compact?: boolean;
+  preview?: boolean;
 }) {
   const t = useTranslations("projects");
   const tA11y = useTranslations("a11y");
 
   return (
     <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-line pt-5">
-      <a
-        href={p.repo}
-        target="_blank"
-        rel="noreferrer noopener"
-        aria-label={tA11y("projectRepo", { name: p.name })}
-        className="group/link inline-flex items-center gap-2 text-[13.5px] text-mist transition-colors duration-300 hover:text-paper"
-      >
-        <GithubIcon className="size-[15px] opacity-70 transition-opacity group-hover/link:opacity-100" />
-        <span className="relative">
-          {t("code")}
-          <span
-            aria-hidden
-            className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-electric transition-transform duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/link:scale-x-100"
-          />
-        </span>
-      </a>
+      {preview ? (
+        <RepoPreview href={p.repo} label={t("code")} name={p.name} />
+      ) : (
+        <a
+          href={p.repo}
+          target="_blank"
+          rel="noreferrer noopener"
+          aria-label={tA11y("projectRepo", { name: p.name })}
+          className="group/link inline-flex items-center gap-2 text-[13.5px] text-mist transition-colors duration-300 hover:text-paper"
+        >
+          <GithubIcon className="size-[15px] opacity-70 transition-opacity group-hover/link:opacity-100" />
+          <span className="relative">
+            {t("code")}
+            <span
+              aria-hidden
+              className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-electric transition-transform duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/link:scale-x-100"
+            />
+          </span>
+        </a>
+      )}
 
       {p.demo ? (
         <a

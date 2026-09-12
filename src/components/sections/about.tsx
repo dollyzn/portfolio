@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { HighlightText } from "@/components/animate-ui/primitives/texts/highlight";
 import { Section, SectionHeader } from "@/components/ui/section";
 import { Reveal, Stagger, StaggerItem } from "@/components/ui/reveal";
 
@@ -38,7 +39,7 @@ export async function About() {
           <div className="mt-10 max-w-xl space-y-5 text-[15.5px] leading-[1.8] text-slate-blue">
             <Reveal delay={0.06}>
               <p>
-                {t("p1Before")} <Highlight>{t("p1Highlight")}</Highlight>{" "}
+                {t("p1Before")} <HighlightText text={t("p1Highlight")} inView />{" "}
                 {t("p1After")}
               </p>
             </Reveal>
@@ -94,13 +95,5 @@ export async function About() {
         </Stagger>
       </div>
     </Section>
-  );
-}
-
-function Highlight({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="text-mist decoration-electric/40 underline-offset-4 [text-decoration-line:underline] [text-decoration-thickness:1px]">
-      {children}
-    </span>
   );
 }

@@ -144,7 +144,48 @@
     "ctaGithub": "GitHub",
     "ctaLinkedin": "LinkedIn",
     "mailtoSubject": "Vamos conversar",
-    "sectionLabel": "Contato"
+    "sectionLabel": "Contato",
+    "intentLabel": "Sobre o que é",
+    "intents": {
+      "project": "Projeto",
+      "role": "Vaga",
+      "collab": "Parceria",
+      "other": "Outro"
+    },
+    "name": "Nome",
+    "namePlaceholder": "Como você se chama",
+    "email": "E-mail",
+    "emailPlaceholder": "voce@empresa.com",
+    "company": "Empresa",
+    "companyPlaceholder": "Opcional",
+    "optional": "opcional",
+    "required": "obrigatório",
+    "honeypot": "Deixe este campo em branco",
+    "message": "Mensagem",
+    "messagePlaceholder": "Contexto, prazo, o que você precisa - o suficiente para eu responder com algo útil.",
+    "submit": "Enviar mensagem",
+    "sending": "Enviando",
+    "successTitle": "Chegou.",
+    "successBody": "Vou ler com calma e te responder no e-mail que você deixou.",
+    "sendAnother": "Enviar outra",
+    "fieldErrors": {
+      "nameMin": "O nome precisa ter pelo menos 2 caracteres.",
+      "nameMax": "O nome pode ter no máximo 80 caracteres.",
+      "emailInvalid": "Esse e-mail não parece válido.",
+      "emailMax": "O e-mail pode ter no máximo 120 caracteres.",
+      "companyMax": "O nome da empresa pode ter no máximo 80 caracteres.",
+      "intentInvalid": "Escolha um assunto da lista.",
+      "messageMin": "A mensagem precisa ter pelo menos 20 caracteres.",
+      "messageMax": "A mensagem pode ter no máximo 2000 caracteres.",
+      "captchaRequired": "Confirma que você não é um robô antes de enviar."
+    },
+    "errors": {
+      "captcha": "A verificação anti-bot falhou. Tenta de novo.",
+      "validation": "Revise os campos destacados e tenta de novo.",
+      "mail": "Não consegui entregar o e-mail agora. Tenta de novo em instantes.",
+      "rate": "Muitas tentativas. Espera alguns minutos.",
+      "generic": "Não deu para enviar agora. Tenta de novo em instantes."
+    }
   },
   "footer": {
     "role": "Software Developer",
@@ -184,6 +225,9 @@
     "lead": "Não é um changelog. É o mapa das decisões que importam - as que você vê e as que tentam ficar invisíveis.",
     "back": "Voltar ao início",
     "source": "O código deste site está em {repo} no",
+    "snippetCaption": "A intro espera o globo. O draw só começa quando o WebGL avisa - ou quando o teto de dez segundos estoura.",
+    "index": "Índice",
+    "stackLabel": "O que segura o site",
     "stack": {
       "title": "Stack",
       "body": "Next.js 16 (App Router), React 19, TypeScript e Tailwind v4. Motion nas transições, Three.js no globo, next-intl no pt/en. Tema com @wrksz/themes para não brigar com o React 19."
