@@ -85,7 +85,7 @@ export function CustomCursor() {
     };
 
     const interactive =
-      "a, button, [role='button'], input, textarea, summary, label, .cursor-pointer";
+      "a, button, [role='button'], [role='option'], input, textarea, summary, label, .cursor-pointer";
 
     const onOver = (event: Event) => {
       const target = event.target as Element | null;

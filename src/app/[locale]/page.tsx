@@ -1,10 +1,6 @@
 import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
-import { Intro } from "@/components/intro";
-import { Navbar } from "@/components/layout/navbar";
-import { Footer } from "@/components/layout/footer";
-import { CustomCursor } from "@/components/layout/custom-cursor";
-import { SectionRail } from "@/components/layout/section-rail";
+import { SiteChrome } from "@/components/layout/site-chrome";
 import { Hero } from "@/components/sections/hero";
 import { About } from "@/components/sections/about";
 import { Stack } from "@/components/sections/stack";
@@ -24,10 +20,7 @@ export default async function Home({ params }: Props) {
   if (!hasLocale(routing.locales, locale)) notFound();
 
   return (
-    <Intro>
-      <CustomCursor />
-      <Navbar />
-      <SectionRail />
+    <SiteChrome showRail>
       <main id="conteudo" className="flex-1">
         <Hero />
         <About />
@@ -38,7 +31,6 @@ export default async function Home({ params }: Props) {
         <Education />
         <Contact />
       </main>
-      <Footer />
-    </Intro>
+    </SiteChrome>
   );
 }

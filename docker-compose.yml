@@ -1,4 +1,4 @@
-# Projeto isolado — não colide com o stack antigo em /home/chatwoot/nsantos
+# Projeto isolado - não colide com o stack antigo em /home/chatwoot/nsantos
 name: portfolio
 
 services:

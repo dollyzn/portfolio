@@ -14,7 +14,7 @@ export function isGlobeReady() {
   return ready;
 }
 
-/** true depois do primeiro markGlobeReady — sobrevive a reset entre remounts. */
+/** true depois do primeiro markGlobeReady - sobrevive a reset entre remounts. */
 export function hasGlobeWarmedUp() {
   return warmedUp;
 }

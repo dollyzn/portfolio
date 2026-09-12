@@ -69,7 +69,7 @@ jobs:
 
       - name: Trigger restricted deploy
         env:
-          # release tag, ex.: v0.2.0 — vira IMAGE_TAG no script da VPS
+          # release tag, ex.: v0.2.0 - vira IMAGE_TAG no script da VPS
           IMAGE_TAG: ${{ github.event.release.tag_name }}
         run: |
           set -euo pipefail

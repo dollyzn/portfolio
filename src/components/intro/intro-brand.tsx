@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { LogoMark } from "@/components/ui/logo";
@@ -8,38 +9,70 @@ import { hasGlobeWarmedUp } from "@/lib/boot-gate";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 const LAYOUT_SPRING = { type: "spring" as const, stiffness: 200, damping: 30 };
+/** Evita piscar o glow em device que já tem o globo quente. */
+const HOLD_DELAY_MS = 250;
 
 /**
  * Estágio central da marca: espera o globo, desenha o SVG e cede o
  * layoutId="brand-logo" para o slot do header (shared layout).
  *
- * Na 1ª visita, espera o WebGL no centro (página ainda escondida).
+ * Na 1ª visita, se o WebGL demorar, só o glow pulsa no centro.
  * Em reprise (locale / soft nav), a logo fica no header até o globo
- * aquecer de novo — só então voa ao centro e desenha, sem a travada.
+ * aquecer de novo - só então voa ao centro e desenha, sem a travada.
  */
 export function IntroBrand() {
   const t = useTranslations("intro");
   const { phase, setPhase, reduced } = useIntro();
-  const waitOnStage = phase === "booting" && !hasGlobeWarmedUp();
-  const onStage = phase === "drawing" || waitOnStage;
+  const firstVisit = !hasGlobeWarmedUp();
+  const waitOnStage = phase === "booting" && firstVisit;
+  const [holdVisible, setHoldVisible] = useState(false);
+  const [glowSettled, setGlowSettled] = useState(false);
+
+  useEffect(() => {
+    if (phase !== "booting" || !firstVisit) return;
+    const id = window.setTimeout(() => setHoldVisible(true), HOLD_DELAY_MS);
+    return () => window.clearTimeout(id);
+  }, [phase, firstVisit]);
+
+  const holding = waitOnStage && holdVisible;
+  const drawing = phase === "drawing";
+  const onStage = drawing || holding;
 
   if (reduced || !onStage) return null;
 
-  const drawing = phase === "drawing";
-
   return (
     <div
+      role={holding ? "status" : undefined}
+      aria-live={holding ? "polite" : undefined}
+      aria-busy={holding || undefined}
+      aria-hidden={holding ? undefined : true}
       className="pointer-events-none fixed inset-0 z-[60] flex flex-col items-center justify-center px-6"
-      aria-hidden
     >
+      {holding ? <span className="sr-only">{t("loading")}</span> : null}
+
       <AnimatePresence>
-        {drawing ? (
+        {holding || drawing ? (
           <motion.div
             key="intro-glow"
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            animate={
+              drawing
+                ? { opacity: 1 }
+                : glowSettled
+                  ? { opacity: [0.38, 0.58, 0.38] }
+                  : { opacity: 0.48 }
+            }
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.5, ease: EASE }}
+            transition={
+              drawing
+                ? { duration: 0.8, ease: EASE }
+                : glowSettled
+                  ? { duration: 3.2, repeat: Infinity, ease: "easeInOut" }
+                  : { duration: 0.9, ease: EASE }
+            }
+            onAnimationComplete={() => {
+              if (!drawing) setGlowSettled(true);
+            }}
             aria-hidden
             className="absolute left-1/2 top-1/2 size-[22rem] max-w-[80vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,var(--glow-navy),transparent_68%)] blur-3xl"
           />
@@ -64,16 +97,13 @@ export function IntroBrand() {
             />
           ) : null}
         </AnimatePresence>
-        <LogoMark
-          key={drawing ? "draw" : "boot"}
-          draw={drawing ? true : "pending"}
-          className={
-            drawing
-              ? "drop-shadow-[0_0_22px_color-mix(in_oklab,var(--electric)_40%,transparent)]"
-              : undefined
-          }
-          onDrawComplete={() => setPhase("moving")}
-        />
+        {drawing ? (
+          <LogoMark
+            draw
+            className="drop-shadow-[0_0_22px_color-mix(in_oklab,var(--electric)_40%,transparent)]"
+            onDrawComplete={() => setPhase("moving")}
+          />
+        ) : null}
       </motion.div>
 
       <AnimatePresence>
