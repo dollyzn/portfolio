@@ -339,6 +339,11 @@ html:not([data-intro="done"]):not([data-intro="revealing"]) body > footer {
   );
 }
 
+/* Dentro de um iframe o cursor da página não recebe eventos e congelaria na borda. */
+html[data-cursor-hidden] [data-custom-cursor] {
+  opacity: 0;
+}
+
 [data-globe] canvas {
   touch-action: none !important;
 }

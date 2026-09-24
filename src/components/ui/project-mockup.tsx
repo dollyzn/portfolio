@@ -25,7 +25,6 @@ export function ProjectMockup({
       <div className="relative flex h-full flex-col p-4 sm:p-5">
         <Chrome />
         <div className="mt-3 min-h-0 flex-1">
-          {slug === "eventflow" ? <EventFlow /> : null}
           {slug === "nexus-api" ? <NexusApi /> : null}
           {slug === "devboard" ? <DevBoard /> : null}
           {slug === "checkpoint" ? <Checkpoint /> : null}
@@ -58,68 +57,6 @@ function Bar({ w, tone = "dim" }: { w: string; tone?: "dim" | "mid" | "hot" }) {
       className={cn("block h-1.5 rounded-full", color)}
       style={{ width: w }}
     />
-  );
-}
-
-function EventFlow() {
-  const bars = [42, 68, 34, 88, 56, 74, 96, 62, 80];
-  return (
-    <div className="grid h-full grid-cols-[26%_1fr] gap-3">
-      <div className="space-y-2.5 border-r border-line pr-3">
-        {["hot", "dim", "dim", "dim", "dim"].map((t, i) => (
-          <div key={i} className="flex items-center gap-1.5">
-            <span
-              className={cn(
-                "size-1.5 rounded-sm",
-                t === "hot" ? "bg-cyan-bright/80" : "bg-line-strong",
-              )}
-            />
-            <Bar
-              w={i === 0 ? "70%" : `${52 + ((i * 13) % 34)}%`}
-              tone={t as "hot" | "dim"}
-            />
-          </div>
-        ))}
-      </div>
-
-      <div className="flex min-h-0 flex-col gap-3">
-        <div className="grid grid-cols-3 gap-2">
-          {["1.2k", "318", "97%"].map((v, i) => (
-            <div
-              key={v}
-              className="rounded-md border border-line bg-panel/70 p-2 dark:bg-surface"
-            >
-              <span
-                className={cn(
-                  "font-mono text-[10px] leading-none",
-                  i === 2 ? "text-cyan-bright" : "text-mist",
-                )}
-              >
-                {v}
-              </span>
-              <div className="mt-1.5">
-                <Bar w="60%" />
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="flex min-h-0 flex-1 items-end gap-[5px] rounded-md border border-line bg-panel/70 p-2.5 dark:bg-surface">
-          {bars.map((h, i) => (
-            <span
-              key={i}
-              style={{ height: `${h}%` }}
-              className={cn(
-                "w-full rounded-sm",
-                i === 6
-                  ? "bg-gradient-to-t from-electric/25 to-cyan-bright/80"
-                  : "bg-gradient-to-t from-electric/10 to-electric/35",
-              )}
-            />
-          ))}
-        </div>
-      </div>
-    </div>
   );
 }
 

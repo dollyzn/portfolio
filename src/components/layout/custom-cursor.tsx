@@ -131,6 +131,7 @@ export function CustomCursor() {
   return (
     <div
       aria-hidden
+      data-custom-cursor
       className="pointer-events-none fixed inset-0 z-[200] motion-reduce:hidden"
     >
       <div
