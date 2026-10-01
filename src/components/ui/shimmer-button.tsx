@@ -40,6 +40,8 @@ export const ShimmerButton = React.forwardRef<
     const visual = (
       <>
         <div
+          aria-hidden
+          data-decor
           className={cn(
             "-z-30 blur-[2px]",
             "@container-[size] absolute inset-0 overflow-visible",

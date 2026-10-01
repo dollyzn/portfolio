@@ -87,6 +87,7 @@ export function Navbar() {
 
       <header className="fixed inset-x-0 top-0 z-50 pt-[env(safe-area-inset-top,0px)]">
         <div
+          data-lite-solid={chromeVisible && (scrolled || open) ? "" : undefined}
           className={cn(
             "relative transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
             chromeVisible && (scrolled || open)

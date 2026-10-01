@@ -281,7 +281,10 @@
     "themeSystem": "Seguir o sistema",
     "localePt": "Português",
     "localeEn": "English",
-    "current": "atual"
+    "current": "atual",
+    "perfLite": "Ativar modo leve",
+    "perfFull": "Ativar efeitos completos",
+    "perfOn": "modo leve ativo"
   },
   "colophon": {
     "metaTitle": "Colophon",
@@ -342,5 +345,22 @@
     "copyEmail": "Copiar endereço de e-mail {email}",
     "copyDone": "E-mail copiado para a área de transferência",
     "copyToast": "E-mail copiado"
+  },
+  "perf": {
+    "title": "Modo leve ativado",
+    "titleFull": "Sem aceleração de hardware",
+    "bodyGpu": "Seu navegador está desenhando sem aceleração de hardware. Desliguei o globo 3D e os efeitos de desfoque para a navegação continuar fluida.",
+    "bodyFps": "A página não estava segurando os quadros por aqui. Desliguei o globo 3D e os efeitos de desfoque para a navegação continuar fluida.",
+    "bodyFull": "Você está vendo a versão completa, com globo 3D e desfoques. Se a navegação travar, o modo leve desliga esses efeitos.",
+    "bodyLite": "Modo leve ligado por você: globo 3D e efeitos de desfoque desligados. A versão completa fica a um clique.",
+    "renderer": "renderizador",
+    "hint": "Reativar a aceleração de hardware nas configurações do navegador traz a versão completa de volta.",
+    "full": "Usar versão completa",
+    "lite": "Ativar modo leve",
+    "dismiss": "Entendi",
+    "close": "Fechar aviso",
+    "badgeLite": "modo leve",
+    "badgeFull": "sem aceleração",
+    "details": "Ver detalhes de desempenho"
   }
 }

@@ -5,6 +5,8 @@ import dynamic from "next/dynamic";
 import { motion, useInView, type MotionValue } from "motion/react";
 import { globeArcs, globeConfig } from "@/lib/globe-arcs";
 import { markGlobeReady, resetGlobeReady } from "@/lib/boot-gate";
+import { usePerfMode } from "@/hooks/use-perf-mode";
+import { StaticGlobe } from "@/components/ui/globe-static";
 import { cn } from "@/lib/utils";
 
 const World = dynamic(
@@ -33,14 +35,21 @@ export function HeroVisual({
   const containerRef = useRef<HTMLDivElement>(null);
   const inView = useInView(containerRef, { margin: "200px" });
   const [ready, setReady] = useState(false);
-  // monta imediatamente (atrás da intro) pra aquecer o WebGL
-  const [mount3d] = useState(true);
+  const { mode, resolved } = usePerfMode();
+  const lite = mode === "lite";
+  // só monta o WebGL depois da sondagem - em software ele nunca entra
+  const mount3d = resolved && !lite;
 
   useEffect(() => {
     return () => {
       resetGlobeReady();
     };
   }, []);
+
+  // sem globo 3D não há o que esperar: a intro segue na hora
+  useEffect(() => {
+    if (resolved && lite) markGlobeReady();
+  }, [resolved, lite]);
 
   return (
     <div
@@ -49,6 +58,7 @@ export function HeroVisual({
     >
       <motion.div
         aria-hidden
+        data-decor
         style={{ x: driftX, y: driftY }}
         className="absolute inset-[-16%] -z-10"
       >
@@ -89,7 +99,11 @@ export function HeroVisual({
 
       <div
         role="img"
-        aria-label="Globo terrestre interativo. Arraste para girar."
+        aria-label={
+          lite
+            ? "Globo terrestre com as rotas do portfólio."
+            : "Globo terrestre interativo. Arraste para girar."
+        }
         data-globe
         className="relative size-full [mask-image:radial-gradient(circle_at_50%_50%,#000_74%,rgba(0,0,0,0.6)_88%,transparent_99%)] [&_canvas]:cursor-grab [&_canvas]:active:cursor-grabbing"
       >
@@ -112,7 +126,8 @@ export function HeroVisual({
             />
           </div>
         ) : null}
-        {!ready ? (
+        {lite ? <StaticGlobe /> : null}
+        {!ready && !lite ? (
           <GlobeSkeleton className="pointer-events-none absolute inset-0" />
         ) : null}
       </div>
@@ -124,10 +139,10 @@ export function HeroVisual({
         LON −47.88
       </span>
       <span className="pointer-events-none absolute -bottom-1 left-1/2 -translate-x-1/2 font-mono text-[9.5px] uppercase tracking-[0.24em] text-dim/60 lg:hidden">
-        arraste para girar
+        {lite ? "brasília · df" : "arraste para girar"}
       </span>
       <span className="pointer-events-none absolute -bottom-1 left-1/2 hidden -translate-x-1/2 font-mono text-[9.5px] uppercase tracking-[0.24em] text-dim/60 lg:block">
-        brasília · df - arraste para girar
+        {lite ? "brasília · df" : "brasília · df - arraste para girar"}
       </span>
     </div>
   );

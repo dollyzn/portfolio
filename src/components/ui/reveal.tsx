@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, type Variants } from "motion/react";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { useSimplifiedMotion } from "@/hooks/use-perf-mode";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
@@ -23,7 +23,7 @@ export function Reveal({
   blur?: number;
   duration?: number;
 }) {
-  const reduced = useReducedMotion();
+  const reduced = useSimplifiedMotion();
 
   return (
     <motion.div
@@ -91,7 +91,7 @@ export function StaggerItem({
   children: ReactNode;
   className?: string;
 }) {
-  const reduced = useReducedMotion();
+  const reduced = useSimplifiedMotion();
   return (
     <motion.div
       className={className}
@@ -119,7 +119,7 @@ export function WordReveal({
   delay?: number;
   as?: "span" | "h1" | "h2" | "p";
 }) {
-  const reduced = useReducedMotion();
+  const reduced = useSimplifiedMotion();
   const words = text.split(" ");
   const MotionTag = motion[Tag];
 

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { useIntro } from "@/components/intro/intro-context";
+import { useLiteMode } from "@/hooks/use-perf-mode";
 
 type Splash = { id: number; x: number; y: number };
 
@@ -34,7 +35,9 @@ export function CustomCursor() {
     getSnapshot,
     getServerSnapshot,
   );
-  const enabled = pointerOk && isComplete;
+  // no modo leve o cursor nativo chega antes do nosso ponto desenhado
+  const lite = useLiteMode();
+  const enabled = pointerOk && isComplete && !lite;
   const [hovering, setHovering] = useState(false);
   const [splashes, setSplashes] = useState<Splash[]>([]);
   const dotRef = useRef<HTMLDivElement>(null);

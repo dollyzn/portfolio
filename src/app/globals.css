@@ -348,6 +348,46 @@ html[data-cursor-hidden] [data-custom-cursor] {
   touch-action: none !important;
 }
 
+/* ── Modo leve ──────────────────────────────────────────────────
+   Sem aceleração de hardware o navegador rasteriza blur, filtros e
+   mix-blend-mode na CPU a cada paint - um glow de 80px custa mais que
+   a página inteira. Aqui esses efeitos saem de cena, as animações
+   infinitas param e o layout continua o mesmo. */
+html[data-perf="lite"] *,
+html[data-perf="lite"] *::before,
+html[data-perf="lite"] *::after {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+
+/* Camadas que só existem por causa do blur: sem ele virariam manchas duras. */
+html[data-perf="lite"] [data-decor],
+html[data-perf="lite"] .noise-overlay::after {
+  display: none !important;
+}
+
+/* Sem backdrop-filter uma barra translúcida deixa o conteúdo passar por baixo. */
+html[data-perf="lite"] [data-lite-solid] {
+  background-color: var(--void);
+}
+
+html[data-perf="lite"] .animate-marquee,
+html[data-perf="lite"] .animate-ping,
+html[data-perf="lite"] .animate-pulse,
+html[data-perf="lite"] .animate-shimmer-slide,
+html[data-perf="lite"] .animate-spin-around {
+  animation: none !important;
+  will-change: auto !important;
+}
+
+/* Rolagem suave em repaint de CPU vira travamento. */
+html[data-perf="lite"],
+html[data-perf="lite"] body {
+  scroll-behavior: auto;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

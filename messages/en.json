@@ -281,7 +281,10 @@
     "themeSystem": "Match system",
     "localePt": "Português",
     "localeEn": "English",
-    "current": "current"
+    "current": "current",
+    "perfLite": "Switch to lite mode",
+    "perfFull": "Switch to full effects",
+    "perfOn": "lite mode on"
   },
   "colophon": {
     "metaTitle": "Colophon",
@@ -342,5 +345,22 @@
     "copyEmail": "Copy email address {email}",
     "copyDone": "Email copied to clipboard",
     "copyToast": "Email copied"
+  },
+  "perf": {
+    "title": "Lite mode on",
+    "titleFull": "Hardware acceleration off",
+    "bodyGpu": "Your browser is drawing without hardware acceleration. I turned the 3D globe and the blur effects off so browsing stays smooth.",
+    "bodyFps": "Frames weren't holding up on this device. I turned the 3D globe and the blur effects off so browsing stays smooth.",
+    "bodyFull": "You're on the full version, with the 3D globe and the blur effects. If it starts to stutter, lite mode turns them off.",
+    "bodyLite": "You turned lite mode on: the 3D globe and the blur effects are off. The full version is one click away.",
+    "renderer": "renderer",
+    "hint": "Turning hardware acceleration back on in your browser settings restores the full version.",
+    "full": "Use the full version",
+    "lite": "Switch to lite mode",
+    "dismiss": "Got it",
+    "close": "Dismiss notice",
+    "badgeLite": "lite mode",
+    "badgeFull": "no acceleration",
+    "details": "See performance details"
   }
 }

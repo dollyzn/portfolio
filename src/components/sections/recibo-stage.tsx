@@ -27,7 +27,7 @@ import {
 import { useTranslations } from "next-intl";
 import { AnimatedBeam } from "@/components/magicui/animated-beam";
 import { NumberTicker } from "@/components/magicui/number-ticker";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { useSimplifiedMotion } from "@/hooks/use-perf-mode";
 import { cn } from "@/lib/utils";
 
 const STEPS = ["upload", "read", "fill", "download"] as const;
@@ -114,7 +114,7 @@ function useFit(ref: RefObject<HTMLElement | null>) {
 
 export function ReciboStage({ className }: { className?: string }) {
   const t = useTranslations("projects.recibo.stage");
-  const reduced = useReducedMotion();
+  const reduced = useSimplifiedMotion();
   const outerRef = useRef<HTMLDivElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
   const chipsRef = useRef<HTMLDivElement>(null);

@@ -19,6 +19,7 @@ import {
   BookOpen,
   Check,
   Copy,
+  Gauge,
   Languages,
   Mail,
   Monitor,
@@ -33,6 +34,8 @@ import {
   TooltipTrigger,
 } from "@/components/animate-ui/components/base/tooltip";
 import { usePathname, useRouter } from "@/i18n/navigation";
+import { usePerfMode } from "@/hooks/use-perf-mode";
+import { setPerfPreference } from "@/lib/perf-mode";
 import { useIntroOptional } from "@/components/intro/intro-context";
 import { GithubIcon, LinkedinIcon } from "@/components/ui/icons";
 import { Kbd, KbdGroup } from "@/components/ui/kbd";
@@ -115,6 +118,7 @@ function CommandPaletteDialog({ ready }: { ready: boolean }) {
   const pathname = usePathname();
   const router = useRouter();
   const { setTheme } = useTheme();
+  const { mode: perfMode } = usePerfMode();
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(0);
   const [copied, setCopied] = useState(false);
@@ -247,6 +251,19 @@ function CommandPaletteDialog({ ready }: { ready: boolean }) {
         },
       },
       {
+        id: "perf-mode",
+        group: "actions",
+        label: perfMode === "lite" ? t("perfFull") : t("perfLite"),
+        keywords:
+          "desempenho performance modo leve lite efeitos effects gpu aceleracao acceleration",
+        hint: perfMode === "lite" ? t("perfOn") : undefined,
+        icon: <Gauge className="size-4" strokeWidth={1.7} />,
+        run: () => {
+          setPerfPreference(perfMode === "lite" ? "full" : "lite");
+          close();
+        },
+      },
+      {
         id: "mailto",
         group: "actions",
         label: t("sendEmail"),
@@ -324,6 +341,7 @@ function CommandPaletteDialog({ ready }: { ready: boolean }) {
     goSection,
     locale,
     pathname,
+    perfMode,
     router,
     setTheme,
     switchLocale,
