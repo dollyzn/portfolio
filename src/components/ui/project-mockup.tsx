@@ -20,7 +20,11 @@ export function ProjectMockup({
       )}
     >
       <div className="bg-tech-grid absolute inset-0 opacity-40 dark:opacity-[0.55]" />
-      <div className="absolute -right-16 -top-16 size-56 rounded-full bg-electric/12 blur-[64px]" />
+      <div
+        aria-hidden
+        data-decor
+        className="absolute -right-16 -top-16 size-56 rounded-full bg-electric/12 blur-[64px]"
+      />
 
       <div className="relative flex h-full flex-col p-4 sm:p-5">
         <Chrome />

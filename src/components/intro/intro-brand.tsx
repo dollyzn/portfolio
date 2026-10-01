@@ -93,6 +93,7 @@ export function IntroBrand() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.45, ease: EASE }}
               aria-hidden
+              data-decor
               className="absolute left-1/2 top-1/2 -z-10 size-28 -translate-x-1/2 -translate-y-1/2 rounded-full bg-electric/20 blur-2xl sm:size-32"
             />
           ) : null}

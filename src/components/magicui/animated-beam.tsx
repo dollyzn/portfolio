@@ -3,6 +3,7 @@
 import { useEffect, useId, useState, type RefObject } from "react";
 import { motion } from "motion/react";
 
+import { useLiteMode } from "@/hooks/use-perf-mode";
 import { cn } from "@/lib/utils";
 
 export interface AnimatedBeamProps {
@@ -51,6 +52,8 @@ export const AnimatedBeam: React.FC<AnimatedBeamProps> = ({
   const id = useId();
   const [pathD, setPathD] = useState("");
   const [svgDimensions, setSvgDimensions] = useState({ width: 0, height: 0 });
+  // animar x1/x2 do gradiente repinta o SVG inteiro a cada frame
+  const lite = useLiteMode();
 
   // Calculate the gradient coordinates based on the reverse prop
   const gradientCoordinates = reverse
@@ -142,48 +145,52 @@ export const AnimatedBeam: React.FC<AnimatedBeamProps> = ({
         strokeOpacity={pathOpacity}
         strokeLinecap="round"
       />
-      <path
-        d={pathD}
-        strokeWidth={pathWidth}
-        stroke={`url(#${id})`}
-        strokeOpacity="1"
-        strokeLinecap="round"
-      />
-      <defs>
-        <motion.linearGradient
-          className="transform-gpu"
-          id={id}
-          gradientUnits={"userSpaceOnUse"}
-          initial={{
-            x1: "0%",
-            x2: "0%",
-            y1: "0%",
-            y2: "0%",
-          }}
-          animate={{
-            x1: gradientCoordinates.x1,
-            x2: gradientCoordinates.x2,
-            y1: gradientCoordinates.y1,
-            y2: gradientCoordinates.y2,
-          }}
-          transition={{
-            delay,
-            duration,
-            ease: [0.16, 1, 0.3, 1], // https://easings.net/#easeOutExpo
-            repeat,
-            repeatDelay,
-          }}
-        >
-          <stop stopColor={gradientStartColor} stopOpacity="0"></stop>
-          <stop stopColor={gradientStartColor}></stop>
-          <stop offset="32.5%" stopColor={gradientStopColor}></stop>
-          <stop
-            offset="100%"
-            stopColor={gradientStopColor}
-            stopOpacity="0"
-          ></stop>
-        </motion.linearGradient>
-      </defs>
+      {lite ? null : (
+        <>
+          <path
+            d={pathD}
+            strokeWidth={pathWidth}
+            stroke={`url(#${id})`}
+            strokeOpacity="1"
+            strokeLinecap="round"
+          />
+          <defs>
+            <motion.linearGradient
+              className="transform-gpu"
+              id={id}
+              gradientUnits={"userSpaceOnUse"}
+              initial={{
+                x1: "0%",
+                x2: "0%",
+                y1: "0%",
+                y2: "0%",
+              }}
+              animate={{
+                x1: gradientCoordinates.x1,
+                x2: gradientCoordinates.x2,
+                y1: gradientCoordinates.y1,
+                y2: gradientCoordinates.y2,
+              }}
+              transition={{
+                delay,
+                duration,
+                ease: [0.16, 1, 0.3, 1], // https://easings.net/#easeOutExpo
+                repeat,
+                repeatDelay,
+              }}
+            >
+              <stop stopColor={gradientStartColor} stopOpacity="0"></stop>
+              <stop stopColor={gradientStartColor}></stop>
+              <stop offset="32.5%" stopColor={gradientStopColor}></stop>
+              <stop
+                offset="100%"
+                stopColor={gradientStopColor}
+                stopOpacity="0"
+              ></stop>
+            </motion.linearGradient>
+          </defs>
+        </>
+      )}
     </svg>
   );
 };

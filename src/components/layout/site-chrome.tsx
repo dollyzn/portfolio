@@ -4,6 +4,7 @@ import { CommandPalette } from "@/components/layout/command-palette";
 import { CustomCursor } from "@/components/layout/custom-cursor";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
+import { PerfGuard } from "@/components/layout/perf-guard";
 import { SectionRail } from "@/components/layout/section-rail";
 
 export function SiteChrome({
@@ -18,6 +19,7 @@ export function SiteChrome({
   return (
     <Intro skip={skipIntro}>
       <CommandPalette>
+        <PerfGuard />
         <CustomCursor />
         <Navbar />
         {showRail ? <SectionRail /> : null}

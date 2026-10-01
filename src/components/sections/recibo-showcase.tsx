@@ -24,7 +24,7 @@ import { ReciboStage } from "@/components/sections/recibo-stage";
 import { ShimmerButton } from "@/components/ui/shimmer-button";
 import { Reveal } from "@/components/ui/reveal";
 import { SpotlightCard } from "@/components/ui/spotlight-card";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { useSimplifiedMotion } from "@/hooks/use-perf-mode";
 import type { Project } from "@/content";
 
 const SHOTS = "/projects/recibo-livre";
@@ -72,7 +72,7 @@ const SCREENS: Screen[] = [
 export function ReciboFeatured({ project: p }: { project: Project }) {
   const t = useTranslations("projects");
   const tr = useTranslations("projects.recibo");
-  const reduced = useReducedMotion();
+  const reduced = useSimplifiedMotion();
 
   const stats = [
     { value: "0", label: tr("stats.uploads") },
@@ -220,28 +220,32 @@ export function ReciboFeatured({ project: p }: { project: Project }) {
             />
             <div
               aria-hidden
+              data-decor
               className="absolute -right-24 -top-24 size-72 rounded-full bg-electric/12 blur-[80px]"
             />
             <div
               aria-hidden
+              data-decor
               className="absolute -bottom-24 left-10 size-64 rounded-full bg-cyan-bright/[0.07] blur-[80px]"
             />
             <ReciboStage className="relative h-full justify-center" />
           </div>
 
           {/* o `order` da coluna do palco também muda a ordem de pintura no grid */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 z-10 rounded-[inherit]"
-          >
-            <BorderBeam
-              size={90}
-              duration={9}
-              borderWidth={1.2}
-              colorFrom="var(--electric)"
-              colorTo="var(--cyan-bright)"
-            />
-          </div>
+          {reduced ? null : (
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 z-10 rounded-[inherit]"
+            >
+              <BorderBeam
+                size={90}
+                duration={9}
+                borderWidth={1.2}
+                colorFrom="var(--electric)"
+                colorTo="var(--cyan-bright)"
+              />
+            </div>
+          )}
         </SpotlightCard>
       </motion.div>
     </Reveal>

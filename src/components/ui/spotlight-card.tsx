@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, type ReactNode } from "react";
+import { useLiteMode } from "@/hooks/use-perf-mode";
 import { cn } from "@/lib/utils";
 
 /**
@@ -22,10 +23,11 @@ export function SpotlightCard({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const frame = useRef(0);
+  const lite = useLiteMode();
 
   const handleMove = (e: React.MouseEvent) => {
     const node = ref.current;
-    if (!node || frame.current) return;
+    if (!node || frame.current || lite) return;
     const { clientX, clientY } = e;
     frame.current = requestAnimationFrame(() => {
       frame.current = 0;
@@ -52,6 +54,7 @@ export function SpotlightCard({
     >
       <span
         aria-hidden
+        data-decor
         className="pointer-events-none absolute inset-0 -z-10 opacity-0 transition-opacity duration-500 group-hover/spot:opacity-100"
         style={{
           background:
